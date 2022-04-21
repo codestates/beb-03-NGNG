@@ -4,9 +4,20 @@ import { checkEmailVerifyFromId } from '../../service/User.service';
 import requestIp from 'request-ip';
 
 
-const loginRequired = async (req: any, res: any, next: NextFunction) => {
+const loginRequired = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const token = req.cookies['access-token']
+        // const token = req?.cookies['access-token'];
+        let token = null;
+
+        const bearerHeader = req?.headers['authorization'];
+        console.log(bearerHeader)
+        if (typeof bearerHeader !== undefined) {
+            const bearer = bearerHeader.split(' ');
+            if (bearer.length === 2) {
+                token = bearer[1];
+            }
+        }
+
         const secret: any = process.env.JWT_SECRET
         if (token) {
             const validateToken: any = jwt.verify(token, secret);

@@ -10,6 +10,7 @@ interface IUser {
     password: string,
     emailToken?: string | null,
     isVerified: boolean,
+    privateKey: string,
 }
 
 // interface ICreateUser extends IUser {

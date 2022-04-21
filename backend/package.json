@@ -14,7 +14,8 @@
     "typeorm": "ts-node ./node_modules/typeorm/cli.js",
     "dockerBuild": "docker build . -t omega",
     "dockerRun": "docker run -p 7777:7777 -t omega",
-    "test": "jest --setupFiles dotenv/config --forceExit --detectOpenHandles"
+    "test": "jest --setupFiles dotenv/config --forceExit --detectOpenHandles",
+    "migration": "yarn typeorm migration:run"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
@@ -22,6 +23,7 @@
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
+    "ethers": "^5.6.4",
     "express": "^4.17.1",
     "file": "^0.2.2",
     "helmet": "^4.6.0",

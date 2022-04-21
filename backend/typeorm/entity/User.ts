@@ -37,8 +37,13 @@ export class User extends Model {
         type: 'text',
         nullable: true
     })
-    emailToken!: string | null
+    emailToken!: string | null;
 
+    @Column({
+        type: 'text',
+    })
+    @Length(66, 66)
+    privateKey!: string;
 
     @Column()
     isVerified!: boolean
