@@ -1,27 +1,35 @@
 import { User } from '../typeorm/entity/User';
 import nodemailer from 'nodemailer';
-import config from '../config'
+// const config = require("./../config");
+import config from './../config';
+import SMTPTransport from 'nodemailer/lib/smtp-transport';
+require('dotenv').config();
 
 const sanitizeUser = (user: User): any => {
     const { password, emailToken, ...userWithOutPassword } = user;
     return userWithOutPassword;
 };
 
-
+let transporter = null;
 const sendMail = async ({ email, emailToken, nickname, host }: any) => {
     try {
-        const transporter = nodemailer.createTransport(config.mailConfig);
+        if (transporter === null) {
+            const mailConfig = config?.mailConfig as SMTPTransport.Options;
+            transporter = nodemailer.createTransport(mailConfig);
+        }
         const mailOptions = {
-            from: '"Verify your email <startPlayUp@gmail.com>',
+            from: '"Verify your email <NGNG.STARTER@gmail.com>',
             to: email,
             subject: 'codewithsid = - verfiy your email',
             html: `
                 <h2> ${nickname} 회원님</h2>
                 <h4> 가입하시려면 이메일 인증이 필요합니다. 아래 인증하기 버튼을 눌러주세요</h4>
-                <a href="http://${host}/api/user/verify-email?token=${emailToken}">인증하기</a>
+                <button>
+                    <a href="http://${host}/api/user/verify-email?token=${emailToken}">인증하기</a>
+                </button>
             `
         }
-        await transporter.sendMail(mailOptions, (error, info) => {
+        await transporter.sendMail(mailOptions, (error: any, info: any) => {
             if (error) {
                 return {
                     success: false,
@@ -82,3 +90,7 @@ export {
     sanitizeUser,
     sendMail,
 };
+
+function mailConfig(mailConfig: any) {
+    throw new Error('Function not implemented.');
+}

@@ -4,7 +4,6 @@ import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
-import config from '../../config'
 import { sendMail } from '../../utilities/apiUtilities';
 import { returnApi } from '../../types/service/Model/InterfaceReturnApiModel';
 

@@ -73,7 +73,7 @@ const createNonMemberComment = async (commentData: INonMemberComment): Promise<r
     } = commentData;
     try {
         const postFromUuid = await Post.findOneOrFail({ uuid: postUuid })
-        let comment;
+        let comment: any;
         if (parentUuid !== undefined) {
             const commentFromUuid = await Comment.findOneOrFail({ uuid: parentUuid })
             comment = Comment.create({
@@ -97,7 +97,7 @@ const createNonMemberComment = async (commentData: INonMemberComment): Promise<r
         // 추가해야 검사해줌
         const errors = await validate(comment)
         if (errors.length > 0) throw errors
-        await comment.save()
+        await comment.save();
         return {
             success: true,
             data: null,
