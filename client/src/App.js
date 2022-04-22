@@ -1,158 +1,95 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.1.0
-=========================================================
+import './App.css';
+import { Navigate, Routes, Route} from 'react-router-dom';
+import Home from './pages/Home';
+import MyTalk from './pages/MyTalk';
+import Transactions from './pages/Transactions';
+import Header from './components/Header';
+import Container from '@mui/material/Container';
+import { CssBaseline, Modal, Stack } from '@mui/material';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import RightBar from './components/RightBar';
+import LeftMenu from './components/LeftMenu';
+import routes from "./routes";
 
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
+const customTheme = createTheme({
+  palette: {
+    type: 'dark',
+    primary: {
+      main: '#dba531',
+    },
+    secondary: {
+      main: '#007849',
+    },
+    error: {
+      main: '#ff7605',
+    },
+    success: {
+      main: '#f7b92a',
+    },
+    background: {
+      default: '#292b33',
+      paper: '#3a3a3f',
+    },
+    info: {
+      main: '#00c4b5',
+    },
+  },
+  typography: {
+    fontFamily: 'Montserrat',
+    fontSize: 14,
+    fontWeightRegular: 400,
+    fontWeightMedium: 600,
+    fontWeightLight: 200,
+    fontWeightBold: 700,
+    h1: {
+      fontWeight: 400,
+      fontFamily: 'Permanent Marker',
+      fontSize: '2.9rem',
+    },
+  },
+})
 
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-import { useState, useEffect } from "react";
-
-// react-router components
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-
-// @mui material components
-import { ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-import Icon from "@mui/material/Icon";
-
-// Material Dashboard 2 React components
-import MDBox from "components/MDBox";
-
-// Material Dashboard 2 React example components
-import Sidenav from "examples/Sidenav";
-import Configurator from "examples/Configurator";
-
-// Material Dashboard 2 React themes
-import theme from "assets/theme";
-
-// Material Dashboard 2 React Dark Mode themes
-import themeDark from "assets/theme-dark";
-
-import { CacheProvider } from "@emotion/react";
-import createCache from "@emotion/cache";
-
-// Material Dashboard 2 React routes
-import routes from "routes";
-
-// Material Dashboard 2 React contexts
-import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context";
-
-// Images
-import brandWhite from "assets/images/logo-ct.png";
-import brandDark from "assets/images/logo-ct-dark.png";
-
-export default function App() {
-  const [controller, dispatch] = useMaterialUIController();
-  const {
-    miniSidenav,
-    direction,
-    layout,
-    openConfigurator,
-    sidenavColor,
-    transparentSidenav,
-    whiteSidenav,
-    darkMode,
-  } = controller;
-  const [onMouseEnter, setOnMouseEnter] = useState(false);
-  const { pathname } = useLocation();
-
-  // Open sidenav when mouse enter on mini sidenav
-  const handleOnMouseEnter = () => {
-    if (miniSidenav && !onMouseEnter) {
-      setMiniSidenav(dispatch, false);
-      setOnMouseEnter(true);
-    }
-  };
-
-  // Close sidenav when mouse leave mini sidenav
-  const handleOnMouseLeave = () => {
-    if (onMouseEnter) {
-      setMiniSidenav(dispatch, true);
-      setOnMouseEnter(false);
-    }
-  };
-
-  // Change the openConfigurator state
-  const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
-
-  // Setting the dir attribute for the body element
-  useEffect(() => {
-    document.body.setAttribute("dir", direction);
-  }, [direction]);
-
-  // Setting page scroll to 0 when changing the route
-  useEffect(() => {
-    document.documentElement.scrollTop = 0;
-    document.scrollingElement.scrollTop = 0;
-  }, [pathname]);
+function App() {
 
   const getRoutes = (allRoutes) =>
-    allRoutes.map((route) => {
-      if (route.collapse) {
-        return getRoutes(route.collapse);
-      }
+  allRoutes.map((route) => {
+    if (route.collapse) {
+      return getRoutes(route.collapse);
+    }
 
-      if (route.route) {
-        return <Route exact path={route.route} element={route.component} key={route.key} />;
-      }
+    if (route.route) {
+      return <Route exact path={route.route} element={route.component} key={route.key} />;
+    }
 
-      return null;
-    });
-
-  const configsButton = (
-    <MDBox
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      width="3.25rem"
-      height="3.25rem"
-      bgColor="white"
-      shadow="sm"
-      borderRadius="50%"
-      position="fixed"
-      right="2rem"
-      bottom="2rem"
-      zIndex={99}
-      color="dark"
-      sx={{ cursor: "pointer" }}
-      onClick={handleConfiguratorOpen}
-    >
-      <Icon fontSize="small" color="inherit">
-        settings
-      </Icon>
-    </MDBox>
-  );
+    return null;
+  });
 
   return (
-    <ThemeProvider theme={darkMode ? themeDark : theme}>
+    <ThemeProvider theme={customTheme}>
       <CssBaseline />
-      {layout === "dashboard" && (
-        <>
-          <Sidenav
-            color={sidenavColor}
-            brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-            brandName="Material Dashboard 2"
-            routes={routes}
-            onMouseEnter={handleOnMouseEnter}
-            onMouseLeave={handleOnMouseLeave}
-          />
-          <Configurator />
-          {configsButton}
-        </>
-      )}
-      {layout === "vr" && <Configurator />}
-      <Routes>
-        {getRoutes(routes)}
-        <Route path="*" element={<Navigate to="/dashboard" />} />
-      </Routes>
+      <Container maxWidth={"xl"} >
+        <Header />
+        <Stack direction="row">
+          <Box width={'250px'} sx={{display: 'flex', flexDirection: 'column'}} >
+            <LeftMenu />
+          </Box>
+          <Box sx={{flex: '1'}}>
+            <Routes>
+              {/* <Route path="/" element={<Home />} />
+              <Route path="/mytalk" element={<MyTalk />} />
+              <Route path="/transactions" element={<Transactions />} /> */}
+              {getRoutes(routes)}
+              <Route path="*" element={<Navigate to="/home" />} />
+            </Routes>
+          </Box>
+          <Box minWidth={'250px'}>
+            <RightBar />
+          </Box>
+        </Stack>
+      </Container>
     </ThemeProvider>
   );
 }
+
+export default App;
