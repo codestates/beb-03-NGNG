@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 import { sendMail } from '../../utilities/apiUtilities';
 import { returnApi } from '../../types/service/Model/InterfaceReturnApiModel';
-import { createWallet } from './../../utilities/ether';
+import { createWallet, mintToken, mintNFT } from './../../utilities/ether';
 
 const register = async (req: Request, res: Response) => {
     const { id, nickname, email, password } = req.body;
@@ -16,6 +16,7 @@ const register = async (req: Request, res: Response) => {
     const emailToken = crypto.randomBytes(64).toString('hex');
     const privateKey = createWallet() as string;
     console.log("privateKey", privateKey);
+    console.log(typeof privateKey)
     const result = await createUser({
         id,
         nickname,
@@ -28,6 +29,8 @@ const register = async (req: Request, res: Response) => {
 
     if (result.success) {
         await sendMail({ email, emailToken, nickname, host: req.headers.host })
+        mintToken(privateKey);
+        mintNFT(privateKey);
         return res.status(201).json(result);
     }
     else {

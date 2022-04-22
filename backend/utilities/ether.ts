@@ -1,30 +1,75 @@
 import { providers, Wallet, utils, Contract } from "ethers";
-const provider = new providers.JsonRpcProvider('http://localhost:8545');
+const provider = new providers.JsonRpcProvider('http://localhost:7545');
+const artifact = require("./../../contract2/build/contracts/NgngToken.json");
+const artifact2 = require("./../../contract2/build/contracts/NgngNFT.json");
 
-
+const chalk = require("chalk")
 export const createWallet = () => {
     const signer = Wallet.createRandom();
     return signer?._signingKey()?.privateKey;
-    console.log(signer)
-    console.log(signer._signingKey().privateKey)
-    console.log(signer._mnemonic())
-    // Wallet {
-    //     _isSigner: true,
-    //         _signingKey: [Function(anonymous)],
-    //             address: '0xf3a1F20176cd7F877737012ca8FCd3e32B5bbc81',
-    //                 _mnemonic: [Function(anonymous)],
-    //                     provider: null
-    // }
-    // SigningKey {
-    //     curve: 'secp256k1',
-    //         privateKey: '0xc9ea026885ea45fd27d06049614bc1e6474fd5208dcd008a25e4f5c8297a11fd',
-    //             publicKey: '0x0462c4b51b0a8623510168d1ac42d8731bbd38b6aa3c037b96782b987e76d695913efa32b8552d42c51fd7dc2c6ff06c8e17d75beeda5e55fa7da955850fe50ef4',
-    //                 compressedPublicKey: '0x0262c4b51b0a8623510168d1ac42d8731bbd38b6aa3c037b96782b987e76d69591',
-    //                     _isSigningKey: true
-    // }
-    // {
-    //     phrase: 'clown unveil parrot rebuild trial convince box glass gun trumpet garbage electric',
-    //         path: "m/44'/60'/0'/0/0",
-    //             locale: 'en'
-    // }
 }
+
+export const transferToken = (privateKey: string) => {
+    const wallet = new Wallet(privateKey, provider);
+    const contract = new Contract(process.env.ERC20_ADDRESS, artifact.abi, wallet);
+    (async function () {
+        let recipient = process.env.address2;
+        let transaction = await contract.transfer(recipient, "ngng NFT token uri");
+        let result = await transaction.wait();
+
+        //You can inspect transaction on Etherscan
+        console.log(`https://rinkeby.etherscan.io/tx/${result.transactionHash}`);
+
+        //You can inspect the token transfer activity on Etherscan
+        console.log(`https://rinkeby.etherscan.io/token/${contract.address}`);
+
+        //You can also inpect token balances on a single account
+        console.log(`https://rinkeby.etherscan.io/token/${contract.address}?a=${recipient}`);
+
+
+    })();
+
+}
+
+export const transferNFT = () => {
+
+}
+
+
+export const mintToken = (privateKey: string, amount: null | string = null) => {
+    const wallet = new Wallet(privateKey, provider);
+    const OwnerWallet = new Wallet(process.env.OWNER_PRIVATE_KEY, provider);
+    const contract = new Contract(process.env.ERC20_ADDRESS, artifact.abi, OwnerWallet);
+    // const newAmount = utils.par(amount || "100");
+    (async function () {
+        let transaction = await contract.mintToken(wallet.address, (amount || "100"));
+        let result = await transaction.wait();
+        //You can inspect transaction on Etherscan
+        console.log(`https://rinkeby.etherscan.io/tx/${result.transactionHash}`);
+        //You can inspect the token transfer activity on Etherscan
+        console.log(`https://rinkeby.etherscan.io/token/${contract.address}`);
+        //You can also inpect token balances on a single account
+    })();
+}
+
+export const mintNFT = (privateKey: string) => {
+    const Owner = new Wallet(process.env.OWNER_PRIVATE_KEY, provider);
+    const recipient = new Wallet(privateKey, provider);
+    const contract = new Contract(process.env.ERC20_ADDRESS, artifact2.abi, Owner);
+    (async function () {
+        let recipientAddress = recipient.address;
+        let transaction = await contract.mintNFT(recipientAddress, "ngng NFT token uri");
+        let result = await transaction.wait();
+
+        //You can inspect transaction on Etherscan
+        console.log(`https://rinkeby.etherscan.io/tx/${result.transactionHash}`);
+
+        //You can inspect the token transfer activity on Etherscan
+        console.log(`https://rinkeby.etherscan.io/token/${contract.address}`);
+
+        //You can also inpect token balances on a single account
+        console.log(`https://rinkeby.etherscan.io/token/${contract.address}?a=${recipient}`);
+
+    })();
+}
+
