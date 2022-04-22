@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
+import Alert from '@mui/material/Alert';
 
 const style = {
   position: 'absolute',
@@ -19,9 +20,24 @@ const style = {
 };
 
 export default function LoginModal() {
+  const [inValid, setInvalid] = useState(false);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const userId = data.get('userId');
+    const password = data.get('password');
+    if (userId === '' || password === '') {
+      setInvalid(true);
+      return;
+    }
+    console.log(userId, password);
+    handleClose();
+    setInvalid(false);
+  }
 
   return (
     <>
@@ -36,16 +52,17 @@ export default function LoginModal() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" noValidate sx={{ mt: 1 }}>
+          <Box component="form" noValidate sx={{ mt: 1 }} onSubmit={handleSubmit}>
             <TextField
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="userId"
+              label="User ID"
+              name="userId"
+              autoComplete="userId"
               autoFocus
+              sx={{ mb: 0}}
             />
             <TextField
               margin="normal"
@@ -56,7 +73,12 @@ export default function LoginModal() {
               type="password"
               id="password"
               autoComplete="current-password"
+              sx={{ mb: 2}}
             />
+            {
+              inValid &&
+              <Alert variant='filled' severity="error">All fields must be filled in.</Alert>
+            }
             <Button
               type="submit"
               fullWidth

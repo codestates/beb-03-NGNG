@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
+import Alert from '@mui/material/Alert';
 
 const style = {
   position: 'absolute',
@@ -19,9 +20,34 @@ const style = {
 };
 
 export default function SignupModal() {
+  const [inValid, setInvalid] = useState('');
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const userId = data.get('userId');
+    const nickname = data.get('nickname');
+    const email = data.get('email');
+    const password = data.get('password');
+    const password2 = data.get('password2');
+
+    if (userId === '' || nickname === '' || email === '' || password === '' || password2 === '') {
+      setInvalid('blank');
+      return;
+    }
+
+    if (password === password2) {
+      setInvalid('');
+      console.log(userId, nickname, email, password, password2);
+      handleClose();
+    } else {
+      setInvalid('passwordError');
+      return;
+    }
+  }
 
   return (
     <>
@@ -36,7 +62,29 @@ export default function SignupModal() {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <Box component="form" noValidate sx={{ mt: 1 }}>
+          <Box component="form" noValidate sx={{ mt: 1 }} onSubmit={handleSubmit}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="userId"
+              label="User ID"
+              name="userId"
+              autoComplete="userId"
+              autoFocus
+              sx={{ mb: 0}}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="nickname"
+              label="Nickname"
+              name="nickname"
+              autoComplete="nickname"
+              autoFocus
+              sx={{ mb: 0}}
+            />
             <TextField
               margin="normal"
               required
@@ -46,6 +94,7 @@ export default function SignupModal() {
               name="email"
               autoComplete="email"
               autoFocus
+              sx={{ mb: 0}}
             />
             <TextField
               margin="normal"
@@ -56,6 +105,7 @@ export default function SignupModal() {
               type="password"
               id="password"
               autoComplete="current-password"
+              sx={{ mb: 0}}
             />
             <TextField
               margin="normal"
@@ -64,9 +114,18 @@ export default function SignupModal() {
               name="password"
               label="Password Again"
               type="password"
-              id="password"
+              id="password2"
               autoComplete="current-password"
+              sx={{ mb: 2}}
             />
+            {
+              inValid === 'blank' &&
+              <Alert variant='filled' severity="error">All fields must be filled in.</Alert>
+            }
+            {
+              inValid === 'passwordError' &&
+              <Alert variant='filled' severity="error">The two passwords do not match.</Alert>
+            }
             <Button
               type="submit"
               fullWidth

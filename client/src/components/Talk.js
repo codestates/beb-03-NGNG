@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
@@ -19,6 +19,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretRight } from '@fortawesome/free-solid-svg-icons'
 
 const Talk = (props) => {
+  const commentRef = useRef();
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log(commentRef.current.value);
+    commentRef.current.value = '';
+  }
+
   return (
     <>
       <Card sx={{backgroundColor: '#949494'}}>
@@ -37,7 +45,7 @@ const Talk = (props) => {
           alt="coffee"
         />
         <CardContent>
-          <Typography variant="body2" color="text.secondary">
+          <Typography color="text.secondary" variant="h6">
             This is my favorite latte.
           </Typography>
         </CardContent>
@@ -53,8 +61,8 @@ const Talk = (props) => {
             <ReportModal />            
           </Box>
           <Box sx={{display: 'flex', flex: 1, ml: '60px'}}>
-            <TextField label="Comment Message..." size='small' sx={{mr: '10px', flex: 1}}></TextField>
-            <Button variant='contained' color='success'>Comment</Button>
+            <TextField label="Comment Message..." size='small' sx={{mr: '10px', flex: 1}} inputRef={commentRef}></TextField>
+            <Button variant='contained' color='success' onClick={handleSubmit}>Comment</Button>
           </Box>
         </CardActions>
       </Card>
@@ -62,10 +70,8 @@ const Talk = (props) => {
         <FontAwesomeIcon icon={faCaretRight} fontSize={'60px'} style={{padding: '14px', paddingRight: '20px', color: '#3E3E41'}} />
         <Box sx={{flex:1, mt: 1}}>
           <Comment />
-          <Comment />
         </Box>
       </Box>
-      
     </>
   )
 }

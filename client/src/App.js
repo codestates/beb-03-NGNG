@@ -83,7 +83,7 @@ function App() {
               <Route path="*" element={<Navigate to="/home" />} />
             </Routes>
           </Box>
-          <Box minWidth={'250px'}>
+          <Box width={'300px'}>
             <RightBar />
           </Box>
         </Stack>

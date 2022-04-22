@@ -1,7 +1,7 @@
 import { Card, Button, Box, Tooltip, IconButton } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import React from 'react';
+import React, { useRef } from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
@@ -44,8 +44,16 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const WriteTalk = (props) => {
 
+  const contentRef = useRef();
+
   const handleOpen = () => {
 
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log(contentRef.current.value);
+    contentRef.current.value = '';
   }
 
   return (
@@ -61,15 +69,16 @@ const WriteTalk = (props) => {
           rows={2}
           placeholder='Create a Post'
           label=''
+          id='content'
           sx={{mr: 2}}
+          inputRef = {contentRef}
         />
         <Box sx={{ display: 'flex', flexDirection: 'column', height: 'inherit'}}>
           <Button variant='contained' color='success' onClick={handleOpen} sx={{height: '30px', mb: 1.5}}><AddPhotoAlternateIcon /></Button>
-          <Button variant='contained' color='success' onClick={handleOpen} sx={{height: '30px', width: '60px'}}>Submit</Button>
+          <Button type='submit' variant='contained' color='success' onClick={handleSubmit} sx={{height: '30px', width: '60px'}}>Submit</Button>
         </Box>
       </Card>
     </>
-
   )
 }
 

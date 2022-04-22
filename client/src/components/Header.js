@@ -1,4 +1,4 @@
-import React, { useState, useNavigate } from 'react';
+import React, { useState, useNavigate, useRef } from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -54,6 +54,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 const Header = (props) => {
   const [isLogedIn, setIsLogedIn] = useState('false');
 
+  const inputRef = useRef();
+
+  const handleKeyDown = (event) => {
+    if (event.keyCode === 13) {
+      console.log(inputRef.current.value);
+      inputRef.current.value = '';
+    }
+  }
+
   return (
     <Box sx={{ flexGrow: 1, mb: 2}} >
       <AppBar position="static" sx={{
@@ -80,6 +89,8 @@ const Header = (props) => {
             <StyledInputBase
               placeholder="Search…"
               inputProps={{ 'aria-label': 'search' }}
+              inputRef={inputRef}
+              onKeyDown={(event)=>handleKeyDown(event)}
             />
           </Search>
           <Box sx={{ flexGrow: 1 }} />
