@@ -38,15 +38,17 @@ const createUser = async (userData: IUser): Promise<returnUser> => {
     }
 }
 
-const deleteUser = async (userData: IUser | any): Promise<returnUser> => {
-    const { id, nickname, email, password } = userData;
+const deleteUserFromId = async (userId: string): Promise<returnUser> => {
     try {
-        const user = User.create({ id, nickname, email, password, role: 'user' });
-
+        const user = await User.findOneOrFail({ id: userId, role: 'user' });
         // 추가해야 검사해줌
-        const errors = await validate(user)
-        if (errors.length > 0) throw errors
-        await user.save()
+        console.log("deleteUserFromId", user);
+        if (user) {
+            await user.remove();
+        }
+        else {
+            throw "아이디가 없음"
+        }
         return {
             success: true,
             data: null,
@@ -208,6 +210,7 @@ const checkEmailVerifyFromId = async ({ id }: { id: string }): Promise<returnUse
 export {
     createUser,
     getUserFromId,
+    deleteUserFromId,
     loginCheckUser,
     verifyEmailUser,
     checkEmailVerifyFromId,

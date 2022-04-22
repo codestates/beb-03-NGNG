@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { createUser, getUserFromId, loginCheckUser, updateUser, verifyEmailUser } from '../../service/User.service';
+import { createUser, getUserFromId, loginCheckUser, updateUser, verifyEmailUser, deleteUserFromId } from '../../service/User.service';
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
@@ -164,7 +164,17 @@ const getUser = async (req: Request, res: Response) => {
     }
 }
 
+const withdrawal = async (req: Request, res: Response) => {
+    const { id } = req.user as { id: string }
+    const result = await deleteUserFromId(id);
+    if (result.success) {
+        return res.status(201).json(result);
+    }
+    else {
+        return res.status(500).json(result)
+    }
+}
 
 
 
-export { register, getUser, deleteUser, login, logout, verifyEmail, sendVerifyEmail, getLoadMyInfo }
+export { register, getUser, deleteUser, login, logout, verifyEmail, sendVerifyEmail, getLoadMyInfo, withdrawal }
