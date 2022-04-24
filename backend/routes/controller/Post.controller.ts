@@ -15,9 +15,9 @@ import {
 const sendPost = async (req: any, res: Response) => {
     const { id, ipAddress } = req.user;
     console.log("ipAddress : ", id, ipAddress);
-    const { title, content, category } = req.body;
+    const { content, category } = req.body;
     const result = await createPost({
-        title, content, ipAddress, id, category
+        content, ipAddress, id, category
     });
     if (result.success) {
         return res.status(201).json(result);

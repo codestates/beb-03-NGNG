@@ -9,9 +9,6 @@ import { HashTag } from './HashTag';
 
 @Entity()
 export class Post extends Model {
-    @Column()
-    @Length(1, 255)
-    title!: string;
 
     @Column({ type: "text" })
     content!: string;
@@ -53,16 +50,6 @@ export class Post extends Model {
     @Column()
     @IsIP()
     ipAddress!: string;
-
-    @Column({
-        nullable: true
-    })
-    slug!: string;
-
-    @AfterInsert()
-    createSlug() {
-        this.title
-    }
 
     @ManyToOne(() => User, post => post.posts, {
         onDelete: "CASCADE",

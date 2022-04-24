@@ -80,7 +80,6 @@ const getLikeItPost = async (likeItData: { postUuid: string }): Promise<returnGe
 
 const createPost = async (postData: IPost): Promise<returnPost> => {
     const {
-        title,
         content,
         ipAddress,
         id,
@@ -89,7 +88,7 @@ const createPost = async (postData: IPost): Promise<returnPost> => {
     console.log(postData)
     try {
         const user = await User.findOneOrFail({ id })
-        const post = Post.create({ title, content, ipAddress, user, category });
+        const post = Post.create({ content, ipAddress, user, category });
         const errors = await validate(post)
         if (errors.length > 0) throw errors
         await post.save()
@@ -199,7 +198,7 @@ const getPostsWithoutNoticeBoardByTime = async ({ limit = "150" }: { limit: stri
         const posts = await getRepository(Post)
             .createQueryBuilder("post")
             .where("post.category != :category", { category })
-            .select(["post.uuid", "post.title", "post.updatedAt", "post.category"])
+            .select(["post.uuid", "post.updatedAt", "post.category"])
             .leftJoin('post.user', 'user')
             .addSelect('user.id' as "id")
             .orderBy("post.createdAt", "DESC")
@@ -228,7 +227,7 @@ const getPostsSortByTime = async ({ limit = "150" }: { limit: string }): Promise
         const intLimit = parseInt(limit);
         const posts = await getRepository(Post)
             .createQueryBuilder("post")
-            .select(["post.uuid", "post.title", "post.updatedAt", "post.category"])
+            .select(["post.uuid", "post.updatedAt", "post.category"])
             .leftJoin('post.user', 'user')
             .addSelect('user.id' as "id")
             .orderBy("post.createdAt", "DESC")
@@ -258,7 +257,7 @@ const getPostsPagenationSortByTime = async ({ category, page = 0, pageSize = 15 
         if (category) {
             await getRepository(Post)
                 .createQueryBuilder("post")
-                .select(["post.uuid", "post.title", "post.updatedAt", "post.category"])
+                .select(["post.uuid", "post.updatedAt", "post.category"])
                 .where("post.category = :category", { category })
                 .leftJoin('post.user', 'user')
                 .addSelect('user.id' as "id")
@@ -270,7 +269,7 @@ const getPostsPagenationSortByTime = async ({ category, page = 0, pageSize = 15 
         else {
             await getRepository(Post)
                 .createQueryBuilder("post")
-                .select(["post.uuid", "post.title", "post.updatedAt", "post.category"])
+                .select(["post.uuid", "post.updatedAt", "post.category"])
                 .leftJoin('post.user', 'user')
                 .addSelect('user.id' as "id")
                 .skip((page - 1) * pageSize)
