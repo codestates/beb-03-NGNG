@@ -7,13 +7,16 @@ import { Model } from './Models/Model'
 import { User } from './User'
 
 @Entity()
-export class HashTags extends Model {
+export class HashTag extends Model {
 
     @Column({ type: "text" })
     tag!: string;
 
-    @ManyToMany(() => Post)
-    @JoinTable()
-    posts: Post[];
+    @ManyToOne(() => Post, post => post.hashTags, {
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+        nullable: false,
+    })
+    post: Post;
 
 }

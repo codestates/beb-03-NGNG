@@ -5,6 +5,7 @@ import { Comment } from "./Comment";
 
 import { Model } from './Models/Model'
 import { User } from './User'
+import { HashTag } from './HashTag';
 
 @Entity()
 export class Post extends Model {
@@ -69,10 +70,13 @@ export class Post extends Model {
     })
     user!: User
 
-    @OneToMany(() => Comment, comment => comment.post)
+    @OneToMany(_ => HashTag, hashTag => hashTag.post)
+    hashTags!: HashTag[]
+
+    @OneToMany(_ => Comment, comment => comment.post)
     comments!: Comment[]
 
-    @OneToMany(() => Thumb, thumb => thumb.post)
+    @OneToMany(_ => Thumb, thumb => thumb.post)
     thumbs!: Thumb[]
 
     toJSON() {
