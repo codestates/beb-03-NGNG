@@ -6,7 +6,6 @@ declare global {
         interface Request {
             user: {
                 id?: string;
-                nickname?: string;
                 ipAddress?: string;
             };
         }

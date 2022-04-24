@@ -14,10 +14,6 @@ export class User extends Model {
     id!: string;
 
     @Column({ unique: true })
-    @Length(5, 30)
-    nickname!: string;
-
-    @Column({ unique: true })
     @Length(1, 255)
     @IsEmail()
     email!: string;
@@ -51,9 +47,6 @@ export class User extends Model {
     @OneToMany(() => Comment, comment => comment.user)
     comments!: Comment[]
 
-    @OneToMany(() => Comment, comment => comment.user_nickname)
-    commentsForNickname!: Comment[]
-
     @OneToMany(() => Comment, comment => comment.user_id)
     commentsForId!: Comment[]
 
@@ -67,7 +60,7 @@ export class User extends Model {
     toJSON() {
         return {
             ...this,
-            id: undefined,
+            // id: undefined,
             index: undefined,
             emailToken: undefined,
             isVerified: undefined

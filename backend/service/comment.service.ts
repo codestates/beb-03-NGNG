@@ -25,7 +25,6 @@ const createMemberComment = async (commentData: IMemberComment): Promise<returnC
                 ipAddress,
                 post: postFromUuid,
                 user: userFromUuid,
-                user_nickname: userFromUuid,
                 user_id: userFromUuid,
                 isMember: true,
                 parentComment: commentFromUuid
@@ -38,7 +37,6 @@ const createMemberComment = async (commentData: IMemberComment): Promise<returnC
                 isMember: true,
                 post: postFromUuid,
                 user: userFromUuid,
-                user_nickname: userFromUuid,
                 user_id: userFromUuid,
             });
         }
@@ -218,7 +216,7 @@ const getCommentsFromPostUuid = async ({ postUuid }: any): Promise<returnComment
                         ipAddress: o.parentComment_ipAddress,
                         annonymouseId: o.parentComment_anonymouseId,
                         isMember: o.parentComment_isMember,
-                        nickname: o.parentComment_user_nickname,
+                        id: o.parentComment_user_id,
 
                     })
                 }
@@ -234,7 +232,7 @@ const getCommentsFromPostUuid = async ({ postUuid }: any): Promise<returnComment
                         ipAddress: o.parentComment_ipAddress,
                         annonymouseId: o.parentComment_anonymouseId,
                         isMember: o.parentComment_isMember,
-                        nickname: o.parentComment_user_nickname,
+                        id: o.parentComment_user_id,
                     })
                 }
                 temp[o.comment_index] = {
@@ -244,7 +242,7 @@ const getCommentsFromPostUuid = async ({ postUuid }: any): Promise<returnComment
                     ipAddress: o.comment_ipAddress,
                     annonymouseId: o.comment_anonymouseId,
                     isMember: o.comment_isMember,
-                    nickname: o.comment_user_nickname,
+                    id: o.comment_user_id,
                     childComments
                 }
 

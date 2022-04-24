@@ -9,8 +9,8 @@ import { returnApi } from '../../types/service/Model/InterfaceReturnApiModel';
 import { createWallet, mintToken, mintNFT } from './../../utilities/ether';
 
 const register = async (req: Request, res: Response) => {
-    const { id, nickname, email, password } = req.body;
-    console.log("register : ", id, nickname, email, password)
+    const { id, email, password } = req.body;
+    console.log("register : ", id, email, password)
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(password, salt);
     const emailToken = crypto.randomBytes(64).toString('hex');
@@ -19,7 +19,6 @@ const register = async (req: Request, res: Response) => {
     console.log(typeof privateKey)
     const result = await createUser({
         id,
-        nickname,
         email,
         password: hashPassword,
         emailToken,
@@ -28,7 +27,7 @@ const register = async (req: Request, res: Response) => {
     });
 
     if (result.success) {
-        await sendMail({ email, emailToken, nickname, host: req.headers.host })
+        await sendMail({ email, emailToken,id, host: req.headers.host })
         mintToken(privateKey);
         mintNFT(privateKey);
         return res.status(201).json(result);
@@ -38,9 +37,9 @@ const register = async (req: Request, res: Response) => {
     }
 }
 
-const createToken = ({ id, nickname }: { id: string, nickname: string }) => {
+const createToken = ({ id }: { id: string }) => {
     const secret: any = process.env.JWT_SECRET
-    return jwt.sign({ id, nickname }, secret, { expiresIn: '1h' });
+    return jwt.sign({ id }, secret, { expiresIn: '1h' });
 }
 
 
@@ -66,8 +65,7 @@ const login = async (req: Request, res: Response) => {
     const { id, password } = req.body;
     const result = await loginCheckUser({ id, password });
     if (result.success) {
-        const { user: { nickname } } = result.data;
-        const token = createToken({ id, nickname })
+        const token = createToken({ id })
         return res.status(201).json({
             success: false,
             data: {
@@ -83,15 +81,19 @@ const login = async (req: Request, res: Response) => {
 
 
 const getLoadMyInfo = async (req: Request, res: Response) => {
-    const { id, nickname } = req.user as { id: string, nickname: string }
-    console.log("getLoadMyInfo", id, nickname);
+    const { id } = req.user as { id: string }
+    console.log("getLoadMyInfo", id);
     // const token = createToken(id)
     // res.cookie('access-token', token, {
     //     secure: true,
     //     httpOnly: true,
     //     maxAge: 3600000
     // })
-    return res.status(201).json({ success: true, data: { id, nickname }, error: null });
+    return res.status(201).json({
+        success: true,
+        data: { id },
+        error: null
+    });
 }
 
 
@@ -113,14 +115,13 @@ const verifyEmail = async (req: Request, res: Response) => {
 
 const sendVerifyEmail = async (req: Request, res: Response) => {
     const id = req.user.id as string;
-    const nickname = req.user.nickname as string;
     const email = req.body.email as string;
     const host = req.headers.host;
     const emailToken = crypto.randomBytes(64).toString('hex');
     const result = await updateUser({ id, email, emailToken })
     console.log("update User", result)
     if (result.success) {
-        await sendMail({ host, email, emailToken, nickname });
+        await sendMail({ host, email, emailToken, id });
         return res.status(201).json({
             success: true,
             message: "인증메일을 보냈습니다."

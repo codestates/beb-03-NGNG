@@ -154,7 +154,7 @@ const getPostFromUuid = async ({ postUuid }: { postUuid: string }): Promise<retu
         const post = await getRepository(Post)
             .createQueryBuilder("post")
             .leftJoin('post.user', 'user')
-            .addSelect(['user.nickname'])
+            .addSelect(['user.id'])
             .where("post.uuid = :uuid", { uuid: postUuid })
             .getOne();
         if (process.env.NODE_ENV !== "production") {
@@ -201,7 +201,7 @@ const getPostsWithoutNoticeBoardByTime = async ({ limit = "150" }: { limit: stri
             .where("post.category != :category", { category })
             .select(["post.uuid", "post.title", "post.updatedAt", "post.category"])
             .leftJoin('post.user', 'user')
-            .addSelect('user.nickname' as "nickname")
+            .addSelect('user.id' as "id")
             .orderBy("post.createdAt", "DESC")
             .limit(intLimit)
             .getRawMany();
@@ -230,7 +230,7 @@ const getPostsSortByTime = async ({ limit = "150" }: { limit: string }): Promise
             .createQueryBuilder("post")
             .select(["post.uuid", "post.title", "post.updatedAt", "post.category"])
             .leftJoin('post.user', 'user')
-            .addSelect('user.nickname' as "nickname")
+            .addSelect('user.id' as "id")
             .orderBy("post.createdAt", "DESC")
             .limit(intLimit)
             .getRawMany();
@@ -261,7 +261,7 @@ const getPostsPagenationSortByTime = async ({ category, page = 0, pageSize = 15 
                 .select(["post.uuid", "post.title", "post.updatedAt", "post.category"])
                 .where("post.category = :category", { category })
                 .leftJoin('post.user', 'user')
-                .addSelect('user.nickname' as "nickname")
+                .addSelect('user.id' as "id")
                 .skip((page - 1) * pageSize)
                 .take(pageSize)
                 .getRawMany();
@@ -272,7 +272,7 @@ const getPostsPagenationSortByTime = async ({ category, page = 0, pageSize = 15 
                 .createQueryBuilder("post")
                 .select(["post.uuid", "post.title", "post.updatedAt", "post.category"])
                 .leftJoin('post.user', 'user')
-                .addSelect('user.nickname' as "nickname")
+                .addSelect('user.id' as "id")
                 .skip((page - 1) * pageSize)
                 .take(pageSize)
                 .getRawMany();
@@ -303,7 +303,7 @@ const getCategoryPostsSortByTime = async ({ category, limit = "1500" }: { catego
             .createQueryBuilder("post")
             .where("post.category = :category", { category })
             .leftJoin('post.user', 'user')
-            .addSelect(['user.nickname'])
+            .addSelect(['user.id'])
             .orderBy("post.createdAt", "DESC")
             .limit(intLimit)
             .getRawMany();
