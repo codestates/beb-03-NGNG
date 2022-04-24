@@ -99,7 +99,9 @@ const createPost = async (postData: IPost): Promise<returnPost> => {
             error: null,
         }
     } catch (err) {
-        console.log(err)
+        if (process.env.NODE_ENV !== "production") {
+            console.error(err)
+        }
         return {
             success: false,
             data: null,
@@ -108,32 +110,66 @@ const createPost = async (postData: IPost): Promise<returnPost> => {
     }
 }
 
-const deletePost = async () => {
-
+const deletePost_service = async ({ postUuid }: { postUuid: string }) => {
+    try {
+        const result = await getRepository(Post)
+            .createQueryBuilder("post")
+            .delete()
+            .from(User)
+            .where("uuid = :postUuid", { postUuid })
+            .execute();
+        return {
+            success: true,
+            data: result,
+            error: null,
+        }
+    }
+    catch (err) {
+        if (process.env.NODE_ENV !== "production") {
+            console.error(err)
+        }
+        return {
+            success: false,
+            data: null,
+            error: "post 삭제 실패",
+        }
+    }
 }
 
-const updatePost = async () => {
+const updatePost_service = async () => {
+    try {
 
+    }
+    catch (err) {
+        if (process.env.NODE_ENV !== "production") {
+            console.error(err)
+        }
+    }
 }
+
 
 const getPostFromUuid = async ({ postUuid }: { postUuid: string }): Promise<returnPost> => {
     try {
         console.log(postUuid)
-        // const post = await Post.findOneOrFail({ uuid: postUuid })
         const post = await getRepository(Post)
             .createQueryBuilder("post")
             .leftJoin('post.user', 'user')
             .addSelect(['user.nickname'])
             .where("post.uuid = :uuid", { uuid: postUuid })
             .getOne();
-        console.log(post)
+        if (process.env.NODE_ENV !== "production") {
+            console.log(post);
+        }
 
-        const postUpdate = await getConnection()
-            .createQueryBuilder()
+        const postUpdate = await getRepository(Post)
+            .createQueryBuilder("post")
             .update(Post)
             .set({ views: () => "views + 1" })
             .where("uuid = :uuid", { uuid: postUuid })
             .execute();
+        if (process.env.NODE_ENV !== "production") {
+            console.log(postUpdate);
+        }
 
         return {
             success: true,
@@ -143,7 +179,9 @@ const getPostFromUuid = async ({ postUuid }: { postUuid: string }): Promise<retu
             error: null,
         }
     } catch (err) {
-        console.error(err)
+        if (process.env.NODE_ENV !== "production") {
+            console.error(err)
+        }
         return {
             success: false,
             data: null,
@@ -289,8 +327,8 @@ const getCategoryPostsSortByTime = async ({ category, limit = "1500" }: { catego
 
 export {
     createPost,
-    updatePost,
-    deletePost,
+    deletePost_service,
+    updatePost_service,
     getPostFromUuid,
     getPostsSortByTime,
     getCategoryPostsSortByTime,

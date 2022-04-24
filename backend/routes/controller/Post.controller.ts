@@ -8,6 +8,8 @@ import {
     getPostsPagenationSortByTime,
     likeItPost,
     getPostsWithoutNoticeBoardByTime,
+    deletePost_service,
+    updatePost_service,
 } from '../../service/post.service';
 
 const sendPost = async (req: any, res: Response) => {
@@ -113,4 +115,42 @@ const getLikeIt = async (req: Request, res: Response) => {
 }
 
 
-export { sendPost, getPost, getPosts, likeIt, getLikeIt, getCategoryPosts, getPostsWithoutNoticeBoard }
+const deletePost = async (req: Request, res: Response) => {
+    const postUuid = req.body.postUuid as string;
+    // const result = await deletePost_service({
+    //     postUuid
+    // });
+    const result = { success: true };
+    if (result.success) {
+        return res.status(201).json(result);
+    }
+    else {
+        return res.status(500).json(result)
+    }
+}
+
+const updatePost = async (req: Request, res: Response) => {
+    // const postUuid = req.query.postUuid as string;
+    // const result = await updatePost_service({
+    //     postUuid
+    // });
+    const result = { success: true };
+    if (result.success) {
+        return res.status(201).json(result);
+    }
+    else {
+        return res.status(500).json(result)
+    }
+}
+
+export {
+    sendPost,
+    getPost,
+    getPosts,
+    likeIt,
+    getLikeIt,
+    getCategoryPosts,
+    getPostsWithoutNoticeBoard,
+    deletePost,
+    updatePost
+}

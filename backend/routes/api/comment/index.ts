@@ -40,5 +40,6 @@ router.post('/deleteNonmemberComment',
 
 router.get('/getComments', getComments);
 
-
+// router.put('/updatePost', likeIt);
+// router.get('/deletePost', getLikeIt);
 export default router

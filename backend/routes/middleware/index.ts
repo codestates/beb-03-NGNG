@@ -22,6 +22,11 @@ const loginRequired = async (req: Request, res: Response, next: NextFunction) =>
         if (token) {
             const validateToken: any = jwt.verify(token, secret);
             console.log("validateToken : ", validateToken);
+
+            // jwt 복호화해서 나온 id 나 nickname 기준으로 
+            // db에서 확인해서 db 데이터를 넣어주느냐
+            // 그대로 복호환 된 값을 넣어주느냐
+            
             if (validateToken) {
                 req.user = {
                     id: validateToken.id,

@@ -1,5 +1,5 @@
 import express, { Router } from 'express';
-import { sendPost, getCategoryPosts, getPost, getPosts, likeIt, getLikeIt, getPostsWithoutNoticeBoard } from '../../controller/Post.controller';
+import { sendPost, getCategoryPosts, getPost, getPosts, likeIt, getLikeIt, getPostsWithoutNoticeBoard,deletePost} from '../../controller/Post.controller';
 import { loginRequired, ipMiddleware } from '../../middleware';
 const router = Router()
 
@@ -14,6 +14,8 @@ router.get('/getPostsWithoutNoticeBoard', getPostsWithoutNoticeBoard);
 
 router.put('/likeIt', likeIt);
 router.get('/getLikeIt', getLikeIt);
+router.put('/updatePost', deletePost);
+router.delete('/deletePost', deletePost);
 
 
 export default router
