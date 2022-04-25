@@ -144,8 +144,8 @@ const getLikeIt = async (req: Request, res: Response) => {
 
 
 const deletePost = async (req: Request, res: Response) => {
-    const postUuid = req.body.postUuid as string;
-    const id = req.user as string;
+    const postUuid = req.query.postUuid as string;
+    const id = req.user.id as string;
     const result = await deletePost_service({
         id,
         postUuid
