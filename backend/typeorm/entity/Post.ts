@@ -5,12 +5,10 @@ import { Comment } from "./Comment";
 
 import { Model } from './Models/Model'
 import { User } from './User'
+import { HashTag } from './HashTag';
 
 @Entity()
 export class Post extends Model {
-    @Column()
-    @Length(1, 255)
-    title!: string;
 
     @Column({ type: "text" })
     content!: string;
@@ -49,37 +47,24 @@ export class Post extends Model {
     })
     commentCount!: number;
 
-    @Column()
-    @IsIP()
-    ipAddress!: string;
-
-    @Column({
-        nullable: true
-    })
-    slug!: string;
-
-    @AfterInsert()
-    createSlug() {
-        this.title
-    }
-
     @ManyToOne(() => User, post => post.posts, {
         onDelete: "CASCADE",
         onUpdate: "CASCADE"
     })
     user!: User
 
-    @OneToMany(() => Comment, comment => comment.post)
+    @OneToMany(_ => HashTag, hashTag => hashTag.post)
+    hashTags!: HashTag[]
+
+    @OneToMany(_ => Comment, comment => comment.post)
     comments!: Comment[]
 
-    @OneToMany(() => Thumb, thumb => thumb.post)
+    @OneToMany(_ => Thumb, thumb => thumb.post)
     thumbs!: Thumb[]
 
     toJSON() {
-        const ipAddress = "X.X." + this.ipAddress.split('.').slice(2, 4).join('.')
         return {
             ...this,
-            ipAddress
         }
 
 

@@ -14,5 +14,13 @@ interface INonMemberComment extends interfaceCommentModel {
 interface returnComment extends returnApi {
     comment?: any,
 }
+interface returnHashTag extends returnApi {
+    hashTag?: any,
+}
 
-export type { IMemberComment, INonMemberComment, returnComment }
+export type {
+    IMemberComment,
+    INonMemberComment,
+    returnComment,
+    returnHashTag
+}

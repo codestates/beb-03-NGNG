@@ -18,11 +18,6 @@ export class Comment extends Model {
     deleted!: boolean;
 
     @Column({
-        nullable: false
-    })
-    ipAddress!: string;
-
-    @Column({
         nullable: true
     })
     anonymouseId?: string;
@@ -52,13 +47,6 @@ export class Comment extends Model {
     })
     user!: User;
 
-    @ManyToOne(() => User, user => user.commentsForNickname, {
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE"
-    })
-    @JoinColumn({ name: 'user_nickname', referencedColumnName: 'nickname' })
-    user_nickname!: User;
-
     @ManyToOne(() => User, user => user.commentsForId, {
         onDelete: "CASCADE",
         onUpdate: "CASCADE"
@@ -78,7 +66,6 @@ export class Comment extends Model {
     toJSON() {
         return {
             ...this,
-            test: this.user_nickname,
             password: undefined
         }
     }

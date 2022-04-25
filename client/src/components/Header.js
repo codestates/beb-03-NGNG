@@ -7,9 +7,11 @@ import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import Button from '@mui/material/Button';
-import Modal from '@mui/material/Modal';
 import LoginModal from './LoginModal';
 import SignupModal from './SignupModal';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { logout } from '../redux/user';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -52,9 +54,13 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const Header = (props) => {
-  const [isLogedIn, setIsLogedIn] = useState('false');
-
+  const dispatch = useDispatch();
+  const isLogedIn = useSelector((state) => state.user.isLogedIn);
   const inputRef = useRef();
+
+  const handleLogout = () => {
+    dispatch(logout());
+  }
 
   const handleKeyDown = (event) => {
     if (event.keyCode === 13) {
@@ -95,12 +101,12 @@ const Header = (props) => {
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            {isLogedIn ?
+            {!isLogedIn ?
             <Box sx={{display: 'flex'}}>
               <LoginModal />
               <SignupModal />
             </Box> :
-            <Button variant='contained' color="success">Log Out</Button>
+            <Button variant='contained' color="success" onClick={handleLogout}>Log Out</Button>
             }
           </Box>
         </Toolbar>

@@ -6,9 +6,13 @@ declare global {
         interface Request {
             user: {
                 id?: string;
-                nickname?: string;
-                ipAddress?: string;
-            };
+            },
+            post:{
+                postUri:Array<string>
+            },
+            profile:{
+                imageUri:string,
+            },
         }
     }
 }

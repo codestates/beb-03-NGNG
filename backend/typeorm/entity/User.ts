@@ -8,14 +8,16 @@ import { Post } from './Post'
 
 @Entity()
 export class User extends Model {
-
     @Column({ unique: true })
     @Length(5, 30)
     id!: string;
 
-    @Column({ unique: true })
-    @Length(5, 30)
-    nickname!: string;
+    @Column({
+        type: "text",
+        // default: "https://mui.com/static/images/avatar/1.jpg",
+        nullable: true,
+    })
+    imageUrl!: string;
 
     @Column({ unique: true })
     @Length(1, 255)
@@ -51,9 +53,6 @@ export class User extends Model {
     @OneToMany(() => Comment, comment => comment.user)
     comments!: Comment[]
 
-    @OneToMany(() => Comment, comment => comment.user_nickname)
-    commentsForNickname!: Comment[]
-
     @OneToMany(() => Comment, comment => comment.user_id)
     commentsForId!: Comment[]
 
@@ -67,7 +66,7 @@ export class User extends Model {
     toJSON() {
         return {
             ...this,
-            id: undefined,
+            // id: undefined,
             index: undefined,
             emailToken: undefined,
             isVerified: undefined

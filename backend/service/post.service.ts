@@ -1,3 +1,4 @@
+import { HashTag } from './../typeorm/entity/HashTag';
 import { getRepository, getConnection } from 'typeorm';
 import { Thumb } from '../typeorm/entity/Thumb';
 import { User } from '../typeorm/entity/User';
@@ -5,6 +6,7 @@ import { validate } from 'class-validator';
 
 import { IPost, ILikeIt, returnPostLikeIt, returnGetPostLikeIt, returnPost, returnPosts } from '../types/service/InterfacePost';
 import { Post } from '../typeorm/entity/Post';
+import { v4 as uuid } from 'uuid';
 
 
 
@@ -80,26 +82,42 @@ const getLikeItPost = async (likeItData: { postUuid: string }): Promise<returnGe
 
 const createPost = async (postData: IPost): Promise<returnPost> => {
     const {
-        title,
         content,
-        ipAddress,
         id,
         category,
+        tags,
     } = postData;
     console.log(postData)
     try {
         const user = await User.findOneOrFail({ id })
-        const post = Post.create({ title, content, ipAddress, user, category });
-        const errors = await validate(post)
+        const post = Post.create({ content, user, category });
+        const errors = await validate(post);
         if (errors.length > 0) throw errors
-        await post.save()
+        await post.save();
+        console.log(post)
+        const tagArray = tags.map(tag => {
+            return { post, tag, uuid: uuid() }
+        });
+        console.log(tagArray)
+        const hashTag = await getConnection()
+            .createQueryBuilder()
+            .insert()
+            .into(HashTag)
+            .values(tagArray)
+            .execute();
+        const errors2 = await validate(hashTag);
+        if (errors2.length > 0) throw errors2
         return {
             success: true,
-            data: null,
+            data: {
+                postUuid: post.uuid
+            },
             error: null,
         }
     } catch (err) {
-        console.log(err)
+        if (process.env.NODE_ENV !== "production") {
+            console.error(err)
+        }
         return {
             success: false,
             data: null,
@@ -108,32 +126,79 @@ const createPost = async (postData: IPost): Promise<returnPost> => {
     }
 }
 
-const deletePost = async () => {
+const deletePost_service = async ({ postUuid, id }: { postUuid: string, id: string }) => {
+    try {
+        // const result = await getRepository(Post)
+        //     .createQueryBuilder("post")
+        //     .leftJoin('post.user', 'user')
+        //     .where("user.id = :id", { id })
+        //     .addSelect((subQuery: any) => {
+        //         return subQuery
+        //             .delete()
+        //             .from(Post)
+        //             .where("post.uuid = :postUuid", { postUuid })
+        //             .execute();
+        //     })
+        //     .getOne();
 
+        const result = await getRepository(Post)
+            .createQueryBuilder("post")
+            .delete()
+            .from(Post)
+            .where("post.uuid = :postUuid", { postUuid })
+            .execute();
+        return {
+            success: true,
+            data: result,
+            error: null,
+        }
+    }
+    catch (err) {
+        if (process.env.NODE_ENV !== "production") {
+            console.error(err)
+        }
+        return {
+            success: false,
+            data: null,
+            error: "post 삭제 실패",
+        }
+    }
 }
 
-const updatePost = async () => {
+const updatePost_service = async () => {
+    try {
 
+    }
+    catch (err) {
+        if (process.env.NODE_ENV !== "production") {
+            console.error(err)
+        }
+    }
 }
+
 
 const getPostFromUuid = async ({ postUuid }: { postUuid: string }): Promise<returnPost> => {
     try {
         console.log(postUuid)
-        // const post = await Post.findOneOrFail({ uuid: postUuid })
         const post = await getRepository(Post)
             .createQueryBuilder("post")
             .leftJoin('post.user', 'user')
-            .addSelect(['user.nickname'])
+            .addSelect(['user.id'])
             .where("post.uuid = :uuid", { uuid: postUuid })
             .getOne();
-        console.log(post)
+        if (process.env.NODE_ENV !== "production") {
+            console.log(post);
+        }
 
-        const postUpdate = await getConnection()
-            .createQueryBuilder()
+        const postUpdate = await getRepository(Post)
+            .createQueryBuilder("post")
             .update(Post)
             .set({ views: () => "views + 1" })
             .where("uuid = :uuid", { uuid: postUuid })
             .execute();
+        if (process.env.NODE_ENV !== "production") {
+            console.log(postUpdate);
+        }
 
         return {
             success: true,
@@ -143,7 +208,9 @@ const getPostFromUuid = async ({ postUuid }: { postUuid: string }): Promise<retu
             error: null,
         }
     } catch (err) {
-        console.error(err)
+        if (process.env.NODE_ENV !== "production") {
+            console.error(err)
+        }
         return {
             success: false,
             data: null,
@@ -161,9 +228,9 @@ const getPostsWithoutNoticeBoardByTime = async ({ limit = "150" }: { limit: stri
         const posts = await getRepository(Post)
             .createQueryBuilder("post")
             .where("post.category != :category", { category })
-            .select(["post.uuid", "post.title", "post.updatedAt", "post.category"])
+            .select(["post.uuid", "post.updatedAt", "post.category"])
             .leftJoin('post.user', 'user')
-            .addSelect('user.nickname' as "nickname")
+            .addSelect('user.id' as "id")
             .orderBy("post.createdAt", "DESC")
             .limit(intLimit)
             .getRawMany();
@@ -190,9 +257,9 @@ const getPostsSortByTime = async ({ limit = "150" }: { limit: string }): Promise
         const intLimit = parseInt(limit);
         const posts = await getRepository(Post)
             .createQueryBuilder("post")
-            .select(["post.uuid", "post.title", "post.updatedAt", "post.category"])
+            .select(["post.uuid", "post.updatedAt", "post.category"])
             .leftJoin('post.user', 'user')
-            .addSelect('user.nickname' as "nickname")
+            .addSelect('user.id' as "id")
             .orderBy("post.createdAt", "DESC")
             .limit(intLimit)
             .getRawMany();
@@ -214,16 +281,44 @@ const getPostsSortByTime = async ({ limit = "150" }: { limit: string }): Promise
     }
 }
 
+const getHashTagPosts_service = async ({ tag }: { tag: string }): Promise<returnPosts> => {
+    try {
+        console.log(tag)
+        const hashTag = await getRepository(HashTag)
+            .createQueryBuilder("hashTag")
+            .leftJoin('hashTag.post', 'post')
+            .where("hashTag.tag = :tag", { tag })
+            .leftJoin('post.user', 'user')
+            .select(["post.uuid", "post.updatedAt", "post.content", "id"])
+            .getRawMany();
+        console.log(hashTag);
+        return {
+            success: true,
+            data: {
+                hashTag,
+            },
+            error: null,
+        }
+    } catch (err) {
+        console.error(err)
+        return {
+            success: false,
+            data: null,
+            error: "포스트 여러개 가져오기 실패"
+        }
+    }
+}
+
 const getPostsPagenationSortByTime = async ({ category, page = 0, pageSize = 15 }: { category: string, page?: number, pageSize?: number }): Promise<returnPosts> => {
     try {
         let posts: Array<object> = []
         if (category) {
             await getRepository(Post)
                 .createQueryBuilder("post")
-                .select(["post.uuid", "post.title", "post.updatedAt", "post.category"])
+                .select(["post.uuid", "post.updatedAt", "post.category"])
                 .where("post.category = :category", { category })
                 .leftJoin('post.user', 'user')
-                .addSelect('user.nickname' as "nickname")
+                .addSelect('user.id' as "id")
                 .skip((page - 1) * pageSize)
                 .take(pageSize)
                 .getRawMany();
@@ -232,9 +327,9 @@ const getPostsPagenationSortByTime = async ({ category, page = 0, pageSize = 15 
         else {
             await getRepository(Post)
                 .createQueryBuilder("post")
-                .select(["post.uuid", "post.title", "post.updatedAt", "post.category"])
+                .select(["post.uuid", "post.updatedAt", "post.category"])
                 .leftJoin('post.user', 'user')
-                .addSelect('user.nickname' as "nickname")
+                .addSelect('user.id' as "id")
                 .skip((page - 1) * pageSize)
                 .take(pageSize)
                 .getRawMany();
@@ -265,7 +360,7 @@ const getCategoryPostsSortByTime = async ({ category, limit = "1500" }: { catego
             .createQueryBuilder("post")
             .where("post.category = :category", { category })
             .leftJoin('post.user', 'user')
-            .addSelect(['user.nickname'])
+            .addSelect(['user.id'])
             .orderBy("post.createdAt", "DESC")
             .limit(intLimit)
             .getRawMany();
@@ -289,8 +384,8 @@ const getCategoryPostsSortByTime = async ({ category, limit = "1500" }: { catego
 
 export {
     createPost,
-    updatePost,
-    deletePost,
+    deletePost_service,
+    updatePost_service,
     getPostFromUuid,
     getPostsSortByTime,
     getCategoryPostsSortByTime,
@@ -298,4 +393,5 @@ export {
     getPostsWithoutNoticeBoardByTime,
     likeItPost,
     getLikeItPost,
+    getHashTagPosts_service,
 }

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { loginRequired, emailVerified, ipMiddleware } from '../../middleware';
+import { loginRequired, emailVerified } from '../../middleware';
 import {
     sendMemberComment,
     sendNonMemberComment,
@@ -13,7 +13,6 @@ const router = Router()
 
 router.post('/sendMemberComment',
     loginRequired,
-    ipMiddleware,
     sendMemberComment
 );
 router.post('/deleteMemberComment',
@@ -28,7 +27,6 @@ router.post('/deleteMemberComment',
 
 
 router.post('/sendNonMemberComment',
-    ipMiddleware,
     sendNonMemberComment
 );
 router.post('/deleteNonmemberComment',
@@ -40,5 +38,6 @@ router.post('/deleteNonmemberComment',
 
 router.get('/getComments', getComments);
 
-
+// router.put('/updatePost', likeIt);
+// router.get('/deletePost', getLikeIt);
 export default router

@@ -5,7 +5,6 @@ type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
 interface IUser {
     id: string,
-    nickname: string,
     email: string,
     password: string,
     emailToken?: string | null,

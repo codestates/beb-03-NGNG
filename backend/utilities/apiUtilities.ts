@@ -11,7 +11,7 @@ const sanitizeUser = (user: User): any => {
 };
 
 let transporter = null;
-const sendMail = async ({ email, emailToken, nickname, host }: any) => {
+const sendMail = async ({ email, emailToken, id, host }: any) => {
     try {
         if (transporter === null) {
             const mailConfig = config?.mailConfig as SMTPTransport.Options;
@@ -22,7 +22,7 @@ const sendMail = async ({ email, emailToken, nickname, host }: any) => {
             to: email,
             subject: 'codewithsid = - verfiy your email',
             html: `
-                <h2> ${nickname} 회원님</h2>
+                <h2> ${id} 회원님</h2>
                 <h4> 가입하시려면 이메일 인증이 필요합니다. 아래 인증하기 버튼을 눌러주세요</h4>
                 <button>
                     <a href="http://${host}/api/user/verify-email?token=${emailToken}">인증하기</a>

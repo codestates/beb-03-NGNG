@@ -1,16 +1,14 @@
 import './App.css';
 import { Navigate, Routes, Route} from 'react-router-dom';
-import Home from './pages/Home';
-import MyTalk from './pages/MyTalk';
-import Transactions from './pages/Transactions';
 import Header from './components/Header';
 import Container from '@mui/material/Container';
-import { CssBaseline, Modal, Stack } from '@mui/material';
+import { CssBaseline, Stack } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import RightBar from './components/RightBar';
 import LeftMenu from './components/LeftMenu';
 import routes from "./routes";
+
 
 const customTheme = createTheme({
   palette: {

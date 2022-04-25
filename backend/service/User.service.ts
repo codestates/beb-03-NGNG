@@ -6,11 +6,10 @@ import { sanitizeUser } from '../utilities/apiUtilities';
 import { returnApi } from '../types/service/Model/InterfaceReturnApiModel';
 
 const createUser = async (userData: IUser): Promise<returnUser> => {
-    const { id, nickname, email, password, emailToken, isVerified, privateKey } = userData;
+    const { id,  email, password, emailToken, isVerified, privateKey } = userData;
     try {
         const user = User.create({
             id,
-            nickname,
             email,
             password,
             emailToken,
@@ -144,7 +143,7 @@ const loginCheckUser = async (userData: ILoginUser): Promise<returnApi> => {
             success: true,
             data: {
                 user: {
-                    nickname: user.nickname
+                    id: user.id
                 }
             },
             error: null,

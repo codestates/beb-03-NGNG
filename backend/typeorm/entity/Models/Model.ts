@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid'
 
 export abstract class Model extends BaseEntity {
     @PrimaryGeneratedColumn()
-    index!: number;
+    index: number;
 
     @Column({ unique: true, type: 'uuid' })
     uuid!: string

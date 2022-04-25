@@ -1,4 +1,4 @@
-import { Card, Button, Box, Tooltip, IconButton } from '@mui/material';
+import { Card, Button, Box, Tooltip, IconButton, Container } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import React, { useRef } from 'react';
@@ -7,6 +7,10 @@ import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import CreateIcon from '@mui/icons-material/Create';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import TagInput from './TagInput';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { initializeTag } from '../redux/tag';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -43,6 +47,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const WriteTalk = (props) => {
+  const tags = useSelector((state) => state.tag.tags);
+  const dispatch = useDispatch();
 
   const contentRef = useRef();
 
@@ -53,6 +59,8 @@ const WriteTalk = (props) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(contentRef.current.value);
+    console.log(tags);
+    dispatch(initializeTag());
     contentRef.current.value = '';
   }
 
@@ -61,9 +69,10 @@ const WriteTalk = (props) => {
       {/* <Typography variant="body2" color="primary" fontSize={'28px'}>
         🔥 Hot 10 Tags Now!
       </Typography> */}
-      <Card sx={{backgroundColor: '#606060', mb: 2, p: 2, display: 'flex', alignItems: 'center'}}>
+      <Card sx={{backgroundColor: '#606060', mb: 2, p: 2, display: 'flex', alignItems: 'flex-start'}}>
         <CreateIcon sx={{mr: 2}} />
-        <TextField
+        <Box sx={{width: '100%', mr: 2}}>
+          <TextField 
           fullWidth
           multiline
           rows={2}
@@ -73,7 +82,9 @@ const WriteTalk = (props) => {
           sx={{mr: 2}}
           inputRef = {contentRef}
         />
-        <Box sx={{ display: 'flex', flexDirection: 'column', height: 'inherit'}}>
+        <TagInput />
+        </Box>
+        <Box sx={{ display: 'flex', flexDirection: 'column', height: 'inherit', pt: 0.5}}>
           <Button variant='contained' color='success' onClick={handleOpen} sx={{height: '30px', mb: 1.5}}><AddPhotoAlternateIcon /></Button>
           <Button type='submit' variant='contained' color='success' onClick={handleSubmit} sx={{height: '30px', width: '60px'}}>Submit</Button>
         </Box>

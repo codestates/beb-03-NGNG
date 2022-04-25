@@ -5,6 +5,10 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
+import { useDispatch } from 'react-redux';
+import { login } from '../redux/user';
+import axios from 'axios';
+import { useQuery, useMutation } from 'react-query';
 
 const style = {
   position: 'absolute',
@@ -20,21 +24,35 @@ const style = {
 };
 
 export default function LoginModal() {
+  const [id, setId] = useState('')
+  const [password, setPassword] = useState('');
+
+  const dispatch = useDispatch();
   const [inValid, setInvalid] = useState(false);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const loginMutation = useMutation(loginInfo => {
+    return axios.post('http://localhost:5001/api/user/login', loginInfo);
+  });
+
   const handleSubmit = (event) => {
+
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const userId = data.get('userId');
-    const password = data.get('password');
-    if (userId === '' || password === '') {
+    setId(data.get('userId'));
+    setPassword(data.get('password'));
+
+    if (id === '' || password === '') {
       setInvalid(true);
       return;
     }
-    console.log(userId, password);
+
+    // id, password로 request -> userInfo를 res로 받아오기 -> 전역 상태 변경
+    
+    // 데이터 받아오고 상태 변경하기 (isLogedIn, userInfo)
+    dispatch(login({id: '', nickname: 'yooni', email: '', emailToken: null, isVerified: false, privateKey: '', tokenAmount: '300'}));
     handleClose();
     setInvalid(false);
   }
@@ -50,7 +68,7 @@ export default function LoginModal() {
       >
         <Box sx={style}>
           <Typography component="h1" variant="h5">
-            Sign in
+            Log in
           </Typography>
           <Box component="form" noValidate sx={{ mt: 1 }} onSubmit={handleSubmit}>
             <TextField
