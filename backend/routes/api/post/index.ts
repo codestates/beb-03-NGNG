@@ -10,13 +10,13 @@ import {
     deletePost,
     getHashTagPosts
 } from '../../controller/Post.controller';
-import { loginRequired, ipMiddleware } from '../../middleware';
+import { loginRequired } from '../../middleware';
 const router = Router()
 
 
 // 카테고리 추가해야함
 
-router.post('/sendPost', loginRequired, ipMiddleware, sendPost);
+router.post('/sendPost', loginRequired, sendPost);
 
 router.get('/getPost', getPost);
 router.get('/getPosts', getPosts);

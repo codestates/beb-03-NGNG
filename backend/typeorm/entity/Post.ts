@@ -47,10 +47,6 @@ export class Post extends Model {
     })
     commentCount!: number;
 
-    @Column()
-    @IsIP()
-    ipAddress!: string;
-
     @ManyToOne(() => User, post => post.posts, {
         onDelete: "CASCADE",
         onUpdate: "CASCADE"
@@ -67,10 +63,8 @@ export class Post extends Model {
     thumbs!: Thumb[]
 
     toJSON() {
-        const ipAddress = "X.X." + this.ipAddress.split('.').slice(2, 4).join('.')
         return {
             ...this,
-            ipAddress
         }
 
 

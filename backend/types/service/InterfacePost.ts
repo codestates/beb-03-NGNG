@@ -2,7 +2,6 @@ import { role } from '../enum/index'
 import { returnApi } from './Model/InterfaceReturnApiModel'
 interface IPost {
     content: string,
-    ipAddress: string
     id: string,
     category: string,
     permision?: role,

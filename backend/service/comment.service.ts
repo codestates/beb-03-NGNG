@@ -9,7 +9,6 @@ import { getRepository } from 'typeorm';
 const createMemberComment = async (commentData: IMemberComment): Promise<returnComment> => {
     const {
         content,
-        ipAddress,
         postUuid,
         id,
         parentUuid,
@@ -22,7 +21,6 @@ const createMemberComment = async (commentData: IMemberComment): Promise<returnC
             const commentFromUuid = await Comment.findOneOrFail({ uuid: parentUuid })
             comment = Comment.create({
                 content,
-                ipAddress,
                 post: postFromUuid,
                 user: userFromUuid,
                 user_id: userFromUuid,
@@ -33,7 +31,6 @@ const createMemberComment = async (commentData: IMemberComment): Promise<returnC
         else {
             comment = Comment.create({
                 content,
-                ipAddress,
                 isMember: true,
                 post: postFromUuid,
                 user: userFromUuid,
@@ -63,7 +60,6 @@ const createMemberComment = async (commentData: IMemberComment): Promise<returnC
 const createNonMemberComment = async (commentData: INonMemberComment): Promise<returnComment> => {
     const {
         content,
-        ipAddress,
         postUuid,
         anonymouseId,
         password,
@@ -76,7 +72,6 @@ const createNonMemberComment = async (commentData: INonMemberComment): Promise<r
             const commentFromUuid = await Comment.findOneOrFail({ uuid: parentUuid })
             comment = Comment.create({
                 content,
-                ipAddress,
                 post: postFromUuid,
                 anonymouseId,
                 password,
@@ -86,7 +81,6 @@ const createNonMemberComment = async (commentData: INonMemberComment): Promise<r
         else {
             comment = Comment.create({
                 content,
-                ipAddress,
                 post: postFromUuid,
                 anonymouseId,
                 password,
@@ -213,7 +207,6 @@ const getCommentsFromPostUuid = async ({ postUuid }: any): Promise<returnComment
                         uuid: o.parentComment_uuid,
                         updatedAt: o.parentComment_updatedAt,
                         content: o.parentComment_content,
-                        ipAddress: o.parentComment_ipAddress,
                         annonymouseId: o.parentComment_anonymouseId,
                         isMember: o.parentComment_isMember,
                         id: o.parentComment_user_id,
@@ -229,7 +222,6 @@ const getCommentsFromPostUuid = async ({ postUuid }: any): Promise<returnComment
                         uuid: o.parentComment_uuid,
                         updatedAt: o.parentComment_updatedAt,
                         content: o.parentComment_content,
-                        ipAddress: o.parentComment_ipAddress,
                         annonymouseId: o.parentComment_anonymouseId,
                         isMember: o.parentComment_isMember,
                         id: o.parentComment_user_id,
@@ -239,7 +231,6 @@ const getCommentsFromPostUuid = async ({ postUuid }: any): Promise<returnComment
                     uuid: o.comment_uuid,
                     updatedAt: o.comment_updatedAt,
                     content: o.comment_content,
-                    ipAddress: o.comment_ipAddress,
                     annonymouseId: o.comment_anonymouseId,
                     isMember: o.comment_isMember,
                     id: o.comment_user_id,

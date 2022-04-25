@@ -14,7 +14,7 @@ import {
 } from '../../service/post.service';
 
 const sendPost = async (req: Request, res: Response) => {
-    const { id, ipAddress } = req.user;
+    const { id } = req.user;
     const { content, category, tags: tagsString } = req.body;
 
     const tags = tagsString.split(/(#[^#\s]+)/g).filter((v: string) => {
@@ -22,7 +22,7 @@ const sendPost = async (req: Request, res: Response) => {
     }).map((tag: string) => tag.slice(1));
     console.log(tags)
     const result = await createPost({
-        content, ipAddress, id, category, tags
+        content, id, category, tags
     });
     if (result.success) {
         return res.status(201).json(result);

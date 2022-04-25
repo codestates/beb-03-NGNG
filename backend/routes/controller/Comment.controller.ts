@@ -13,10 +13,9 @@ const sendMemberComment = async (req: Request, res: Response) => {
         postUuid,
         parentUuid,
     } = req.body;
-    const { id, ipAddress } = req.user;
+    const { id } = req.user;
     const result = await createMemberComment({
         content,
-        ipAddress,
         postUuid,
         id,
         parentUuid,
@@ -37,11 +36,8 @@ const sendNonMemberComment = async (req: Request, res: Response) => {
         anonymouseId,
         password,
     } = req.body;
-    const ipAddress = req.user.ipAddress as string;
-    console.log("testtestsetstttest : ", ipAddress)
     const result = await createNonMemberComment({
         content,
-        ipAddress,
         postUuid,
         anonymouseId,
         password,

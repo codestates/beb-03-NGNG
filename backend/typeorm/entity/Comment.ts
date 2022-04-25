@@ -18,11 +18,6 @@ export class Comment extends Model {
     deleted!: boolean;
 
     @Column({
-        nullable: false
-    })
-    ipAddress!: string;
-
-    @Column({
         nullable: true
     })
     anonymouseId?: string;

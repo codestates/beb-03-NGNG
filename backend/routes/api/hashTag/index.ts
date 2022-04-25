@@ -1,6 +1,6 @@
 import express, { Router } from 'express';
 import {  getTopHashTag} from '../../controller/HashTag.controller';
-import { loginRequired, ipMiddleware } from '../../middleware';
+import { loginRequired } from '../../middleware';
 const router = Router()
 
 

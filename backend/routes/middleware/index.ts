@@ -81,14 +81,4 @@ const isNotEmailVerified = async (req: Request, res: any, next: NextFunction) =>
     }
 }
 
-const ipMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    const clientIp = requestIp.getClientIp(req);
-
-    if (req.user === undefined) {
-        req.user = {}
-    }
-    req.user.ipAddress = clientIp as string;
-    next();
-};
-
-export { loginRequired, emailVerified, isNotEmailVerified, ipMiddleware }
+export { loginRequired, emailVerified, isNotEmailVerified }
