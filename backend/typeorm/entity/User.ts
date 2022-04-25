@@ -12,11 +12,11 @@ export class User extends Model {
     @Length(5, 30)
     id!: string;
 
-    @Column({ 
+    @Column({
         type: "text",
-        default:""
-     })
-    @Length(0, 300)
+        // default: "https://mui.com/static/images/avatar/1.jpg",
+        nullable: true,
+    })
     imageUrl!: string;
 
     @Column({ unique: true })

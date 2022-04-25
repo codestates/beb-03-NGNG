@@ -8,6 +8,7 @@ interface IPost {
     permision?: role,
     useComment?: boolean,
     delete?: boolean,
+    tags: Array<string>,
 }
 
 

@@ -4,7 +4,6 @@ import { Entity, Column, ManyToOne, OneToMany, AfterInsert, ManyToMany, JoinTabl
 import { Post } from "./Post";
 
 import { Model } from './Models/Model'
-import { User } from './User'
 
 @Entity()
 export class HashTag extends Model {
@@ -15,8 +14,8 @@ export class HashTag extends Model {
     @ManyToOne(() => Post, post => post.hashTags, {
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
-        nullable: false,
+        nullable: true,
     })
-    post: Post;
+    post!: Post;
 
 }

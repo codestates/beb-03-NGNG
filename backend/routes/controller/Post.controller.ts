@@ -10,14 +10,19 @@ import {
     getPostsWithoutNoticeBoardByTime,
     deletePost_service,
     updatePost_service,
+    getHashTagPosts_service,
 } from '../../service/post.service';
 
-const sendPost = async (req: any, res: Response) => {
+const sendPost = async (req: Request, res: Response) => {
     const { id, ipAddress } = req.user;
-    console.log("ipAddress : ", id, ipAddress);
-    const { content, category } = req.body;
+    const { content, category, tags: tagsString } = req.body;
+
+    const tags = tagsString.split(/(#[^#\s]+)/g).filter((v: string) => {
+        return v.match(/(#[^#\s]+)/g)
+    }).map((tag: string) => tag.slice(1));
+    console.log(tags)
     const result = await createPost({
-        content, ipAddress, id, category
+        content, ipAddress, id, category, tags
     });
     if (result.success) {
         return res.status(201).json(result);
@@ -56,6 +61,17 @@ const getCategoryPosts = async (req: Request, res: Response) => {
     const limit = req.query.limit as string;
     console.log(category, limit)
     const result = await getCategoryPostsSortByTime({ category, limit });
+    if (result.success) {
+        return res.status(201).json(result);
+    }
+    else {
+        return res.status(500).json(result)
+    }
+}
+const getHashTagPosts = async (req: Request, res: Response) => {
+    const tag = req.query.tag as string;
+    console.log(tag)
+    const result = await getHashTagPosts_service({ tag });
     if (result.success) {
         return res.status(201).json(result);
     }
@@ -117,10 +133,9 @@ const getLikeIt = async (req: Request, res: Response) => {
 
 const deletePost = async (req: Request, res: Response) => {
     const postUuid = req.body.postUuid as string;
-    // const result = await deletePost_service({
-    //     postUuid
-    // });
-    const result = { success: true };
+    const result = await deletePost_service({
+        postUuid
+    });
     if (result.success) {
         return res.status(201).json(result);
     }
@@ -152,5 +167,6 @@ export {
     getCategoryPosts,
     getPostsWithoutNoticeBoard,
     deletePost,
-    updatePost
+    updatePost,
+    getHashTagPosts
 }

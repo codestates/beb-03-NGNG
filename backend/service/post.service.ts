@@ -1,3 +1,4 @@
+import { HashTag } from './../typeorm/entity/HashTag';
 import { getRepository, getConnection } from 'typeorm';
 import { Thumb } from '../typeorm/entity/Thumb';
 import { User } from '../typeorm/entity/User';
@@ -5,6 +6,7 @@ import { validate } from 'class-validator';
 
 import { IPost, ILikeIt, returnPostLikeIt, returnGetPostLikeIt, returnPost, returnPosts } from '../types/service/InterfacePost';
 import { Post } from '../typeorm/entity/Post';
+import { v4 as uuid } from 'uuid';
 
 
 
@@ -84,17 +86,33 @@ const createPost = async (postData: IPost): Promise<returnPost> => {
         ipAddress,
         id,
         category,
+        tags,
     } = postData;
     console.log(postData)
     try {
         const user = await User.findOneOrFail({ id })
         const post = Post.create({ content, ipAddress, user, category });
-        const errors = await validate(post)
+        const errors = await validate(post);
         if (errors.length > 0) throw errors
-        await post.save()
+        await post.save();
+        console.log(post)
+        const tagArray = tags.map(tag => {
+            return { post, tag, uuid: uuid() }
+        });
+        console.log(tagArray)
+        const hashTag = await getConnection()
+            .createQueryBuilder()
+            .insert()
+            .into(HashTag)
+            .values(tagArray)
+            .execute();
+        const errors2 = await validate(hashTag);
+        if (errors2.length > 0) throw errors2
         return {
             success: true,
-            data: null,
+            data: {
+                postUuid: post.uuid
+            },
             error: null,
         }
     } catch (err) {
@@ -251,6 +269,34 @@ const getPostsSortByTime = async ({ limit = "150" }: { limit: string }): Promise
     }
 }
 
+const getHashTagPosts_service = async ({ tag }: { tag: string }): Promise<returnPosts> => {
+    try {
+        console.log(tag)
+        const hashTag = await getRepository(HashTag)
+            .createQueryBuilder("hashTag")
+            .leftJoin('hashTag.post', 'post')
+            .where("hashTag.tag = :tag", { tag })
+            .leftJoin('post.user', 'user')
+            .select(["post.uuid", "post.updatedAt", "post.content", "id"])
+            .getRawMany();
+        console.log(hashTag);
+        return {
+            success: true,
+            data: {
+                hashTag,
+            },
+            error: null,
+        }
+    } catch (err) {
+        console.error(err)
+        return {
+            success: false,
+            data: null,
+            error: "포스트 여러개 가져오기 실패"
+        }
+    }
+}
+
 const getPostsPagenationSortByTime = async ({ category, page = 0, pageSize = 15 }: { category: string, page?: number, pageSize?: number }): Promise<returnPosts> => {
     try {
         let posts: Array<object> = []
@@ -335,4 +381,5 @@ export {
     getPostsWithoutNoticeBoardByTime,
     likeItPost,
     getLikeItPost,
+    getHashTagPosts_service,
 }
