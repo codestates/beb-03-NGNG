@@ -154,12 +154,21 @@ const deletePost_service = async ({ postUuid, id }: { postUuid: string, id: stri
     }
 }
 
-const updatePost_service = async ({ postUuid, id }: { postUuid: string, id: string }) => {
+const updatePost_service = async ({ postUuid, id, content }: { postUuid: string, id: string, content: string }) => {
     try {
-        
+        const result = await getConnection().transaction(async manager => {
+            const result = await manager.query(`
+                UPDATE post LEFT JOIN user
+                ON post.userIndex = user.index  
+                SET post.content = '${content}'
+                WHERE post.uuid = '${postUuid}' AND user.id = '${id}'
+                `
+            );
+            return result;
+        });
         return {
             success: true,
-            data: null,
+            data: { result },
             error: "post 수정 성공",
         }
     }

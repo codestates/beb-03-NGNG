@@ -159,11 +159,13 @@ const deletePost = async (req: Request, res: Response) => {
 }
 
 const updatePost = async (req: Request, res: Response) => {
-    const postUuid = req.query.postUuid as string;
+    const postUuid = req.body.postUuid as string;
+    const content = req.body.content as string;
     const id = req.user.id as string;
     const result = await updatePost_service({
         id,
-        postUuid
+        postUuid,
+        content,
     });
     if (result.success) {
         return res.status(201).json(result);

@@ -8,6 +8,7 @@ import {
     getLikeIt,
     getPostsWithoutNoticeBoard,
     deletePost,
+    updatePost,
     getHashTagPosts
 } from '../../controller/Post.controller';
 import { loginRequired, uploadImage } from '../../middleware';
@@ -24,7 +25,7 @@ router.get('/getHashTagPosts', getHashTagPosts);
 router.get('/getPostsWithoutNoticeBoard', getPostsWithoutNoticeBoard);
 router.put('/likeIt', likeIt);
 router.get('/getLikeIt', getLikeIt);
-router.put('/updatePost', loginRequired, deletePost);
+router.put('/updatePost', loginRequired, updatePost);
 router.delete('/deletePost', loginRequired, deletePost);
 
 
