@@ -154,13 +154,23 @@ const deletePost_service = async ({ postUuid, id }: { postUuid: string, id: stri
     }
 }
 
-const updatePost_service = async () => {
+const updatePost_service = async ({ postUuid, id }: { postUuid: string, id: string }) => {
     try {
-
+        
+        return {
+            success: true,
+            data: null,
+            error: "post 수정 성공",
+        }
     }
     catch (err) {
         if (process.env.NODE_ENV !== "production") {
             console.error(err)
+        }
+        return {
+            success: false,
+            data: null,
+            error: "post 수정 실패",
         }
     }
 }

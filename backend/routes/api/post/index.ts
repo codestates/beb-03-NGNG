@@ -17,18 +17,14 @@ const router = Router()
 // 카테고리 추가해야함
 
 router.post('/sendPost', loginRequired, uploadImage.none(), sendPost);
-
 router.get('/getPost', getPost);
 router.get('/getPosts', getPosts);
-
 router.get('/getCategoryPosts', getCategoryPosts);
 router.get('/getHashTagPosts', getHashTagPosts);
-
 router.get('/getPostsWithoutNoticeBoard', getPostsWithoutNoticeBoard);
-
 router.put('/likeIt', likeIt);
 router.get('/getLikeIt', getLikeIt);
-router.put('/updatePost', deletePost);
+router.put('/updatePost', loginRequired, deletePost);
 router.delete('/deletePost', loginRequired, deletePost);
 
 
