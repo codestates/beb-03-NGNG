@@ -10,13 +10,13 @@ import {
     deletePost,
     getHashTagPosts
 } from '../../controller/Post.controller';
-import { loginRequired } from '../../middleware';
+import { loginRequired, uploadImage } from '../../middleware';
 const router = Router()
 
 
 // 카테고리 추가해야함
 
-router.post('/sendPost', loginRequired, sendPost);
+router.post('/sendPost', loginRequired, uploadImage.none(), sendPost);
 
 router.get('/getPost', getPost);
 router.get('/getPosts', getPosts);
@@ -29,7 +29,7 @@ router.get('/getPostsWithoutNoticeBoard', getPostsWithoutNoticeBoard);
 router.put('/likeIt', likeIt);
 router.get('/getLikeIt', getLikeIt);
 router.put('/updatePost', deletePost);
-router.delete('/deletePost', deletePost);
+router.delete('/deletePost', loginRequired, deletePost);
 
 
 export default router

@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import fs from 'fs';
 import {
     createPost,
     getPostFromUuid,
@@ -12,6 +13,17 @@ import {
     updatePost_service,
     getHashTagPosts_service,
 } from '../../service/post.service';
+
+// const router = express.Router();
+const imageFunction = () => {
+    try {
+        fs.accessSync('uploads');
+    } catch (error) {
+        console.log('uploads 폴더 생성');
+        fs.mkdirSync('uploads');
+    }
+}
+
 
 const sendPost = async (req: Request, res: Response) => {
     const { id } = req.user;
@@ -133,7 +145,9 @@ const getLikeIt = async (req: Request, res: Response) => {
 
 const deletePost = async (req: Request, res: Response) => {
     const postUuid = req.body.postUuid as string;
+    const id = req.user as string;
     const result = await deletePost_service({
+        id,
         postUuid
     });
     if (result.success) {

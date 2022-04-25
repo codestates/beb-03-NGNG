@@ -126,13 +126,26 @@ const createPost = async (postData: IPost): Promise<returnPost> => {
     }
 }
 
-const deletePost_service = async ({ postUuid }: { postUuid: string }) => {
+const deletePost_service = async ({ postUuid, id }: { postUuid: string, id: string }) => {
     try {
+        // const result = await getRepository(Post)
+        //     .createQueryBuilder("post")
+        //     .leftJoin('post.user', 'user')
+        //     .where("user.id = :id", { id })
+        //     .addSelect((subQuery: any) => {
+        //         return subQuery
+        //             .delete()
+        //             .from(Post)
+        //             .where("post.uuid = :postUuid", { postUuid })
+        //             .execute();
+        //     })
+        //     .getOne();
+
         const result = await getRepository(Post)
             .createQueryBuilder("post")
             .delete()
-            .from(User)
-            .where("uuid = :postUuid", { postUuid })
+            .from(Post)
+            .where("post.uuid = :postUuid", { postUuid })
             .execute();
         return {
             success: true,
