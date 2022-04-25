@@ -11,6 +11,8 @@ import TagInput from './TagInput';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { initializeTag } from '../redux/tag';
+import { useMutation } from 'react-query';
+import axios from 'axios';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -47,21 +49,59 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const WriteTalk = (props) => {
+  const accessToken = useSelector((state) => state.user.accessToken);
+  const userId = useSelector((state) => state.user.userInfo.id);
   const tags = useSelector((state) => state.tag.tags);
   const dispatch = useDispatch();
-
   const contentRef = useRef();
 
   const handleOpen = () => {
 
   }
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log(contentRef.current.value);
-    console.log(tags);
+  const newPostMutation = useMutation(((newPost) => {
+    console.log(newPost);
+    return axios.post('http://localhost:5001/api/post/sendPost', newPost, {
+      headers: {
+        "Authorization": `bearer ${accessToken}`
+      }
+    });
+  }), {
+  onSuccess: (data) => {
+    alert('Post Success!');
     dispatch(initializeTag());
     contentRef.current.value = '';
+  },
+  onError: (error) => {
+    alert('Something Wrong! Try again');
+  }
+});
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    if (accessToken === undefined) {
+      alert('Please Login');
+      return;
+    }
+
+    if (contentRef.current.value.length === 0) {
+      alert('Please fill the field');
+      return;
+    }
+
+    const stringTags = '#' + tags.reduce((sum, word) => {
+      return sum + '#' + word
+    });
+
+    const post = {
+      content: contentRef.current.value,
+      id: userId,
+      category: '',
+      tags: stringTags
+    }
+
+    newPostMutation.mutate(post);
   }
 
   return (

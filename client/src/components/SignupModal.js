@@ -5,6 +5,8 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
+import axios from 'axios';
+import { useMutation } from 'react-query';
 
 const style = {
   position: 'absolute',
@@ -23,29 +25,52 @@ export default function SignupModal() {
   const [inValid, setInvalid] = useState('');
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setInvalid('');
+  }
+
+  const signupMutation = useMutation(((info) => {
+      return axios.post('http://localhost:5001/api/user/register', info);
+  }), {
+    onSuccess: (data) => {
+      alert('Sign Up Success!');
+      handleClose();
+    },
+    onError: (error) => {
+      alert('Something Wrong! Try again');
+    }
+  });
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const userId = data.get('userId');
-    const nickname = data.get('nickname');
     const email = data.get('email');
     const password = data.get('password');
     const password2 = data.get('password2');
 
-    if (userId === '' || nickname === '' || email === '' || password === '' || password2 === '') {
+    if (userId === '' || email === '' || password === '' || password2 === '') {
       setInvalid('blank');
       return;
     }
 
-    if (password === password2) {
-      setInvalid('');
-      console.log(userId, nickname, email, password, password2);
-      handleClose();
-    } else {
+    if (userId.length < 5) {
+      setInvalid('shortId');
+      return;
+    }
+
+    if (password !== password2) {
       setInvalid('passwordError');
       return;
+    } else {
+      setInvalid('');
+      // id, email, password 를 서버에 보내서 register 처리해주기!
+      signupMutation.mutate({
+        id: userId,
+        email: email,
+        password: password
+      });
     }
   }
 
@@ -78,23 +103,11 @@ export default function SignupModal() {
               margin="normal"
               required
               fullWidth
-              id="nickname"
-              label="Nickname"
-              name="nickname"
-              autoComplete="nickname"
-              autoFocus
-              sx={{ mb: 0}}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
               id="email"
               label="Email Address"
               name="email"
-              autoComplete="email"
               autoFocus
-              sx={{ mb: 0}}
+              sx={{ mb: 0, background: 'transparent'}}
             />
             <TextField
               margin="normal"
@@ -111,20 +124,24 @@ export default function SignupModal() {
               margin="normal"
               required
               fullWidth
-              name="password"
-              label="Password Again"
+              name="password2"
+              label="Password2"
               type="password"
               id="password2"
               autoComplete="current-password"
-              sx={{ mb: 2}}
+              sx={{ mb: 0}}
             />
             {
               inValid === 'blank' &&
-              <Alert variant='filled' severity="error">All fields must be filled in.</Alert>
+              <Alert variant='filled' severity="error" sx={{mt: 2}}>All fields must be filled in.</Alert>
+            }
+            {
+              inValid === 'shortId' &&
+              <Alert variant='filled' severity="error" sx={{mt: 2}}>ID should be longer than 5.</Alert>
             }
             {
               inValid === 'passwordError' &&
-              <Alert variant='filled' severity="error">The two passwords do not match.</Alert>
+              <Alert variant='filled' severity="error" sx={{mt: 2}}>The two passwords do not match.</Alert>
             }
             <Button
               type="submit"

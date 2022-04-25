@@ -6,9 +6,9 @@ import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
 import { useDispatch } from 'react-redux';
-import { login } from '../redux/user';
+import { login, getUserInfo } from '../redux/user';
 import axios from 'axios';
-import { useQuery, useMutation } from 'react-query';
+import { useQuery, useMutation, useQueryClient } from 'react-query';
 
 const style = {
   position: 'absolute',
@@ -24,25 +24,45 @@ const style = {
 };
 
 export default function LoginModal() {
-  const [id, setId] = useState('')
-  const [password, setPassword] = useState('');
 
   const dispatch = useDispatch();
   const [inValid, setInvalid] = useState(false);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setInvalid(false);
+  }
 
-  const loginMutation = useMutation(loginInfo => {
-    return axios.post('http://localhost:5001/api/user/login', loginInfo);
+  const loginMutation = useMutation((loginInfo => {
+    return axios.post('http://localhost:5001/api/user/login', loginInfo)
+  }), {
+    onSuccess: (data) => {
+      alert('Login Success!');
+      handleClose();
+      setInvalid(false);
+      const accessToken = data.data.data.token;
+      dispatch(login(accessToken));
+
+      // userInfo 가져와서 전역변수 설정
+      axios.get('http://localhost:5001/api/user/getUser', {
+        headers: {
+          "Authorization": `bearer ${accessToken}`
+        }
+      })
+      .then((res) => {
+        dispatch(getUserInfo(res.data.data.user));
+      })
+    }
   });
+
 
   const handleSubmit = (event) => {
 
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    setId(data.get('userId'));
-    setPassword(data.get('password'));
+    const id = (data.get('userId'));
+    const password = (data.get('password'));
 
     if (id === '' || password === '') {
       setInvalid(true);
@@ -50,11 +70,24 @@ export default function LoginModal() {
     }
 
     // id, password로 request -> userInfo를 res로 받아오기 -> 전역 상태 변경
+    loginMutation.mutate({
+      id: id,
+      password: password
+    });
     
-    // 데이터 받아오고 상태 변경하기 (isLogedIn, userInfo)
-    dispatch(login({id: '', nickname: 'yooni', email: '', emailToken: null, isVerified: false, privateKey: '', tokenAmount: '300'}));
-    handleClose();
-    setInvalid(false);
+    // 데이터 받아오고 상태 변경하기 (accessToken, userInfo)
+    // dispatch(login({
+    //   accessToken: '',
+    //   userInfo: {
+    //     id: '',
+    //     email: '',
+    //     emailToken: null,
+    //     isVerified: false,
+    //     privateKey: '',
+    //     tokenAmount: '300'
+    //   }}));
+    // handleClose();
+    // setInvalid(false);
   }
 
   return (
@@ -96,6 +129,10 @@ export default function LoginModal() {
             {
               inValid &&
               <Alert variant='filled' severity="error">All fields must be filled in.</Alert>
+            }
+            {
+              loginMutation.isError ?
+              <Alert variant='filled' severity="error">ID or Password Wrong!</Alert> : null
             }
             <Button
               type="submit"

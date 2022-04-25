@@ -5,7 +5,7 @@ import { Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
 
 const Profile = (props) => {
-  const isLogedIn = useSelector((state) => state.user.isLogedIn);
+  const accessToken = useSelector((state) => state.user.accessToken);
   const user = useSelector((state) => state.user.userInfo);
 
   return (
@@ -15,10 +15,11 @@ const Profile = (props) => {
         sx={{ width: 56, height: 56, mr: '20px' }}
       />
       {
-        isLogedIn ?
+        accessToken ?
         <Box>
-          <Typography sx={{ fontSize: '18px'}}>{user.nickname}</Typography>
-          <Typography sx={{ fontSize: '13px'}}>{user.tokenAmount}</Typography>
+          <Typography sx={{ fontSize: '24px'}}>Hello 🙋🏽‍♂️</Typography>
+          <Typography sx={{ fontSize: '18px'}}>{user.id}!</Typography>
+          {/* <Typography sx={{ fontSize: '13px'}}>{user.tokenAmount}</Typography> */}
         </Box> :
         <Box>
           <Typography color="primary" sx={{ fontSize: '18px'}}>Please Login..</Typography>

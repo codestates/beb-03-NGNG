@@ -55,7 +55,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Header = (props) => {
   const dispatch = useDispatch();
-  const isLogedIn = useSelector((state) => state.user.isLogedIn);
+  const accessToken = useSelector((state) => state.user.accessToken);
   const inputRef = useRef();
 
   const handleLogout = () => {
@@ -101,7 +101,7 @@ const Header = (props) => {
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            {!isLogedIn ?
+            {accessToken === undefined ?
             <Box sx={{display: 'flex'}}>
               <LoginModal />
               <SignupModal />
