@@ -33,11 +33,14 @@ export class Comment extends Model {
     })
     isMember!: boolean;
 
-    @ManyToOne(_ => Comment, comment => comment.childComments)
+    @ManyToOne(_ => Comment, comment => comment.childComments, {
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE"
+    })
     parentComment!: Comment
 
     @OneToMany(_ => Comment, comment => comment.parentComment, {
-        primary: true
+        primary: true,
     })
     childComments!: Comment[]
 

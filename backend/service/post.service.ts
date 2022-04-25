@@ -1,5 +1,5 @@
 import { HashTag } from './../typeorm/entity/HashTag';
-import { getRepository, getConnection } from 'typeorm';
+import { getRepository, getConnection, EntityManager } from 'typeorm';
 import { Thumb } from '../typeorm/entity/Thumb';
 import { User } from '../typeorm/entity/User';
 import { validate } from 'class-validator';
@@ -128,28 +128,17 @@ const createPost = async (postData: IPost): Promise<returnPost> => {
 
 const deletePost_service = async ({ postUuid, id }: { postUuid: string, id: string }) => {
     try {
-        // const result = await getRepository(Post)
-        //     .createQueryBuilder("post")
-        //     .leftJoin('post.user', 'user')
-        //     .where("user.id = :id", { id })
-        //     .addSelect((subQuery: any) => {
-        //         return subQuery
-        //             .delete()
-        //             .from(Post)
-        //             .where("post.uuid = :postUuid", { postUuid })
-        //             .execute();
-        //     })
-        //     .getOne();
-
-        const result = await getRepository(Post)
-            .createQueryBuilder("post")
-            .delete()
-            .from(Post)
-            .where("post.uuid = :postUuid", { postUuid })
-            .execute();
+        const result = await getConnection().transaction(async manager => {
+            const result = await manager.query(`
+                DELETE a FROM post as a LEFT JOIN user as b 
+                ON a.userIndex = b.index  
+                WHERE a.uuid = '${postUuid}' AND b.id = '${id}'`
+            );
+            return result;
+        });
         return {
             success: true,
-            data: result,
+            data: { result },
             error: null,
         }
     }
@@ -165,13 +154,32 @@ const deletePost_service = async ({ postUuid, id }: { postUuid: string, id: stri
     }
 }
 
-const updatePost_service = async () => {
+const updatePost_service = async ({ postUuid, id, content }: { postUuid: string, id: string, content: string }) => {
     try {
-
+        const result = await getConnection().transaction(async manager => {
+            const result = await manager.query(`
+                UPDATE post LEFT JOIN user
+                ON post.userIndex = user.index  
+                SET post.content = '${content}'
+                WHERE post.uuid = '${postUuid}' AND user.id = '${id}'
+                `
+            );
+            return result;
+        });
+        return {
+            success: true,
+            data: { result },
+            error: "post 수정 성공",
+        }
     }
     catch (err) {
         if (process.env.NODE_ENV !== "production") {
             console.error(err)
+        }
+        return {
+            success: false,
+            data: null,
+            error: "post 수정 실패",
         }
     }
 }

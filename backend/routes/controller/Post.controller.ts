@@ -144,8 +144,8 @@ const getLikeIt = async (req: Request, res: Response) => {
 
 
 const deletePost = async (req: Request, res: Response) => {
-    const postUuid = req.body.postUuid as string;
-    const id = req.user as string;
+    const postUuid = req.query.postUuid as string;
+    const id = req.user.id as string;
     const result = await deletePost_service({
         id,
         postUuid
@@ -159,11 +159,14 @@ const deletePost = async (req: Request, res: Response) => {
 }
 
 const updatePost = async (req: Request, res: Response) => {
-    // const postUuid = req.query.postUuid as string;
-    // const result = await updatePost_service({
-    //     postUuid
-    // });
-    const result = { success: true };
+    const postUuid = req.body.postUuid as string;
+    const content = req.body.content as string;
+    const id = req.user.id as string;
+    const result = await updatePost_service({
+        id,
+        postUuid,
+        content,
+    });
     if (result.success) {
         return res.status(201).json(result);
     }
