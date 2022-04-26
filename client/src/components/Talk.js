@@ -42,7 +42,7 @@ const Talk = ({uuid}) => {
         anonymouseId: 'anonymous user',
         password: passwordRef.current.value
       }
-      return axios.post('http://localhost:5001/api/comment/sendNonMemberComment', anonymousComment)
+      return axios.post('http://localhost:5001/api/comment/sendNonMemberComment', anonymousComment);
     }
   }), {
   onSuccess: (data) => {
