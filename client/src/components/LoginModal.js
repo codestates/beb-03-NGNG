@@ -6,7 +6,7 @@ import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
 import { useDispatch } from 'react-redux';
-import { login, getUserInfo } from '../redux/user';
+import { login, getUserInfo } from '../redux/user';
 import axios from 'axios';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 

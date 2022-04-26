@@ -10,7 +10,7 @@ import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import TagInput from './TagInput';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { initializeTag } from '../redux/tag';
+import { initializeTag } from '../redux/tag';
 import { useMutation } from 'react-query';
 import axios from 'axios';
 

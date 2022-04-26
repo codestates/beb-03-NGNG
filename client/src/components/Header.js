@@ -11,7 +11,7 @@ import LoginModal from './LoginModal';
 import SignupModal from './SignupModal';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { logout } from '../redux/user';
+import { logout } from '../redux/user';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
