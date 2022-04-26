@@ -15,7 +15,7 @@ export class User extends Model {
     @Column({
         nullable: false,
         type: "text",
-        default: "https://ipfs.io/ipfs/QmajHBBcXxAdPyKRxBLVTTAHKcgXa59Y32apruwuhHQUcx",
+        //default: "https://ipfs.io/ipfs/QmajHBBcXxAdPyKRxBLVTTAHKcgXa59Y32apruwuhHQUcx",
     })
     imageUri: string;
 
