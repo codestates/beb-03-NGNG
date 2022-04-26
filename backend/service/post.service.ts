@@ -194,6 +194,12 @@ const getPostFromUuid = async ({ postUuid }: { postUuid: string }): Promise<retu
             .addSelect(['user.id'])
             .where("post.uuid = :uuid", { uuid: postUuid })
             .getOne();
+        if (!post) throw "post를 찾을 수 없음";
+        const tags = await getRepository(HashTag)
+            .createQueryBuilder('HashTag')
+            .select()
+            .where("hashTag.postIndex = :postIdx", { postIdx: post['index'] })
+            .getMany()
         console.log(post)
         if (process.env.NODE_ENV !== "production") {
             console.log(post);
@@ -202,7 +208,7 @@ const getPostFromUuid = async ({ postUuid }: { postUuid: string }): Promise<retu
         return {
             success: true,
             data: {
-                post
+                post: { ...post, tag:tags.map(({ tag }) => tag) }
             },
             error: null,
         }
