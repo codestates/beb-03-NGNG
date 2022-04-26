@@ -2,21 +2,26 @@ import { Entity, Column, ManyToOne, OneToMany, AfterInsert, ManyToMany, JoinTabl
 import { Post } from "./Post";
 
 import { Model } from './Models/Model'
+import { User } from "./User";
 
 @Entity()
 export class Report extends Model {
 
-    // @Column({ type: "text" })
-    // reporter:
+    @Column({ type: "text" })
+    content: string
 
-    // @Column({})
+    @ManyToOne(() => User, user => user.reports, {
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+        nullable: true,
+    })
+    reporter!: User;
 
-
-    // @ManyToOne(() => Post, post => post.hashTags, {
-    //     onDelete: "CASCADE",
-    //     onUpdate: "CASCADE",
-    //     nullable: true,
-    // })
-    // post!: Post;
+    @ManyToOne(() => Post, post => post.reports, {
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+        nullable: true,
+    })
+    post!: Post;
 
 }

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { useState, useNavigate, useRef } from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
@@ -13,22 +12,6 @@ import SignupModal from './SignupModal';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { logout } from '../redux/user';
-=======
-import React, { useState, useNavigate, useRef } from "react";
-import { styled, alpha } from "@mui/material/styles";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import InputBase from "@mui/material/InputBase";
-import SearchIcon from "@mui/icons-material/Search";
-import Button from "@mui/material/Button";
-import LoginModal from "./LoginModal";
-import SignupModal from "./SignupModal";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { logout } from "../redux/user";
->>>>>>> upstream/main
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
