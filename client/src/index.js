@@ -1,30 +1,33 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.1.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2022 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
+<<<<<<< HEAD
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import {BrowserRouter} from 'react-router-dom';
+import store from './redux/store' // 이 빨간건 뭐지?
+import { Provider } from 'react-redux';
+=======
 import React from "react";
-import ReactDOM from "react-dom";
-import { BrowserRouter } from "react-router-dom";
-// Material Dashboard 2 React Context Provider
-import { MaterialUIControllerProvider } from "context";
+import ReactDOM from "react-dom/client";
+import "./index.css";
 import App from "./App";
+import { BrowserRouter } from "react-router-dom";
+import store from "./redux/store"; // 이 빨간건 뭐지?
+import { Provider } from "react-redux";
+>>>>>>> upstream/main
+import { QueryClient, QueryClientProvider } from "react-query";
 
-ReactDOM.render(
-  <BrowserRouter>
-    <MaterialUIControllerProvider>
-      <App />
-    </MaterialUIControllerProvider>
-  </BrowserRouter>,
-  document.getElementById("root")
+const queryClient = new QueryClient();
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <Provider store={store}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </Provider>
+    </QueryClientProvider>
+  </React.StrictMode>
 );
