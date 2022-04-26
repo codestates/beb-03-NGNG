@@ -1,3 +1,12 @@
+<<<<<<< HEAD
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import {BrowserRouter} from 'react-router-dom';
+import store from './redux/store' // 이 빨간건 뭐지?
+import { Provider } from 'react-redux';
+=======
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
@@ -5,6 +14,7 @@ import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import store from "./redux/store"; // 이 빨간건 뭐지?
 import { Provider } from "react-redux";
+>>>>>>> upstream/main
 import { QueryClient, QueryClientProvider } from "react-query";
 
 const queryClient = new QueryClient();

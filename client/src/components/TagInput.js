@@ -1,9 +1,18 @@
+<<<<<<< HEAD
+import React, {useState} from 'react';
+import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { addTag } from '../redux/tag';
+import { deleteTag } from '../redux/tag';
+=======
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { addTag } from "../redux/tag";
 import { deleteTag } from "../redux/tag";
+>>>>>>> upstream/main
 
 export const TagsInput = styled.div`
   display: flex;

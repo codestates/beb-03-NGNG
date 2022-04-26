@@ -1,3 +1,20 @@
+<<<<<<< HEAD
+import { Card, Button, Box, Tooltip, IconButton, Container } from '@mui/material';
+import TextField from '@mui/material/TextField';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import React, { useRef } from 'react';
+import { styled, alpha } from '@mui/material/styles';
+import InputBase from '@mui/material/InputBase';
+import SearchIcon from '@mui/icons-material/Search';
+import CreateIcon from '@mui/icons-material/Create';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import TagInput from './TagInput';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { initializeTag } from '../redux/tag';
+import { useMutation } from 'react-query';
+import axios from 'axios';
+=======
 import {
   Card,
   Button,
@@ -20,6 +37,7 @@ import { useDispatch } from "react-redux";
 import { initializeTag } from "../redux/tag";
 import { useMutation } from "react-query";
 import axios from "axios";
+>>>>>>> upstream/main
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
