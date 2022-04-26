@@ -4,6 +4,7 @@ import { IsEmail, IsEnum, Length } from "class-validator";
 import { Entity, Column, OneToMany } from "typeorm";
 import { Model } from './Models/Model'
 import { Post } from './Post'
+import { Report } from './Report';
 
 
 @Entity()
@@ -52,6 +53,9 @@ export class User extends Model {
 
     @OneToMany(() => Comment, comment => comment.user)
     comments!: Comment[]
+
+    @OneToMany(_ => Report, report => report.reporter)
+    reports!: Report[]
 
     @OneToMany(() => Comment, comment => comment.user_id)
     commentsForId!: Comment[]
