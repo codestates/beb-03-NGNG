@@ -4,6 +4,7 @@ import { checkEmailVerifyFromId } from '../../service/User.service';
 import requestIp from 'request-ip';
 import path from 'path';
 import multer from 'multer';
+import { v4 as uuid } from 'uuid'
 
 const loginRequired = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -83,17 +84,7 @@ const isNotEmailVerified = async (req: Request, res: any, next: NextFunction) =>
 }
 
 const uploadImage = multer({
-    storage: multer.diskStorage({
-        destination(req, file, done) {
-            done(null, 'uploads');
-        },
-        filename(req, file, done) { // name.png
-            const ext = path.extname(file.originalname); // 확장자 추출
-            const basename = path.basename(file.originalname, ext);
-            done(null, basename + '_' + new Date().getTime() + ext);
-        },
-        // req.post.postUri
-    }),
+    storage: multer.memoryStorage(),
     limits: { fileSize: 20 * 1024 * 1024 } // 20MB
 })
 

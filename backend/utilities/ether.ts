@@ -36,6 +36,18 @@ export const transferNFT = () => {
 }
 
 
+export const getBalance = (privateKey: string) => {
+    const wallet = new Wallet(privateKey, provider);
+    const OwnerWallet = new Wallet(process.env.OWNER_PRIVATE_KEY, provider);
+    const contract = new Contract(process.env.ERC20_ADDRESS, artifact.abi, OwnerWallet);
+
+    (async function () {
+        let balance = await contract.balanceOf(wallet.address);
+        let result = await balance.wait();
+        return result;
+    })();
+}
+
 export const mintToken = (privateKey: string, amount: null | string = null) => {
     const wallet = new Wallet(privateKey, provider);
     const OwnerWallet = new Wallet(process.env.OWNER_PRIVATE_KEY, provider);

@@ -28,6 +28,14 @@ export class Post extends Model {
 
     @Column({
         nullable: false,
+        type: "text",
+        default: "https://ipfs.io/ipfs/QmajHBBcXxAdPyKRxBLVTTAHKcgXa59Y32apruwuhHQUcx",
+    })
+    imageUri: string;
+
+
+    @Column({
+        nullable: false,
         default: true
     })
     useComment!: boolean;

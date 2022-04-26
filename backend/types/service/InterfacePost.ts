@@ -1,13 +1,13 @@
 import { role } from '../enum/index'
 import { returnApi } from './Model/InterfaceReturnApiModel'
 interface IPost {
+    imageUri: string,
     content: string,
     id: string,
     permision?: role,
     useComment?: boolean,
     delete?: boolean,
     tags: Array<string>,
-    postUri: string,
 }
 
 

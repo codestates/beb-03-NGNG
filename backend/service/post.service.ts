@@ -87,11 +87,12 @@ const createPost = async (postData: IPost): Promise<returnPost> => {
         content,
         id,
         tags,
+        imageUri
     } = postData;
     console.log(postData)
     try {
         const user = await User.findOneOrFail({ id })
-        const post = Post.create({ content, user });
+        const post = Post.create({ content, user, imageUri });
         const errors = await validate(post);
         if (errors.length > 0) throw errors
         await post.save();
@@ -191,7 +192,7 @@ const getPostFromUuid = async ({ postUuid }: { postUuid: string }): Promise<retu
         const post = await getRepository(Post)
             .createQueryBuilder("post")
             .leftJoin('post.user', 'user')
-            .addSelect(['user.id'])
+            .addSelect(['user.id', 'user.imageUri'])
             .where("post.uuid = :uuid", { uuid: postUuid })
             .getOne();
         if (!post) throw "post를 찾을 수 없음";
@@ -208,7 +209,7 @@ const getPostFromUuid = async ({ postUuid }: { postUuid: string }): Promise<retu
         return {
             success: true,
             data: {
-                post: { ...post, tag:tags.map(({ tag }) => tag) }
+                post: { ...post, tag: tags.map(({ tag }) => tag) }
             },
             error: null,
         }

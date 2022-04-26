@@ -6,7 +6,15 @@ import { sanitizeUser } from '../utilities/apiUtilities';
 import { returnApi } from '../types/service/Model/InterfaceReturnApiModel';
 
 const createUser = async (userData: IUser): Promise<returnUser> => {
-    const { id,  email, password, emailToken, isVerified, privateKey } = userData;
+    const {
+        id,
+        email,
+        password,
+        emailToken,
+        isVerified,
+        privateKey,
+        imageUri
+    } = userData;
     try {
         const user = User.create({
             id,
@@ -16,6 +24,7 @@ const createUser = async (userData: IUser): Promise<returnUser> => {
             isVerified,
             role: 'user',
             privateKey,
+            imageUri,
         });
 
         const errors = await validate(user)
