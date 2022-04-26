@@ -18,7 +18,7 @@ router.post('/sendPost', loginRequired, uploadImage.none(), sendPost);
 router.get('/getPost', getPost);
 router.get('/getPosts', getPosts);
 router.get('/getHashTagPosts', getHashTagPosts);
-router.put('/likeIt', likeIt);
+router.put('/likeIt', loginRequired, likeIt);
 router.get('/getLikeIt', getLikeIt);
 router.put('/updatePost', loginRequired, updatePost);
 router.delete('/deletePost', loginRequired, deletePost);

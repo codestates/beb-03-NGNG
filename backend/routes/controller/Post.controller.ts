@@ -91,11 +91,11 @@ const getHashTagPosts = async (req: Request, res: Response) => {
 // }
 
 const likeIt = async (req: Request, res: Response) => {
-    const { postUuid, userUuid, likeIt } = req.body;
+    const { postUuid } = req.body;
+    const id = req?.user?.id as string;
     const result = await likeItPost({
         postUuid,
-        userUuid,
-        likeIt,
+        id,
     });
     if (result.success) {
         return res.status(201).json(result);

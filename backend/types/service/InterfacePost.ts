@@ -12,8 +12,7 @@ interface IPost {
 
 interface ILikeIt {
     postUuid: string,
-    userUuid: string,
-    likeIt: boolean
+    id: string,
 }
 
 interface returnPost extends returnApi {

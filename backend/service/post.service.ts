@@ -12,12 +12,18 @@ import { v4 as uuid } from 'uuid';
 
 const likeItPost = async (likeItData: ILikeIt): Promise<returnPostLikeIt> => {
     try {
-        const { postUuid, userUuid, likeIt } = likeItData
+        const { postUuid, id } = likeItData
         const post = await Post.findOneOrFail({ uuid: postUuid })
-        const user = await User.findOneOrFail({ uuid: userUuid })
+        const user = await User.findOneOrFail({ id })
         const thumbFindOne = await Thumb.findOne({ post, user })
+        console.log(thumbFindOne)
         if (thumbFindOne) {
-            thumbFindOne.remove()
+            // thumbFindOne.remove()
+            return {
+                success: false,
+                data: null,
+                error: "이미 좋아요를 눌렀습니다.",
+            }
         }
         else {
             const thumb = Thumb.create({
@@ -50,21 +56,17 @@ const getLikeItPost = async (likeItData: { postUuid: string }): Promise<returnGe
         const thumb = await getRepository(Thumb)
             .createQueryBuilder("thumb")
             .select("SUM(thumb.likeIt)", "likeItCount")
-            .addSelect("count(*)", "countAll")
             .where("thumb.postIndex = :postIndex", { postIndex: post.index })
             .getRawOne();
         console.log(thumb)
         let likeItCount = 0
-        let countAll = 0
         if (thumb.sum !== null) {
             likeItCount = parseInt(thumb.likeItCount)
-            countAll = parseInt(thumb.countAll)
         }
         return {
             success: true,
             data: {
                 likeItCount,
-                countAll
             },
             error: null,
         }
@@ -192,6 +194,7 @@ const getPostFromUuid = async ({ postUuid }: { postUuid: string }): Promise<retu
             .addSelect(['user.id'])
             .where("post.uuid = :uuid", { uuid: postUuid })
             .getOne();
+        console.log(post)
         if (process.env.NODE_ENV !== "production") {
             console.log(post);
         }
@@ -221,7 +224,7 @@ const getPostsSortByTime = async ({ limit = "150" }: { limit: string }): Promise
         const intLimit = parseInt(limit);
         const posts = await getRepository(Post)
             .createQueryBuilder("post")
-            .select(["post.uuid", "post.updatedAt"])
+            .select(["post.uuid", "post.updatedAt", "post.createdAt", "post.content"])
             .leftJoin('post.user', 'user')
             .addSelect('user.id' as "id")
             .orderBy("post.createdAt", "DESC")
