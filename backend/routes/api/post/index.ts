@@ -14,7 +14,8 @@ const router = Router()
 
 
 // 카테고리 추가해야함
-router.post('/sendPost', loginRequired, uploadImage.none(), sendPost);
+
+router.post('/sendPost', loginRequired, uploadImage.none('image'), sendPost);
 router.get('/getPost', getPost);
 router.get('/getPosts', getPosts);
 router.get('/getHashTagPosts', getHashTagPosts);

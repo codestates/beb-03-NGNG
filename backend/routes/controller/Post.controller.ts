@@ -13,6 +13,7 @@ import {
     updatePost_service,
     getHashTagPosts_service,
 } from '../../service/post.service';
+import { create } from 'ipfs-http-client';
 
 // const router = express.Router();
 const imageFunction = () => {
@@ -28,12 +29,20 @@ const imageFunction = () => {
 const sendPost = async (req: Request, res: Response) => {
     const { id } = req.user;
     const { content, tags: tagsString } = req.body;
+
+    imageFunction()
+    // @ts-ignore
+    const client = create("https://ipfs.infura.io:5001/api/v0");
+    // @ts-ignore
+    const cid = await client.add(req.file);
+    const postUri = `https://ipfs.infura.io/ipfs/${cid.path}`;
+
     const tags = tagsString.split(/(#[^#\s]+)/g).filter((v: string) => {
         return v.match(/(#[^#\s]+)/g)
     }).map((tag: string) => tag.slice(1));
     console.log(tags)
     const result = await createPost({
-        content, id, tags
+        content, id, tags, postUri
     });
     if (result.success) {
         return res.status(201).json(result);
