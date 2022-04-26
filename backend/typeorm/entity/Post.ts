@@ -6,6 +6,7 @@ import { Comment } from "./Comment";
 import { Model } from './Models/Model'
 import { User } from './User'
 import { HashTag } from './HashTag';
+import { Report } from './Report';
 
 @Entity()
 export class Post extends Model {
@@ -54,6 +55,9 @@ export class Post extends Model {
 
     @OneToMany(_ => HashTag, hashTag => hashTag.post)
     hashTags!: HashTag[]
+
+    @OneToMany(_ => Report, report => report.post)
+    reports!: Report[]
 
     @OneToMany(_ => Comment, comment => comment.post)
     comments!: Comment[]
