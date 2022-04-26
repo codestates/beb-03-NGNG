@@ -20,15 +20,6 @@ export class Post extends Model {
     })
     permision!: string;
 
-    @Column()
-    category!: string;
-
-    @Column({
-        nullable: false,
-        default: false
-    })
-    views!: number;
-
     @Column({
         nullable: false,
         default: 0

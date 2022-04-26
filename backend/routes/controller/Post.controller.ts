@@ -27,14 +27,13 @@ const imageFunction = () => {
 
 const sendPost = async (req: Request, res: Response) => {
     const { id } = req.user;
-    const { content, category, tags: tagsString } = req.body;
-
+    const { content, tags: tagsString } = req.body;
     const tags = tagsString.split(/(#[^#\s]+)/g).filter((v: string) => {
         return v.match(/(#[^#\s]+)/g)
     }).map((tag: string) => tag.slice(1));
     console.log(tags)
     const result = await createPost({
-        content, id, category, tags
+        content, id, tags
     });
     if (result.success) {
         return res.status(201).json(result);
@@ -68,33 +67,10 @@ const getPosts = async (req: Request, res: Response) => {
     }
 }
 
-const getCategoryPosts = async (req: Request, res: Response) => {
-    const category = req.query.category as string;
-    const limit = req.query.limit as string;
-    console.log(category, limit)
-    const result = await getCategoryPostsSortByTime({ category, limit });
-    if (result.success) {
-        return res.status(201).json(result);
-    }
-    else {
-        return res.status(500).json(result)
-    }
-}
 const getHashTagPosts = async (req: Request, res: Response) => {
     const tag = req.query.tag as string;
     console.log(tag)
     const result = await getHashTagPosts_service({ tag });
-    if (result.success) {
-        return res.status(201).json(result);
-    }
-    else {
-        return res.status(500).json(result)
-    }
-}
-
-const getPostsWithoutNoticeBoard = async (req: Request, res: Response) => {
-    const limit = req.query.limit as string;
-    const result = await getPostsWithoutNoticeBoardByTime({ limit });
     if (result.success) {
         return res.status(201).json(result);
     }
@@ -181,8 +157,6 @@ export {
     getPosts,
     likeIt,
     getLikeIt,
-    getCategoryPosts,
-    getPostsWithoutNoticeBoard,
     deletePost,
     updatePost,
     getHashTagPosts

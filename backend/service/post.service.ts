@@ -84,13 +84,12 @@ const createPost = async (postData: IPost): Promise<returnPost> => {
     const {
         content,
         id,
-        category,
         tags,
     } = postData;
     console.log(postData)
     try {
         const user = await User.findOneOrFail({ id })
-        const post = Post.create({ content, user, category });
+        const post = Post.create({ content, user });
         const errors = await validate(post);
         if (errors.length > 0) throw errors
         await post.save();
@@ -187,7 +186,6 @@ const updatePost_service = async ({ postUuid, id, content }: { postUuid: string,
 
 const getPostFromUuid = async ({ postUuid }: { postUuid: string }): Promise<returnPost> => {
     try {
-        console.log(postUuid)
         const post = await getRepository(Post)
             .createQueryBuilder("post")
             .leftJoin('post.user', 'user')
@@ -196,16 +194,6 @@ const getPostFromUuid = async ({ postUuid }: { postUuid: string }): Promise<retu
             .getOne();
         if (process.env.NODE_ENV !== "production") {
             console.log(post);
-        }
-
-        const postUpdate = await getRepository(Post)
-            .createQueryBuilder("post")
-            .update(Post)
-            .set({ views: () => "views + 1" })
-            .where("uuid = :uuid", { uuid: postUuid })
-            .execute();
-        if (process.env.NODE_ENV !== "production") {
-            console.log(postUpdate);
         }
 
         return {

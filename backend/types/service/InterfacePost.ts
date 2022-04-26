@@ -3,7 +3,6 @@ import { returnApi } from './Model/InterfaceReturnApiModel'
 interface IPost {
     content: string,
     id: string,
-    category: string,
     permision?: role,
     useComment?: boolean,
     delete?: boolean,
