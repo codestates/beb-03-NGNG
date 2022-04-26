@@ -1,9 +1,18 @@
+<<<<<<< HEAD
 import React, {useState} from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { addTag } from '../redux/tag';
 import { deleteTag } from '../redux/tag';
+=======
+import React, { useState } from "react";
+import styled from "styled-components";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { addTag } from "../redux/tag";
+import { deleteTag } from "../redux/tag";
+>>>>>>> upstream/main
 
 export const TagsInput = styled.div`
   display: flex;
@@ -31,7 +40,7 @@ export const TagsInput = styled.div`
       border-radius: 6px;
       margin: 0 8px 0 0;
       background: #997322;
-        > .tag-close-icon {
+      > .tag-close-icon {
         display: block;
         width: 16px;
         height: 16px;
@@ -41,21 +50,21 @@ export const TagsInput = styled.div`
         margin-left: 8px;
         color: black;
         border-radius: 50%;
-        background: #E2B75A;
+        background: #e2b75a;
         cursor: pointer;
       }
     }
   }
 
-  > input {    
+  > input {
     flex: 1;
     border: none;
     background-color: transparent;
     font-size: 15px;
-    font-family: 'Montserrat';
+    font-family: "Montserrat";
     padding: 4px 0 0 0;
     :focus {
-    outline: transparent;
+      outline: transparent;
     }
   }
 `;
@@ -65,39 +74,45 @@ const TagInput = (props) => {
   const dispatch = useDispatch();
 
   const removeTags = (indexToRemove) => {
-    dispatch(deleteTag(tags.filter((item, idx) => {
-      return idx !== indexToRemove;
-    })
-  ))};
-  
+    dispatch(
+      deleteTag(
+        tags.filter((item, idx) => {
+          return idx !== indexToRemove;
+        })
+      )
+    );
+  };
+
   const addTags = (event) => {
     if (event.target.value.length !== 0 && !tags.includes(event.target.value)) {
       let newTags = [...tags, event.target.value];
       dispatch(addTag(newTags));
-      event.target.value = '';
+      event.target.value = "";
     }
-  }
+  };
 
   return (
     <TagsInput>
-      <ul id='tags'>
+      <ul id="tags">
         {tags.map((tag, index) => (
-          <li key={index} className='tag'>
-            <span className='tag-title'>{tag}</span>
-            <span className='tag-close-icon' onClick={() => removeTags(index)}>
+          <li key={index} className="tag">
+            <span className="tag-title">{tag}</span>
+            <span className="tag-close-icon" onClick={() => removeTags(index)}>
               &times;
             </span>
           </li>
         ))}
       </ul>
       <input
-        className='tag-input'
-        type='text'
-        onKeyUp={(e)=> {if (e.key === 'Enter') addTags(e)}}
-        placeholder='Press enter to add tags'
+        className="tag-input"
+        type="text"
+        onKeyUp={(e) => {
+          if (e.key === "Enter") addTags(e);
+        }}
+        placeholder="Press enter to add tags"
       />
     </TagsInput>
-  )
-}
+  );
+};
 
 export default TagInput;

@@ -8,6 +8,7 @@ interface IPost {
     useComment?: boolean,
     delete?: boolean,
     tags: Array<string>,
+    postUri: string,
 }
 
 
