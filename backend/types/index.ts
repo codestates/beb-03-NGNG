@@ -7,12 +7,15 @@ declare global {
             user: {
                 id?: string;
             },
-            post:{
-                postUri:Array<string>
+            post: {
+                postUri: Array<string>
             },
-            profile:{
-                imageUri:string,
+            profile: {
+                imageUri: string,
             },
+            file: {
+                buffer: string,
+            }
         }
     }
 }

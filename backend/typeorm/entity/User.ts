@@ -13,11 +13,11 @@ export class User extends Model {
     id!: string;
 
     @Column({
+        nullable: false,
         type: "text",
-        // default: "https://mui.com/static/images/avatar/1.jpg",
-        nullable: true,
+        default: "https://ipfs.io/ipfs/QmajHBBcXxAdPyKRxBLVTTAHKcgXa59Y32apruwuhHQUcx",
     })
-    imageUrl!: string;
+    imageUri: string;
 
     @Column({ unique: true })
     @Length(1, 255)

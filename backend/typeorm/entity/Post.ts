@@ -20,20 +20,19 @@ export class Post extends Model {
     })
     permision!: string;
 
-    @Column()
-    category!: string;
-
-    @Column({
-        nullable: false,
-        default: false
-    })
-    views!: number;
-
     @Column({
         nullable: false,
         default: 0
     })
     delete!: boolean;
+
+    @Column({
+        nullable: false,
+        type: "text",
+        default: "https://ipfs.io/ipfs/QmajHBBcXxAdPyKRxBLVTTAHKcgXa59Y32apruwuhHQUcx",
+    })
+    imageUri: string;
+
 
     @Column({
         nullable: false,

@@ -2,6 +2,9 @@
 
 serer/node_modules
 server/.env
+server/yarn.lock
+backend/yarn.lock
+backend/package-lock.json
 
 
 # dependencies

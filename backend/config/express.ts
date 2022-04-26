@@ -34,6 +34,7 @@ server.use(express.json())
 server.use(morgan('combined'));
 server.use(hpp());
 server.use(helmet({ contentSecurityPolicy: false }));
+// server.use(express.static('uploads'));
 // server.use(express.static(path.join(__dirname, '../public')))
 server.use('/api', routes)
 

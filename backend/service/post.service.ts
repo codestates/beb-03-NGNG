@@ -12,12 +12,18 @@ import { v4 as uuid } from 'uuid';
 
 const likeItPost = async (likeItData: ILikeIt): Promise<returnPostLikeIt> => {
     try {
-        const { postUuid, userUuid, likeIt } = likeItData
+        const { postUuid, id } = likeItData
         const post = await Post.findOneOrFail({ uuid: postUuid })
-        const user = await User.findOneOrFail({ uuid: userUuid })
+        const user = await User.findOneOrFail({ id })
         const thumbFindOne = await Thumb.findOne({ post, user })
+        console.log(thumbFindOne)
         if (thumbFindOne) {
-            thumbFindOne.remove()
+            // thumbFindOne.remove()
+            return {
+                success: false,
+                data: null,
+                error: "이미 좋아요를 눌렀습니다.",
+            }
         }
         else {
             const thumb = Thumb.create({
@@ -50,21 +56,17 @@ const getLikeItPost = async (likeItData: { postUuid: string }): Promise<returnGe
         const thumb = await getRepository(Thumb)
             .createQueryBuilder("thumb")
             .select("SUM(thumb.likeIt)", "likeItCount")
-            .addSelect("count(*)", "countAll")
             .where("thumb.postIndex = :postIndex", { postIndex: post.index })
             .getRawOne();
         console.log(thumb)
         let likeItCount = 0
-        let countAll = 0
         if (thumb.sum !== null) {
             likeItCount = parseInt(thumb.likeItCount)
-            countAll = parseInt(thumb.countAll)
         }
         return {
             success: true,
             data: {
                 likeItCount,
-                countAll
             },
             error: null,
         }
@@ -84,13 +86,13 @@ const createPost = async (postData: IPost): Promise<returnPost> => {
     const {
         content,
         id,
-        category,
         tags,
+        imageUri
     } = postData;
     console.log(postData)
     try {
         const user = await User.findOneOrFail({ id })
-        const post = Post.create({ content, user, category });
+        const post = Post.create({ content, user, imageUri });
         const errors = await validate(post);
         if (errors.length > 0) throw errors
         await post.save();
@@ -187,31 +189,27 @@ const updatePost_service = async ({ postUuid, id, content }: { postUuid: string,
 
 const getPostFromUuid = async ({ postUuid }: { postUuid: string }): Promise<returnPost> => {
     try {
-        console.log(postUuid)
         const post = await getRepository(Post)
             .createQueryBuilder("post")
             .leftJoin('post.user', 'user')
-            .addSelect(['user.id'])
+            .addSelect(['user.id', 'user.imageUri'])
             .where("post.uuid = :uuid", { uuid: postUuid })
             .getOne();
+        if (!post) throw "post를 찾을 수 없음";
+        const tags = await getRepository(HashTag)
+            .createQueryBuilder('HashTag')
+            .select()
+            .where("hashTag.postIndex = :postIdx", { postIdx: post['index'] })
+            .getMany()
+        console.log(post)
         if (process.env.NODE_ENV !== "production") {
             console.log(post);
-        }
-
-        const postUpdate = await getRepository(Post)
-            .createQueryBuilder("post")
-            .update(Post)
-            .set({ views: () => "views + 1" })
-            .where("uuid = :uuid", { uuid: postUuid })
-            .execute();
-        if (process.env.NODE_ENV !== "production") {
-            console.log(postUpdate);
         }
 
         return {
             success: true,
             data: {
-                post
+                post: { ...post, tag: tags.map(({ tag }) => tag) }
             },
             error: null,
         }
@@ -228,44 +226,12 @@ const getPostFromUuid = async ({ postUuid }: { postUuid: string }): Promise<retu
 }
 
 
-const getPostsWithoutNoticeBoardByTime = async ({ limit = "150" }: { limit: string }): Promise<returnPosts> => {
-    try {
-        const intLimit = parseInt(limit);
-        console.log(limit, intLimit)
-        const category = "noticeBoard";
-        const posts = await getRepository(Post)
-            .createQueryBuilder("post")
-            .where("post.category != :category", { category })
-            .select(["post.uuid", "post.updatedAt", "post.category"])
-            .leftJoin('post.user', 'user')
-            .addSelect('user.id' as "id")
-            .orderBy("post.createdAt", "DESC")
-            .limit(intLimit)
-            .getRawMany();
-        console.log(posts)
-        return {
-            success: true,
-            data: {
-                posts
-            },
-            error: null,
-        }
-    } catch (err) {
-        console.error(err)
-        return {
-            success: false,
-            data: null,
-            error: "getPostsWithoutNoticeBoardByTime db error"
-        }
-    }
-}
-
 const getPostsSortByTime = async ({ limit = "150" }: { limit: string }): Promise<returnPosts> => {
     try {
         const intLimit = parseInt(limit);
         const posts = await getRepository(Post)
             .createQueryBuilder("post")
-            .select(["post.uuid", "post.updatedAt", "post.category"])
+            .select(["post.uuid", "post.updatedAt", "post.createdAt", "post.content"])
             .leftJoin('post.user', 'user')
             .addSelect('user.id' as "id")
             .orderBy("post.createdAt", "DESC")
@@ -317,77 +283,77 @@ const getHashTagPosts_service = async ({ tag }: { tag: string }): Promise<return
     }
 }
 
-const getPostsPagenationSortByTime = async ({ category, page = 0, pageSize = 15 }: { category: string, page?: number, pageSize?: number }): Promise<returnPosts> => {
-    try {
-        let posts: Array<object> = []
-        if (category) {
-            await getRepository(Post)
-                .createQueryBuilder("post")
-                .select(["post.uuid", "post.updatedAt", "post.category"])
-                .where("post.category = :category", { category })
-                .leftJoin('post.user', 'user')
-                .addSelect('user.id' as "id")
-                .skip((page - 1) * pageSize)
-                .take(pageSize)
-                .getRawMany();
-            console.log(posts)
-        }
-        else {
-            await getRepository(Post)
-                .createQueryBuilder("post")
-                .select(["post.uuid", "post.updatedAt", "post.category"])
-                .leftJoin('post.user', 'user')
-                .addSelect('user.id' as "id")
-                .skip((page - 1) * pageSize)
-                .take(pageSize)
-                .getRawMany();
-            console.log(posts)
-        }
-        return {
-            success: true,
-            data: {
-                posts
-            },
-            error: null,
-        }
-    } catch (err) {
-        console.error(err)
-        return {
-            success: false,
-            data: null,
-            error: "포스트 여러개 페이지네이션 형식으로 가져오기 실패"
-        }
-    }
-}
+// const getPostsPagenationSortByTime = async ({ category, page = 0, pageSize = 15 }: { category: string, page?: number, pageSize?: number }): Promise<returnPosts> => {
+//     try {
+//         let posts: Array<object> = []
+//         if (category) {
+//             await getRepository(Post)
+//                 .createQueryBuilder("post")
+//                 .select(["post.uuid", "post.updatedAt", "post.category"])
+//                 .where("post.category = :category", { category })
+//                 .leftJoin('post.user', 'user')
+//                 .addSelect('user.id' as "id")
+//                 .skip((page - 1) * pageSize)
+//                 .take(pageSize)
+//                 .getRawMany();
+//             console.log(posts)
+//         }
+//         else {
+//             await getRepository(Post)
+//                 .createQueryBuilder("post")
+//                 .select(["post.uuid", "post.updatedAt", "post.category"])
+//                 .leftJoin('post.user', 'user')
+//                 .addSelect('user.id' as "id")
+//                 .skip((page - 1) * pageSize)
+//                 .take(pageSize)
+//                 .getRawMany();
+//             console.log(posts)
+//         }
+//         return {
+//             success: true,
+//             data: {
+//                 posts
+//             },
+//             error: null,
+//         }
+//     } catch (err) {
+//         console.error(err)
+//         return {
+//             success: false,
+//             data: null,
+//             error: "포스트 여러개 페이지네이션 형식으로 가져오기 실패"
+//         }
+//     }
+// }
 
 
-const getCategoryPostsSortByTime = async ({ category, limit = "1500" }: { category: string, limit: string }): Promise<returnPosts> => {
-    try {
-        const intLimit = parseInt(limit);
-        const posts = await getRepository(Post)
-            .createQueryBuilder("post")
-            .where("post.category = :category", { category })
-            .leftJoin('post.user', 'user')
-            .addSelect(['user.id'])
-            .orderBy("post.createdAt", "DESC")
-            .limit(intLimit)
-            .getRawMany();
-        return {
-            success: true,
-            data: {
-                posts
-            },
-            error: null,
-        }
-    } catch (err) {
-        console.error(err)
-        return {
-            success: false,
-            data: null,
-            error: "카테고리 별로 포스트들 가져오기 실패"
-        }
-    }
-}
+// const getCategoryPostsSortByTime = async ({ category, limit = "1500" }: { category: string, limit: string }): Promise<returnPosts> => {
+//     try {
+//         const intLimit = parseInt(limit);
+//         const posts = await getRepository(Post)
+//             .createQueryBuilder("post")
+//             .where("post.category = :category", { category })
+//             .leftJoin('post.user', 'user')
+//             .addSelect(['user.id'])
+//             .orderBy("post.createdAt", "DESC")
+//             .limit(intLimit)
+//             .getRawMany();
+//         return {
+//             success: true,
+//             data: {
+//                 posts
+//             },
+//             error: null,
+//         }
+//     } catch (err) {
+//         console.error(err)
+//         return {
+//             success: false,
+//             data: null,
+//             error: "카테고리 별로 포스트들 가져오기 실패"
+//         }
+//     }
+// }
 
 
 export {
@@ -396,9 +362,7 @@ export {
     updatePost_service,
     getPostFromUuid,
     getPostsSortByTime,
-    getCategoryPostsSortByTime,
-    getPostsPagenationSortByTime,
-    getPostsWithoutNoticeBoardByTime,
+    // getPostsPagenationSortByTime,
     likeItPost,
     getLikeItPost,
     getHashTagPosts_service,

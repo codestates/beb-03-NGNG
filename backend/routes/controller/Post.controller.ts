@@ -1,48 +1,35 @@
 import { Request, Response } from 'express';
-import fs from 'fs';
 import {
     createPost,
     getPostFromUuid,
     getPostsSortByTime,
     getLikeItPost,
-    getCategoryPostsSortByTime,
-    getPostsPagenationSortByTime,
+    // getCategoryPostsSortByTime,
+    // getPostsPagenationSortByTime,
     likeItPost,
-    getPostsWithoutNoticeBoardByTime,
+    // getPostsWithoutNoticeBoardByTime,
     deletePost_service,
     updatePost_service,
     getHashTagPosts_service,
 } from '../../service/post.service';
-import {create} from 'ipfs-http-client';
-
-// const router = express.Router();
-const imageFunction = () => {
-    try {
-        fs.accessSync('uploads');
-    } catch (error) {
-        console.log('uploads 폴더 생성');
-        fs.mkdirSync('uploads');
-    }
-}
-
+import { create } from 'ipfs-http-client';
 
 const sendPost = async (req: Request, res: Response) => {
     const { id } = req.user;
-    const { content, category, tags: tagsString } = req.body;
-
-    imageFunction()
+    const { content, tags: tagsString } = req.body;
+    const buffer = req.file.buffer as Object;
     // @ts-ignore
     const client = create("https://ipfs.infura.io:5001/api/v0");
     // @ts-ignore
-    const cid = await client.add(req.file);
-    const postUri = `https://ipfs.infura.io/ipfs/${cid.path}`;
-
+    const cid = await client.add(buffer);
+    const imageUri = `https://ipfs.io/ipfs/${cid.path}`;
+    // console.log('imageUri', imageUri);
     const tags = tagsString.split(/(#[^#\s]+)/g).filter((v: string) => {
         return v.match(/(#[^#\s]+)/g)
     }).map((tag: string) => tag.slice(1));
     console.log(tags)
     const result = await createPost({
-        content, id, category, tags, postUri
+        content, id, tags, imageUri
     });
     if (result.success) {
         return res.status(201).json(result);
@@ -76,18 +63,6 @@ const getPosts = async (req: Request, res: Response) => {
     }
 }
 
-const getCategoryPosts = async (req: Request, res: Response) => {
-    const category = req.query.category as string;
-    const limit = req.query.limit as string;
-    console.log(category, limit)
-    const result = await getCategoryPostsSortByTime({ category, limit });
-    if (result.success) {
-        return res.status(201).json(result);
-    }
-    else {
-        return res.status(500).json(result)
-    }
-}
 const getHashTagPosts = async (req: Request, res: Response) => {
     const tag = req.query.tag as string;
     console.log(tag)
@@ -100,34 +75,23 @@ const getHashTagPosts = async (req: Request, res: Response) => {
     }
 }
 
-const getPostsWithoutNoticeBoard = async (req: Request, res: Response) => {
-    const limit = req.query.limit as string;
-    const result = await getPostsWithoutNoticeBoardByTime({ limit });
-    if (result.success) {
-        return res.status(201).json(result);
-    }
-    else {
-        return res.status(500).json(result)
-    }
-}
-
-const getCategoryPostsPagenation = async (req: Request, res: Response) => {
-    const category = req.query.category as string;
-    const result = await getPostsPagenationSortByTime({ category });
-    if (result.success) {
-        return res.status(201).json(result);
-    }
-    else {
-        return res.status(500).json(result)
-    }
-}
+// const getCategoryPostsPagenation = async (req: Request, res: Response) => {
+//     const category = req.query.category as string;
+//     const result = await getPostsPagenationSortByTime({ category });
+//     if (result.success) {
+//         return res.status(201).json(result);
+//     }
+//     else {
+//         return res.status(500).json(result)
+//     }
+// }
 
 const likeIt = async (req: Request, res: Response) => {
-    const { postUuid, userUuid, likeIt } = req.body;
+    const { postUuid } = req.body;
+    const id = req?.user?.id as string;
     const result = await likeItPost({
         postUuid,
-        userUuid,
-        likeIt,
+        id,
     });
     if (result.success) {
         return res.status(201).json(result);
@@ -189,8 +153,6 @@ export {
     getPosts,
     likeIt,
     getLikeIt,
-    getCategoryPosts,
-    getPostsWithoutNoticeBoard,
     deletePost,
     updatePost,
     getHashTagPosts

@@ -1,21 +1,19 @@
 import { role } from '../enum/index'
 import { returnApi } from './Model/InterfaceReturnApiModel'
 interface IPost {
+    imageUri: string,
     content: string,
     id: string,
-    category: string,
     permision?: role,
     useComment?: boolean,
     delete?: boolean,
     tags: Array<string>,
-    postUri: string,
 }
 
 
 interface ILikeIt {
     postUuid: string,
-    userUuid: string,
-    likeIt: boolean
+    id: string,
 }
 
 interface returnPost extends returnApi {

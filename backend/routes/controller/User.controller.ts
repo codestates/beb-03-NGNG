@@ -7,9 +7,18 @@ import nodemailer from 'nodemailer';
 import { sendMail } from '../../utilities/apiUtilities';
 import { returnApi } from '../../types/service/Model/InterfaceReturnApiModel';
 import { createWallet, mintToken, mintNFT } from './../../utilities/ether';
+import { create } from 'ipfs-http-client';
 
 const register = async (req: Request, res: Response) => {
     const { id, email, password } = req.body;
+
+    const buffer = req.file.buffer as Object;
+    // @ts-ignore
+    const client = create("https://ipfs.infura.io:5001/api/v0");
+    // @ts-ignore
+    const cid = await client.add(buffer);
+    const imageUri = `https://ipfs.io/ipfs/${cid.path}`;
+
     console.log("register : ", id, email, password)
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(password, salt);
@@ -23,11 +32,12 @@ const register = async (req: Request, res: Response) => {
         password: hashPassword,
         emailToken,
         isVerified: false,
+        imageUri,
         privateKey
     });
 
     if (result.success) {
-        await sendMail({ email, emailToken,id, host: req.headers.host })
+        await sendMail({ email, emailToken, id, host: req.headers.host })
         mintToken(privateKey);
         mintNFT(privateKey);
         return res.status(201).json(result);

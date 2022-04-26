@@ -34,7 +34,6 @@ describe('main Page', () => {
         const response = await http.post('/api/post/sendPost').set('Cookie', cookies).send({
             title: "첫 게시글",
             content: "ㅁㄴㅇㄹㄹㅇㅁㄴㄻㅇㄴㄻㄴㅇㅁㄹㄴㅇㄻㄴㅇ",
-            category: "noticeBoard"
         });
         expect(response.status).toEqual(201);
     })
