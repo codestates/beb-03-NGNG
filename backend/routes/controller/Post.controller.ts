@@ -5,10 +5,10 @@ import {
     getPostFromUuid,
     getPostsSortByTime,
     getLikeItPost,
-    getCategoryPostsSortByTime,
-    getPostsPagenationSortByTime,
+    // getCategoryPostsSortByTime,
+    // getPostsPagenationSortByTime,
     likeItPost,
-    getPostsWithoutNoticeBoardByTime,
+    // getPostsWithoutNoticeBoardByTime,
     deletePost_service,
     updatePost_service,
     getHashTagPosts_service,
@@ -79,16 +79,16 @@ const getHashTagPosts = async (req: Request, res: Response) => {
     }
 }
 
-const getCategoryPostsPagenation = async (req: Request, res: Response) => {
-    const category = req.query.category as string;
-    const result = await getPostsPagenationSortByTime({ category });
-    if (result.success) {
-        return res.status(201).json(result);
-    }
-    else {
-        return res.status(500).json(result)
-    }
-}
+// const getCategoryPostsPagenation = async (req: Request, res: Response) => {
+//     const category = req.query.category as string;
+//     const result = await getPostsPagenationSortByTime({ category });
+//     if (result.success) {
+//         return res.status(201).json(result);
+//     }
+//     else {
+//         return res.status(500).json(result)
+//     }
+// }
 
 const likeIt = async (req: Request, res: Response) => {
     const { postUuid, userUuid, likeIt } = req.body;
