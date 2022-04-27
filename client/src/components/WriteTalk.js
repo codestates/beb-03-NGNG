@@ -53,18 +53,18 @@ const WriteTalk = (props) => {
   const tags = useSelector((state) => state.tag.tags);
 
   const [isUploading, setIsUploading] = useState(false);
-  const [readingImg, setReadingImg] = useState(false);
 
   const dispatch = useDispatch();
   const contentRef = useRef();
   let imgFile;
 
   const loadFile = (input) => {
-    //setReadingImg(true);
+    document.getElementById("progress-indicator").style.display = 'block';
 		imgFile = input.target.files[0];
-    // setTimeout(() => {
-    //   setReadingImg(false);
-    // }, 1500)
+    
+    setTimeout(() => {
+      document.getElementById("progress-indicator").style.display = 'none';
+    }, 2500)
 	};
 
   const newPostMutation = useMutation(((formData) => {
@@ -93,6 +93,7 @@ const WriteTalk = (props) => {
   );
 
   const handleSubmit = (event) => {
+    console.log('🎁', imgFile);
     event.preventDefault();
 
     if (accessToken === undefined) {
@@ -155,7 +156,7 @@ const WriteTalk = (props) => {
             pt: 0.5,
           }}
         >
-          <input type='file' accept='image/*' className='inputImg' style={{display: 'none'}} id="post-img-file" name="post-img-file" onChange={loadFile.bind(this)} />
+          <input type='file' accept='image/*' className='inputImg' style={{display: 'none'}} id="post-img-file" name="post-img-file" onChange={(e) => loadFile(e)} />
           <label htmlFor="post-img-file">
             <Button
               variant="contained"
@@ -167,19 +168,17 @@ const WriteTalk = (props) => {
               <AddPhotoAlternateIcon />
             </Button>
           </label>
-          {
-            readingImg ?
-            <CircularProgress sx={{p: 1, ml: 1.5}} /> :
             <Button
               type="submit"
               variant="contained"
               color="success"
+              id="submit-button"
               onClick={handleSubmit}
               sx={{ height: "30px", width: "60px" }}
             >
               Submit
             </Button>
-          }
+            <CircularProgress sx={{ml: 1.5, mt: 1.5, display: 'none'}} id="progress-indicator" />
           {
             isUploading &&
             <CircularProgress sx={{ml: 1.5, mt: 1.5}} />

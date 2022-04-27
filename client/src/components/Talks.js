@@ -8,11 +8,13 @@ const Talks = ({ filter }) => {
   const loginedUserId = useSelector((state) => state.user.userInfo.id);
 
   const { data, status, error } = useQuery('getPosts', () => {
-    return axios.get('/api/post/getPosts')
-    .then((res) => {
-      return res.data.data.posts;
-    })
-  })
+
+      return axios.get('/api/post/getPosts')
+      .then((res) => {
+        return res.data.data.posts;
+      })
+    }
+  )
 
   if (status === 'loading') {
     return <h1>Loading...</h1>
@@ -35,7 +37,7 @@ const Talks = ({ filter }) => {
         })
       }
       {
-        !filter &&
+        (!filter) &&
         data.map((post) => {
           return <Talk key={post.post_uuid} uuid={post.post_uuid} />
         })

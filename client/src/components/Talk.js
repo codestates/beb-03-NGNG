@@ -68,6 +68,13 @@ const Talk = ({uuid}) => {
     })
   })
 
+  const { data: likeItCount } = useQuery(`getLikeCount_${uuid}`, () => {
+    return axios.get(`/api/post/getLikeIt?postUuid=${uuid}`)
+    .then((res) => {
+      return res.data.data.likeItCount;
+    })
+  })
+
   if (status === "loading") {
     return <h1>Loading...</h1>
   }
@@ -117,7 +124,7 @@ const Talk = ({uuid}) => {
               </Avatar>
             }
             title={data.user.id}
-            subheader={data.updatedAt.slice(0, 16)}
+            subheader={`${data.updatedAt.slice(0, 10)} ${data.updatedAt.slice(11,16)}`}
           />
           {/* 이 아래의 박스는 로그인한 유저의 id(from redux)와 post 작성자 id(data.user.id)가 같아아만 보인다. */}
           {
@@ -147,10 +154,10 @@ const Talk = ({uuid}) => {
         </CardContent>
         <CardActions disableSpacing sx={{p: '14px',display: 'flex', justifyContent: 'space-between'}}>
           <Box sx={{width: '180px', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-            <LikeItModal uuid={uuid} />
-            <Typography>+3</Typography>
+            <LikeItModal uuid={uuid} postUserId={data.user.id} />
+            <Typography>{likeItCount ? likeItCount : '0'}</Typography>
             <DonateModal />
-            <ReportModal />            
+            <ReportModal uuid={uuid} />            
           </Box>
           <Box sx={{display: 'flex', flex: 1, ml: '30px'}}>
             <TextField label="Comment Message..." size='small' sx={{mr: '10px', flex: accessToken ? 1 : 0.75}} inputRef={commentRef}></TextField>

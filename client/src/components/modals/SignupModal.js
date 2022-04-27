@@ -57,18 +57,17 @@ export default function SignupModal() {
       handleClose();
     },
     onError: (error) => {
-      alert('Something Wrong! Try again');
+      alert(error);
       setIsUploading(false);
     }
   });
 
   const loadFile = (event) => {
-    setReadingImg(true);
+    document.getElementById("progress-indicator2").style.display = 'block';
     imgFile = event.target.files[0];
-    console.log('⭐️⭐️⭐️----------------', imgFile);
-    setTimeout(function() {
-      setReadingImg(false);
-    }, 1500);
+    setTimeout(() => {
+      document.getElementById("progress-indicator2").style.display = 'none';
+    }, 2500)
   }
 
   const handleSubmit = (event) => {
@@ -167,17 +166,15 @@ export default function SignupModal() {
               sx={{ mb: 0}}
               inputRef={passwordConfirmRef}
             />
-            {
-              readingImg &&
-              <CircularProgress />
-              
-            }
+            <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'flex-end'}}>
+            <CircularProgress color="secondary" sx={{mr: 2, mt: 2, p: 0.8, display: 'none'}} id="progress-indicator2" />
             <input type='file' accept='image/*' className='inputImg' style={{display: 'none'}} id="profile-img-file" name="profile-img-file" onChange={loadFile.bind(this)} />
             <label htmlFor="profile-img-file" style={{display: 'flex', justifyContent: 'flex-end'}}>
               <Button variant="outlined" color='secondary' component="span" className='inputImg' sx={{mt: 2}}>
                 Select Profile Image
               </Button>
             </label>
+            </Box>
             {
               inValid === 'blank' &&
               <Alert variant='filled' severity="error" sx={{mt: 2}}>All fields must be filled in.</Alert>

@@ -23,11 +23,18 @@ const style = {
   p: 4,
 };
 
-export default function LikeItModal({uuid}) {
+export default function LikeItModal({uuid, postUserId}) {
   const accessToken = useSelector((state) => state.user.accessToken);
+  const loginUserId = useSelector((state) => state.user.userInfo.id);
 
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    if (postUserId === loginUserId) {
+      alert('You cannot Like your own post');
+      return;
+    }
+    setOpen(true);
+  }
   const handleClose = () => setOpen(false);
 
   const { likeItData } = useQuery("checkLikeIt", () => {
@@ -54,7 +61,7 @@ export default function LikeItModal({uuid}) {
         alert("Like It Success!");
       },
       onError: (error) => {
-        alert(error);
+        alert('You Lieked it already')
       },
     }
   );

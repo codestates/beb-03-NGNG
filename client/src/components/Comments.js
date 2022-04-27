@@ -17,16 +17,16 @@ const Comments = ({postUuid}) => {
   })
 
   return (
-      <Box sx={{display: 'flex'}}>
+      <Box sx={{display: 'flex', mb: 3}}>
         {
           comments.length !== 0 &&
-          <FontAwesomeIcon icon={faCaretRight} fontSize={'60px'} style={{padding: '14px', paddingRight: '20px', color: '#3E3E41'}} />
+          <FontAwesomeIcon icon={faCaretRight} fontSize={'60px'} style={{padding: '14px', paddingRight: '20px', color: '#3E3E41', marginLeft: '20px', marginRight: '20px'}} />
         }
       <Box sx={{flex:1, mt: 1}}>
         {
           comments.length !== 0 &&
           comments.map((comment) => {
-            return <Comment key={comment.uuid} userId={comment.id} updatedAt={comment.updatedAt} content={comment.content} commentUuid={comment.uuid} anonymouseId={comment.annonymouseId} />
+            return <Comment key={comment.uuid} userId={comment.id} updatedAt={comment.updatedAt} content={comment.content} commentUuid={comment.uuid} anonymouseId={comment.annonymouseId} deleted={comment.deleted} imageUri={comment.imageUri} />
           })
         }
       </Box>

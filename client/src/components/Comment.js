@@ -14,7 +14,7 @@ import CommentDeleteModal from './modals/CommentDeleteModal';
 import AnonyCommentDeleteModal from './modals/AnonyCommentDeleteModal';
 
 
-const Comment = ({userId, updatedAt, content, commentUuid, anonymouseId}) => {
+const Comment = ({userId, updatedAt, content, commentUuid, anonymouseId, deleted, imageUri}) => {
   const accessToken = useSelector((state) => state.user.accessToken);
   const loginedUserId = useSelector((state) => state.user.userInfo.id);
   const commentRef = useRef();
@@ -31,11 +31,12 @@ const Comment = ({userId, updatedAt, content, commentUuid, anonymouseId}) => {
         <Box sx={{display: 'flex', alignItems: 'center'}}>
           <CardHeader
             avatar={
-              <Avatar aria-label="recipe">
+              <Avatar aria-label="recipe" src={imageUri}>
               </Avatar>
             }
             title={userId === null ? 'anonymous' : userId}
-            subheader={updatedAt.slice(5,10)}
+            subheader={`${updatedAt.slice(0, 10)} ${updatedAt.slice(11,16)}`}
+            sx={{width: '300px'}}
           />
           <CardContent sx={{width: '100%', display: 'flex', flexDirection: 'column'}}>
             <Typography variant="h6" color="text.secondary">
@@ -43,11 +44,11 @@ const Comment = ({userId, updatedAt, content, commentUuid, anonymouseId}) => {
             </Typography>
           </CardContent>
           {
-            loginedUserId === userId &&
+            (loginedUserId === userId && deleted !== 1) &&
             <CommentDeleteModal uuid={commentUuid} />
           }
           {
-            anonymouseId !== null &&
+            (anonymouseId !== null && deleted !== 1) &&
             <AnonyCommentDeleteModal uuid={commentUuid} />
           }
         </Box>
