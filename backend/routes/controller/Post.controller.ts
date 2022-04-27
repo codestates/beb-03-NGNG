@@ -15,27 +15,36 @@ import {
 import { create } from 'ipfs-http-client';
 
 const sendPost = async (req: Request, res: Response) => {
-    const { id } = req.user;
-    const { content, tags: tagsString } = req.body;
-    const buffer = req.file.buffer as Object;
-    // @ts-ignore
-    const client = create("https://ipfs.infura.io:5001/api/v0");
-    // @ts-ignore
-    const cid = await client.add(buffer);
-    const imageUri = `https://ipfs.io/ipfs/${cid.path}`;
-    // console.log('imageUri', imageUri);
-    const tags = tagsString.split(/(#[^#\s]+)/g).filter((v: string) => {
-        return v.match(/(#[^#\s]+)/g)
-    }).map((tag: string) => tag.slice(1));
-    console.log(tags)
-    const result = await createPost({
-        content, id, tags, imageUri
-    });
-    if (result.success) {
-        return res.status(201).json(result);
+    try {
+        const { id } = req.user;
+        const { content, tags: tagsString } = req.body;
+        const buffer = req.file.buffer as Object;
+        // @ts-ignore
+        const client = create("https://ipfs.infura.io:5001/api/v0");
+        // @ts-ignore
+        const cid = await client.add(buffer);
+        const imageUri = `https://ipfs.io/ipfs/${cid.path}`;
+        // console.log('imageUri', imageUri);
+        const tags = tagsString.split(/(#[^#\s]+)/g).filter((v: string) => {
+            return v.match(/(#[^#\s]+)/g)
+        }).map((tag: string) => tag.slice(1));
+        console.log(tags)
+        const result = await createPost({
+            content, id, tags, imageUri
+        });
+        if (result.success) {
+            return res.status(201).json(result);
+        }
+        else {
+            return res.status(500).json(result)
+        }
     }
-    else {
-        return res.status(500).json(result)
+    catch (err) {
+        return res.status(500).json({
+            success: false,
+            data: null,
+            error: "",
+        })
     }
 }
 

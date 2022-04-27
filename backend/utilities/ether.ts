@@ -1,9 +1,9 @@
 import { providers, Wallet, utils, Contract } from "ethers";
-const provider = new providers.JsonRpcProvider('http://localhost:7545');
+// const provider = new providers.JsonRpcProvider('http://localhost:7545');
+const provider = new providers.JsonRpcProvider(`https://rinkeby.infura.io/v3/${process.env.projectId}`);
 const artifact = require("./../../contract2/build/contracts/NgngToken.json");
 const artifact2 = require("./../../contract2/build/contracts/NgngNFT.json");
 
-const chalk = require("chalk")
 export const createWallet = () => {
     const signer = Wallet.createRandom();
     return signer?._signingKey()?.privateKey;

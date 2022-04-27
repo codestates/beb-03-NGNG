@@ -12,14 +12,17 @@ import { create } from 'ipfs-http-client';
 const register = async (req: Request, res: Response) => {
     const { id, email, password } = req.body;
 
-    const buffer = req.file.buffer as Object;
+    const buffer = req?.file?.buffer as Object;
+    // try {
     // @ts-ignore
     const client = create("https://ipfs.infura.io:5001/api/v0");
     // @ts-ignore
-    const cid = await client.add(buffer);
-    const imageUri = `https://ipfs.io/ipfs/${cid.path}`;
-
-    console.log("register : ", id, email, password)
+    console.log("buffer", buffer);
+    let imageUri = process.env.DEFAULT_IMAGE_URI;
+    if (buffer) {
+        const cid = await client.add(buffer);
+        imageUri = `https://ipfs.io/ipfs/${cid.path}`;
+    }
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(password, salt);
     const emailToken = crypto.randomBytes(64).toString('hex');
@@ -45,6 +48,14 @@ const register = async (req: Request, res: Response) => {
     else {
         return res.status(500).json(result)
     }
+    // }
+    // catch (err) {
+    //     return res.status(501).json({
+    //         success: false,
+    //         data: null,
+    //         error: err,
+    //     })
+    // }
 }
 
 const createToken = ({ id }: { id: string }) => {

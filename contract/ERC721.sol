@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
+let contractAdress = 0x96F77190Ca2072dC288a6501d914CC5a3bA07359
 
 contract NgngNft is ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;

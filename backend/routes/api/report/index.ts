@@ -4,9 +4,7 @@ import { loginRequired } from '../../middleware';
 const router = Router()
 
 
-// 카테고리 추가해야함
-
-router.get('/reportPost', reportPost_controller);
+router.post('/reportPost', loginRequired, reportPost_controller);
 
 
 

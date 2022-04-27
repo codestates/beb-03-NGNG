@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import { sanitizeUser } from '../utilities/apiUtilities';
 import { returnApi } from '../types/service/Model/InterfaceReturnApiModel';
 
+
 const createUser = async (userData: IUser): Promise<returnUser> => {
     const {
         id,
@@ -41,7 +42,7 @@ const createUser = async (userData: IUser): Promise<returnUser> => {
         return {
             success: false,
             data: null,
-            error: "로그인 실패"
+            error: "회원가입 실패"
         }
     }
 }

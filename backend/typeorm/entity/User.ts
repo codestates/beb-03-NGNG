@@ -16,7 +16,6 @@ export class User extends Model {
     @Column({
         nullable: false,
         type: "text",
-        //default: "https://ipfs.io/ipfs/QmajHBBcXxAdPyKRxBLVTTAHKcgXa59Y32apruwuhHQUcx",
     })
     imageUri: string;
 
@@ -59,6 +58,9 @@ export class User extends Model {
 
     @OneToMany(() => Comment, comment => comment.user_id)
     commentsForId!: Comment[]
+
+    // @OneToMany(() => Comment, comment => comment.user_imageUri)
+    // commentsForImageUri!: Comment[]
 
     @OneToMany(() => Post, post => post.user)
     posts!: Post[]

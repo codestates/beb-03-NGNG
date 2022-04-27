@@ -1,5 +1,5 @@
 require('dotenv').config()
-const HDWalletProvider = require('truffle-hdwallet-provider-privkey');
+const HDWalletProvider = require('@truffle/hdwallet-provider');
 
 module.exports = {
 
@@ -10,19 +10,32 @@ module.exports = {
       network_id: "*" // Match any network id
     },
     ropsten: {
-      provider: () => new HDWalletProvider([process.env.PRIVATE_KEY], `https://ropsten.infura.io/v3/${process.env.projectId}`),
+      provider: () => {
+        return new HDWalletProvider({
+          privateKeys: [process.env.PRIVATE_KEY],
+          providerOrUrl: `https://ropsten.infura.io/v3/${process.env.projectId}`
+        });
+      },
       network_id: 3,
       gas: 4000000      //make sure this gas allocation isn't over 4M, which is the max
     },
     kovan: {
-      provider: () => new HDWalletProvider([process.env.PRIVATE_KEY], `https://kovan.infura.io/v3/${process.env.projectId}`),
+      provider: () => {
+        return new HDWalletProvider({
+          privateKeys: [process.env.PRIVATE_KEY],
+          providerOrUrl: `https://kovan.infura.io/v3/${process.env.projectId}`
+        });
+      },
       gas: 5000000,
       gasPrice: 25000000000,
       network_id: 42
     },
     rinkeby: {
       provider: function () {
-        return new HDWalletProvider(mnemonic, `https://rinkeby.infura.io/v3/${process.env.projectId}`);
+        return new HDWalletProvider({
+          privateKeys: [process.env.PRIVATE_KEY],
+          providerOrUrl: `https://rinkeby.infura.io/v3/${process.env.projectId}`
+        });
       },
       network_id: 4,
       gas: 4500000,
@@ -42,7 +55,7 @@ module.exports = {
       // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
       settings: {          // See the solidity docs for advice about optimization and evmVersion
         optimizer: {
-          enabled: false,
+          enabled: true,
           runs: 200
         },
       }
