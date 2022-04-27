@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
+// let contractAdress = 0x96F77190Ca2072dC288a6501d914CC5a3bA07359
 
 contract NgngNft is ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
@@ -15,12 +16,13 @@ contract NgngNft is ERC721URIStorage, Ownable {
     uint256 public nftPrice;
 
     constructor() ERC721("NgngNFT", "NGNG") {
-        nftPrice = 10;
+        nftPrice = 10e18;
     }
 
     function mintNFT(address recipient, string memory tokenURI) public onlyOwner returns (uint256) {
         require(token.balanceOf(recipient) > nftPrice);
         token.transferFrom(recipient, msg.sender, nftPrice); // from to amount , nft사니까 돈뺌, 돈 받는사람, 가격만큼
+
         _tokenIds.increment();
 
         uint256 newItemId = _tokenIds.current(); // uint256으로 바꿔주려면 .current()를 써줘서 토큰id받아옴
