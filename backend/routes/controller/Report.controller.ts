@@ -6,7 +6,8 @@ import {
 const reportPost_controller = async (req: Request, res: Response) => {
     const postUuid = req.body.postUuid as string;
     const content = req.body.content as string;
-    const result = await reportPost_service({ postUuid, content });
+    const id = req.user.id as string;
+    const result = await reportPost_service({ id, postUuid, content });
     if (result.success) {
         return res.status(201).json(result);
     }
