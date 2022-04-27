@@ -59,6 +59,9 @@ export class User extends Model {
     @OneToMany(() => Comment, comment => comment.user_id)
     commentsForId!: Comment[]
 
+    // @OneToMany(() => Comment, comment => comment.user_imageUri)
+    // commentsForImageUri!: Comment[]
+
     @OneToMany(() => Post, post => post.user)
     posts!: Post[]
 
