@@ -176,12 +176,15 @@ const getCommentsFromPostUuid = async ({ postUuid }: any): Promise<returnComment
     try {
         const comment = await getRepository(Comment)
             .createQueryBuilder("comment")
+            .leftJoinAndSelect('comment.user', 'user')
+            .leftJoin('comment.post', 'post')
             .where('comment.parentComment IS NULL')
             .andWhere("post.uuid = :uuid", { uuid: postUuid })
-            .leftJoin('comment.post', 'post')
             .leftJoinAndSelect('comment.childComments', ' parentComment')
             .orderBy("comment.createdAt", "ASC")
             .getRawMany();
+
+
         console.log(comment)
         const temp: any = {}
         comment.map((o) => {
@@ -230,9 +233,9 @@ const getCommentsFromPostUuid = async ({ postUuid }: any): Promise<returnComment
                     isMember: o.comment_isMember,
                     id: o.comment_user_id,
                     deleted: o.comment_deleted,
+                    imageUri: o.user_imageUri,
                     childComments,
                 }
-
             }
         })
 
