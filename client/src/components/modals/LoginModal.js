@@ -6,7 +6,7 @@ import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
 import { useDispatch } from 'react-redux';
-import { login, getUserInfo } from '../redux/user';
+import { login, getUserInfo } from '../../redux/user';
 import axios from 'axios';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 
@@ -35,7 +35,7 @@ export default function LoginModal() {
 
   const loginMutation = useMutation(
     (loginInfo) => {
-      return axios.post("http://localhost:5001/api/user/login", loginInfo);
+      return axios.post("/api/user/login", loginInfo);
     },
     {
       onSuccess: (data) => {
@@ -47,7 +47,7 @@ export default function LoginModal() {
 
         // userInfo 가져와서 전역변수 설정
         axios
-          .get("http://localhost:5001/api/user/getUser", {
+          .get("/api/user/getUser", {
             headers: {
               Authorization: `bearer ${accessToken}`,
             },

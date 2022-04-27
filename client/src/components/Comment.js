@@ -10,10 +10,13 @@ import Box from '@mui/material/Box';
 import SubComment from './SubComment';
 import { TextField, Button } from '@mui/material';
 import { useSelector } from 'react-redux';
+import CommentDeleteModal from './modals/CommentDeleteModal';
+import AnonyCommentDeleteModal from './modals/AnonyCommentDeleteModal';
 
 
-const Comment = ({userId, updatedAt, content, commentUuid, anonymouseId}) => {
+const Comment = ({userId, updatedAt, content, commentUuid, anonymouseId, deleted, imageUri}) => {
   const accessToken = useSelector((state) => state.user.accessToken);
+  const loginedUserId = useSelector((state) => state.user.userInfo.id);
   const commentRef = useRef();
   const passwordRef = useRef();
 
@@ -28,19 +31,28 @@ const Comment = ({userId, updatedAt, content, commentUuid, anonymouseId}) => {
         <Box sx={{display: 'flex', alignItems: 'center'}}>
           <CardHeader
             avatar={
-              <Avatar aria-label="recipe">
+              <Avatar aria-label="recipe" src={imageUri}>
               </Avatar>
             }
             title={userId === null ? 'anonymous' : userId}
-            subheader={updatedAt.slice(5,10)}
+            subheader={`${updatedAt.slice(0, 10)} ${updatedAt.slice(11,16)}`}
+            sx={{width: '300px'}}
           />
           <CardContent sx={{width: '100%', display: 'flex', flexDirection: 'column'}}>
             <Typography variant="h6" color="text.secondary">
               {content}
             </Typography>
-            
           </CardContent>
+          {
+            (loginedUserId === userId && deleted !== 1) &&
+            <CommentDeleteModal uuid={commentUuid} />
+          }
+          {
+            (anonymouseId !== null && deleted !== 1) &&
+            <AnonyCommentDeleteModal uuid={commentUuid} />
+          }
         </Box>
+        
         {/* 대댓글 작성 폼 */}
         {/* <Box sx={{display: 'flex', flex: 1, pb:2, pl: 2, pr: 2, ml: 22}}>
           <TextField label="Comment Message..." size='small' sx={{mr: '10px', flex: accessToken ? 1 : 0.75}} inputRef={commentRef}></TextField>

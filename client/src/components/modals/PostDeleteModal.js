@@ -3,10 +3,13 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
-import BugReportIcon from '@mui/icons-material/BugReport';
 import Tooltip from '@mui/material/Tooltip';
+import ClearIcon from '@mui/icons-material/Clear';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useSelector } from 'react-redux';
+import { useMutation } from 'react-query';
+import axios from 'axios';
 
 const style = {
   position: 'absolute',
@@ -21,16 +24,46 @@ const style = {
   p: 4,
 };
 
-export default function ReportModal() {
+export default function PostDeleteModal({uuid}) {
+  const accessToken = useSelector((state) => state.user.accessToken);
+
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    postDeleteMutation.mutate();
+    handleClose();
+  }
+
+  const postDeleteMutation = useMutation((() => {
+    return axios({
+      method: "delete",
+      url: `/api/post/deletePost?postUuid=${uuid}`,
+      headers: {
+        "Authorization": `bearer ${accessToken}`,
+        "Content-Type": 'application/json'
+      }
+    })
+    }), {
+      onSuccess: (data) => {
+        alert("Post Delete Success!");
+      },
+      onError: (error) => {
+        alert(error);
+      },
+    }
+  );
+
+  
+
   return (
     <>
-      <Tooltip title="Report this post 🚨" placement='top'>
-        <IconButton aria-label="report" sx={{ color: '#B05505'}} onClick={handleOpen}>
-          <BugReportIcon />
+      <Tooltip title="Delete" placement='top'>
+        <IconButton aria-label="report" onClick={handleOpen}>
+          <DeleteIcon />
         </IconButton>
       </Tooltip>
       <Modal
@@ -41,10 +74,10 @@ export default function ReportModal() {
       >
         <Box sx={style}>
           <Typography component="h1" variant="h5">
-            🚨 Report to Manager
+            🤔 Delete the post
           </Typography>
           <Typography>
-            Are you sure you want to report this post as Harmful post?
+            Are you sure you want to delete this post?
           </Typography>
           <Box noValidate sx={{ mt: 1, display: 'flex' }}>
             <Button
@@ -52,6 +85,7 @@ export default function ReportModal() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2, mr: 2 }}
+              onClick={handleClose}
             >
               CANCLE
             </Button>
@@ -61,6 +95,7 @@ export default function ReportModal() {
               variant="contained"
               color="secondary"
               sx={{ mt: 3, mb: 2 }}
+              onClick={handleSubmit}
             >
               YES
             </Button>
