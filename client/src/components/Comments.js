@@ -10,7 +10,7 @@ const Comments = ({postUuid}) => {
   const [comments, setComments] = useState([]);
 
   const {data} = useQuery(`getComments_${postUuid}`, () => {
-    return axios.get(`http://localhost:5001/api/comment/getComments?postUuid=${postUuid}`)
+    return axios.get(`/api/comment/getComments?postUuid=${postUuid}`)
     .then((res) => {
       setComments(res.data.data.comments);
     })
@@ -26,7 +26,7 @@ const Comments = ({postUuid}) => {
         {
           comments.length !== 0 &&
           comments.map((comment) => {
-            return <Comment key={comment.uuid} userId={comment.id} updatedAt={comment.updatedAt} content={comment.content} commentUuid={comment.uuid} anonymouseId={comment.anonymouseId} />
+            return <Comment key={comment.uuid} userId={comment.id} updatedAt={comment.updatedAt} content={comment.content} commentUuid={comment.uuid} anonymouseId={comment.annonymouseId} />
           })
         }
       </Box>

@@ -1,6 +1,6 @@
 import { Container } from '@mui/material';
 import React from 'react';
-import Tags from '../../components/Tags';
+import HotTags from '../../components/HotTags';
 import WriteTalk from '../../components/WriteTalk';
 import Talks from '../../components/Talks';
 
@@ -8,9 +8,9 @@ const Home = (props) => {
 
   return (
     <Container>
-      <Tags />
+      <HotTags />
       <WriteTalk />
-      <Talks />
+      <Talks filter={false} />
     </Container>
   )
 }

@@ -11,7 +11,7 @@ const Profile = (props) => {
   return (
     <Box sx={{display: 'flex', alignItems: 'center', borderBottom: '0.5px solid grey', pb: '20px'}}>
       <Avatar
-        src=""
+        src={user.imageUri}
         sx={{ width: 56, height: 56, mr: '20px' }}
       />
       {

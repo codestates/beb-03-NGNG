@@ -1,8 +1,13 @@
+import { Container } from '@mui/material';
 import React from 'react';
+import Talks from '../../components/Talks';
 
 const MyTalk = (props) => {
+  
   return (
-    <h1>My Talk</h1>
+    <Container>
+      <Talks filter={true} />
+    </Container>
   )
 }
 

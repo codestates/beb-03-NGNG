@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -7,6 +7,7 @@ import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
 import axios from 'axios';
 import { useMutation } from 'react-query';
+import { CircularProgress } from '@mui/material';
 
 const style = {
   position: 'absolute',
@@ -24,53 +25,78 @@ const style = {
 export default function SignupModal() {
   const [inValid, setInvalid] = useState('');
   const [open, setOpen] = React.useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [readingImg, setReadingImg] = useState(false);
+
+  const idRef = useRef();
+  const emailRef = useRef();
+  const passwordRef = useRef();
+  const passwordConfirmRef = useRef();
+  let imgFile;
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
     setInvalid('');
   }
 
-  const signupMutation = useMutation(((info) => {
-      return axios.post('http://localhost:5001/api/user/register', info);
+  const signupMutation = useMutation(((formData) => {
+      setIsUploading(true);
+      return axios({
+        method: "post",
+        url: '/api/user/register',
+        data: formData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        }
+      });
   }), {
     onSuccess: (data) => {
+      setIsUploading(false);
       alert('Sign Up Success!');
       handleClose();
     },
     onError: (error) => {
       alert('Something Wrong! Try again');
+      setIsUploading(false);
     }
   });
 
+  const loadFile = (event) => {
+    setReadingImg(true);
+    imgFile = event.target.files[0];
+    console.log('⭐️⭐️⭐️----------------', imgFile);
+    setTimeout(function() {
+      setReadingImg(false);
+    }, 1500);
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const userId = data.get('userId');
-    const email = data.get('email');
-    const password = data.get('password');
-    const password2 = data.get('password2');
 
-    if (userId === '' || email === '' || password === '' || password2 === '') {
+    if (idRef.current.value === '' || emailRef.current.value === '' || passwordRef.current.value === '' || passwordConfirmRef.current.value === '') {
       setInvalid('blank');
       return;
     }
 
-    if (userId.length < 5) {
+    if (idRef.current.value.length < 5) {
       setInvalid('shortId');
       return;
     }
 
-    if (password !== password2) {
+    if (passwordRef.current.value !== passwordConfirmRef.current.value) {
       setInvalid('passwordError');
       return;
     } else {
+      const formData = new FormData();
+      formData.append("id", idRef.current.value);
+      formData.append("email", emailRef.current.value);
+      formData.append("password", passwordRef.current.value);
+      formData.append("image", imgFile);
+
       setInvalid('');
-      // id, email, password 를 서버에 보내서 register 처리해주기!
-      signupMutation.mutate({
-        id: userId,
-        email: email,
-        password: password
-      });
+      // id, email, password, image 를 서버에 보내서 register 처리해주기!
+      signupMutation.mutate(formData);
     }
   }
 
@@ -84,10 +110,16 @@ export default function SignupModal() {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography component="h1" variant="h5">
-            Sign up
-          </Typography>
-          <Box component="form" noValidate sx={{ mt: 1 }} onSubmit={handleSubmit}>
+          <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
+            <Typography component="h1" variant="h5">
+              Sign up
+            </Typography>
+            {
+              isUploading &&
+              <CircularProgress color="secondary" />
+            }
+          </Box>
+          <Box component="form" noValidate sx={{ mt: 1 }} onSubmit={handleSubmit} encType='multipart/form-data'>
             <TextField
               margin="normal"
               required
@@ -98,6 +130,7 @@ export default function SignupModal() {
               autoComplete="userId"
               autoFocus
               sx={{ mb: 0}}
+              inputRef={idRef}
             />
             <TextField
               margin="normal"
@@ -108,6 +141,7 @@ export default function SignupModal() {
               name="email"
               autoFocus
               sx={{ mb: 0, background: 'transparent'}}
+              inputRef={emailRef}
             />
             <TextField
               margin="normal"
@@ -119,6 +153,7 @@ export default function SignupModal() {
               id="password"
               autoComplete="current-password"
               sx={{ mb: 0}}
+              inputRef={passwordRef}
             />
             <TextField
               margin="normal"
@@ -130,7 +165,19 @@ export default function SignupModal() {
               id="password2"
               autoComplete="current-password"
               sx={{ mb: 0}}
+              inputRef={passwordConfirmRef}
             />
+            {
+              readingImg &&
+              <CircularProgress />
+              
+            }
+            <input type='file' accept='image/*' className='inputImg' style={{display: 'none'}} id="profile-img-file" name="profile-img-file" onChange={loadFile.bind(this)} />
+            <label htmlFor="profile-img-file" style={{display: 'flex', justifyContent: 'flex-end'}}>
+              <Button variant="outlined" color='secondary' component="span" className='inputImg' sx={{mt: 2}}>
+                Select Profile Image
+              </Button>
+            </label>
             {
               inValid === 'blank' &&
               <Alert variant='filled' severity="error" sx={{mt: 2}}>All fields must be filled in.</Alert>
