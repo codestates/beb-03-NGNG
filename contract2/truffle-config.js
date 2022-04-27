@@ -39,7 +39,7 @@ module.exports = {
       },
       network_id: 4,
       gas: 4500000,
-      gasPrice: 10000000000,
+      gasPrice: 13738925968,
     }
   },
 
@@ -55,7 +55,7 @@ module.exports = {
       // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
       settings: {          // See the solidity docs for advice about optimization and evmVersion
         optimizer: {
-          enabled: true,
+          enabled: false,
           runs: 200
         },
       }

@@ -16,11 +16,11 @@ contract NgngNft is ERC721URIStorage, Ownable {
     uint256 public nftPrice;
 
     constructor() ERC721("NgngNFT", "NGNG") {
-        nftPrice = 10e18;
+        nftPrice = 10;
     }
 
     function mintNFT(address recipient, string memory tokenURI) public onlyOwner returns (uint256) {
-        require(token.balanceOf(recipient) > nftPrice);
+        require(token.balanceOf(recipient) > nftPrice,"");
         token.transferFrom(recipient, msg.sender, nftPrice); // from to amount , nft사니까 돈뺌, 돈 받는사람, 가격만큼
 
         _tokenIds.increment();

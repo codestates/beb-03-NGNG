@@ -12,7 +12,7 @@ contract NgngToken is ERC20, Ownable {
     function mintToken(address to, uint256 amount) public onlyOwner returns (bool){
         require(to != address(0x0));
         require(amount > 0);
-        uint256 easyNum = amount*(10**18);
+        uint256 easyNum = amount;
         _mint(to, easyNum);
         _approve(to, msg.sender, allowance(to, msg.sender) + easyNum);  // 토큰받는사람이, 서버에게, 허락된 토큰 개수 + amount
 
