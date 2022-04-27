@@ -13,45 +13,36 @@ const loginRequired = async (req: Request, res: Response, next: NextFunction) =>
 
         const bearerHeader = req?.headers['authorization'];
         console.log(bearerHeader)
-        if (typeof bearerHeader !== undefined) {
-            const bearer = bearerHeader.split(' ');
-            if (bearer.length === 2) {
-                token = bearer[1];
-            }
+
+        if (bearerHeader === undefined) throw "token not found";
+
+        const bearer = bearerHeader.split(' ');
+        if (bearer.length === 2) {
+            token = bearer[1];
         }
 
         const secret: any = process.env.JWT_SECRET
-        if (token) {
-            const validateToken: any = jwt.verify(token, secret);
-            console.log("validateToken : ", validateToken);
+        const validateToken: any = jwt.verify(token, secret);
+        console.log("validateToken : ", validateToken);
 
-            // jwt 복호화해서 나온 id 나 nickname 기준으로 
-            // db에서 확인해서 db 데이터를 넣어주느냐
-            // 그대로 복호환 된 값을 넣어주느냐
+        // jwt 복호화해서 나온 id 나 nickname 기준으로 
+        // db에서 확인해서 db 데이터를 넣어주느냐
+        // 그대로 복호환 된 값을 넣어주느냐
 
-            if (validateToken) {
-                req.user = {
-                    id: validateToken.id,
-                }
-                next()
+        if (validateToken) {
+            req.user = {
+                id: validateToken.id,
             }
-            else {
-                console.log("token expires");
-                // res.redirect('/')
-                res.status(500).json({ success: false, message: "token expires" })
-            }
-
+            next()
         }
         else {
-            console.log('token not found')
-            // res.redirect('/')
-            res.status(500).json({ success: false, message: "token not found" })
-
+            throw "token expires";
         }
     }
     catch (err) {
         // console.log(err)
         res.cookie('access-token', "", { maxAge: 1 })
+        res.status(500).json({ success: false, message: err })
         // res.redirect('/')
     }
 }
