@@ -39,7 +39,7 @@ const loginRequired = async (req: Request, res: Response, next: NextFunction) =>
             if (result.success === false) throw "db에 id가 없음";
             const { id, imageUri, email, role, uuid, createAt, isVerified, privateKey }: IUser = result?.data?.user;
             let tokenBalance = await getBalance(privateKey);
-            tokenBalance = ethers.utils.formatEther(tokenBalance);
+            tokenBalance = 'ethers.utils.formatEther(tokenBalance)';
             console.log(tokenBalance)
             req.user = { id, imageUri, email, role, uuid, createAt, isVerified, privateKey, tokenBalance };
             next()
