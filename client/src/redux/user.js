@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialUserInfo = {createdAt: '', email: '', id: '', imageUri: '', index: 0, isVerified: false, privateKey: '', role: '', updatedAt: '', uuid: ''};
+const initialUserInfo = {email: '', id: '', imageUri: '', isVerified: false, role: '',  uuid: '', tokenBalance: ''};
 
 export const userSlice = createSlice({
     name: "user",
@@ -8,16 +8,16 @@ export const userSlice = createSlice({
     reducers: {
         login: (state, action) => {
           state.accessToken = action.payload;
-          console.log('⭐️⭐️⭐️---------------- dispatch: Login');
+          //console.log('⭐️⭐️⭐️---------------- dispatch: Login');
         },
         getUserInfo: (state, action) => {
           state.userInfo = action.payload;
-          console.log('⭐️⭐️⭐️---------------- dispatch: getUserInfo');
+          //console.log('⭐️⭐️⭐️---------------- dispatch: getUserInfo');
         },
         logout: (state) => {
           state.accessToken = undefined;
           state.userInfo = initialUserInfo;
-          console.log('⭐️⭐️⭐️---------------- dispatch: Logout');
+          //console.log('⭐️⭐️⭐️---------------- dispatch: Logout');
         }
     },
 });

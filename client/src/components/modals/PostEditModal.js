@@ -45,10 +45,14 @@ export default function PostEditModal({uuid}) {
     })
     }), {
       onSuccess: (data) => {
-        alert("Post Edit Success!");
+        alert("😄 The post has been successfully edited");
       },
       onError: (error) => {
-        alert(error);
+        alert(`
+        ❗️ Something Wrong! Please try again
+
+        (${error})
+        `);
       },
     }
   );
@@ -57,7 +61,7 @@ export default function PostEditModal({uuid}) {
     e.preventDefault();
 
     if (contentRef.current.value === '') {
-      alert('Please enter content');
+      alert('❗️ Please fill the content field');
       return;
     }
 

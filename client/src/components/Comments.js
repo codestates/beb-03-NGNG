@@ -26,7 +26,7 @@ const Comments = ({postUuid}) => {
         {
           comments.length !== 0 &&
           comments.map((comment) => {
-            return <Comment key={comment.uuid} userId={comment.id} updatedAt={comment.updatedAt} content={comment.content} commentUuid={comment.uuid} anonymouseId={comment.annonymouseId} deleted={comment.deleted} imageUri={comment.imageUri} />
+            return <Comment key={comment.uuid} postUuid={postUuid} userId={comment.id} updatedAt={comment.updatedAt} content={comment.content} commentUuid={comment.uuid} anonymouseId={comment.annonymouseId} deleted={comment.deleted} imageUri={comment.imageUri} childComments={comment.childComments} />
           })
         }
       </Box>

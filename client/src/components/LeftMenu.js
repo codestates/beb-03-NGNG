@@ -39,9 +39,9 @@ const LeftMenu = (props) => {
           </ListItem>
           <ListItem disablePadding>
             <ListItemButton
-            component="a" href="/transactions">
+            component="a" href="/mywallet">
               <AccountBalanceWalletIcon sx={{mr: 1}} />
-            <ListItemText primary="Transactions" primaryTypographyProps={{fontSize: '20px'}}/>
+            <ListItemText primary="My Wallet" primaryTypographyProps={{fontSize: '20px'}}/>
             </ListItemButton>
           </ListItem>
         </List>

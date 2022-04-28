@@ -81,28 +81,32 @@ const WriteTalk = (props) => {
     }), {
       onSuccess: (data) => {
         setIsUploading(false);
-        alert("Post Success!");
+        alert("😄 The post has been created successfully");
         dispatch(initializeTag());
         contentRef.current.value = "";
       },
       onError: (error) => {
-        alert(error);
+        alert(`
+        ❗️ Something Wrong! Please try again
+
+        (${error})
+        `);
         setIsUploading(false);
       },
     }
   );
 
   const handleSubmit = (event) => {
-    console.log('🎁', imgFile);
+    // console.log('🎁', imgFile);
     event.preventDefault();
 
     if (accessToken === undefined) {
-      alert("Please Login");
+      alert("❗️ Please Log in");
       return;
     }
 
     if (contentRef.current.value.length === 0) {
-      alert("Please fill the field");
+      alert("❗️ Please fill the content field");
       return;
     }
 
