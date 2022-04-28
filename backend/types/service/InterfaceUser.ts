@@ -1,16 +1,21 @@
+import { Timestamp } from 'typeorm';
 import { User } from '../../typeorm/entity/User';
 import { role } from "../enum";
 import { returnApi } from "./Model/InterfaceReturnApiModel"
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
 interface IUser {
-    imageUri: string | undefined,
-    id: string,
-    email: string,
-    password: string,
+    imageUri?: string | undefined | null,
+    id?: string,
+    email?: string,
+    password?: string,
     emailToken?: string | null,
-    isVerified: boolean,
-    privateKey: string,
+    isVerified?: boolean,
+    privateKey?: string,
+    role?: string,
+    uuid?: string,
+    createAt?: Timestamp,
+    tokenBalance?: string,
 }
 
 // interface ICreateUser extends IUser {

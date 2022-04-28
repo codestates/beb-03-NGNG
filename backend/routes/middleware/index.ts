@@ -6,6 +6,8 @@ import path from 'path';
 import multer from 'multer';
 import { v4 as uuid } from 'uuid'
 import { getBalance } from '../../utilities/ether';
+import { IUser } from '../../types';
+import { ethers } from 'ethers';
 
 const loginRequired = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -35,10 +37,11 @@ const loginRequired = async (req: Request, res: Response, next: NextFunction) =>
         if (validateToken) {
             const result = await getUserFromId({ id: validateToken?.id });
             if (result.success === false) throw "db에 id가 없음";
-            const { id, privateKey }: { id: string, privateKey: string } = result?.data?.user;
-            const tokenBalance = await getBalance(privateKey) as unknown as string;
-            req.user = { id, privateKey, tokenBalance };
-            console.log(id, privateKey, tokenBalance)
+            const { id, imageUri, email, role, uuid, createAt, isVerified, privateKey }: IUser = result?.data?.user;
+            let tokenBalance = await getBalance(privateKey);
+            tokenBalance = ethers.utils.formatEther(tokenBalance);
+            console.log(tokenBalance)
+            req.user = { id, imageUri, email, role, uuid, createAt, isVerified, privateKey, tokenBalance };
             next()
         }
         else {
@@ -47,7 +50,8 @@ const loginRequired = async (req: Request, res: Response, next: NextFunction) =>
     }
     catch (err) {
         // console.log(err)
-        res.cookie('access-token', "", { maxAge: 1 })
+        // res.cookie('access-token', "", { maxAge: 1 })
+        console.log("error가 남", err)
         res.status(500).json({ success: false, message: err })
         // res.redirect('/')
     }

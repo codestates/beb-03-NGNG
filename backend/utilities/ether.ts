@@ -55,12 +55,15 @@ export const transferNFT = (privateKey1: string, privateKey2: string, tokenId: s
 
 
 export const getBalance = async (privateKey: string) => {
+    console.log("privateKey", privateKey)
     const wallet = new Wallet(privateKey, provider);
+    console.log("wallet", wallet)
     const OwnerWallet = new Wallet(process.env.OWNER_PRIVATE_KEY, provider);
     const contract = new Contract(process.env.ERC20_ADDRESS, artifact.abi, OwnerWallet);
 
     let balance = await contract.balanceOf(wallet.address);
     // let result = await balance.wait();
+    console.log(balance)
     return balance;
 }
 

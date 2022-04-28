@@ -8,6 +8,7 @@ import { sendMail } from '../../utilities/apiUtilities';
 import { returnApi } from '../../types/service/Model/InterfaceReturnApiModel';
 import { createWallet, mintToken, mintNFT } from './../../utilities/ether';
 import { create } from 'ipfs-http-client';
+import { IUser } from '../../types/service/InterfaceUser';
 
 const register = async (req: Request, res: Response) => {
     const { id, email, password } = req.body;
@@ -98,17 +99,11 @@ const login = async (req: Request, res: Response) => {
 
 
 const getLoadMyInfo = async (req: Request, res: Response) => {
-    const { id } = req.user as { id: string }
-    console.log("getLoadMyInfo", id);
-    // const token = createToken(id)
-    // res.cookie('access-token', token, {
-    //     secure: true,
-    //     httpOnly: true,
-    //     maxAge: 3600000
-    // })
+    const { id, imageUri, email, role, uuid, createAt, isVerified, tokenBalance }: IUser = req?.user;
+    console.log()
     return res.status(201).json({
         success: true,
-        data: { id },
+        data: { id, imageUri, email, role, uuid, createAt, isVerified, tokenBalance },
         error: null
     });
 }
