@@ -5,6 +5,7 @@ import comment from './api/comment';
 import hashTag from './api/hashTag';
 import report from './api/report';
 import contract from './api/contract';
+import admin from './api/admin';
 
 
 router.use('/user', user);
@@ -13,6 +14,7 @@ router.use('/comment', comment);
 router.use('/hashTag', hashTag);
 router.use('/report', report);
 router.use('/contract', contract);
+router.use('/admin', admin);
 
 
 

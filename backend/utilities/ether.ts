@@ -1,4 +1,4 @@
-import { providers, Wallet, utils, Contract } from "ethers";
+import { providers, Wallet, utils, Contract, ethers } from "ethers";
 const provider = new providers.JsonRpcProvider('http://localhost:7545');
 // const provider = new providers.JsonRpcProvider(`https://rinkeby.infura.io/v3/${process.env.projectId}`);
 const artifact = require("./../../contract2/build/contracts/NgngToken.json");
@@ -67,19 +67,27 @@ export const getBalance = async (privateKey: string) => {
     return balance;
 }
 
-export const mintToken = (privateKey: string, amount: null | string = null) => {
+export const findNFT = async ({ privateKey }: { privateKey: string }) => {
+    const wallet = new Wallet(privateKey, provider);
+    const OwnerWallet = new Wallet(process.env.OWNER_PRIVATE_KEY, provider);
+    const contract = new Contract(process.env.ERC721_ADDRESS, artifact2.abi, OwnerWallet);
+
+    let transaction = await contract.balanceOf(wallet.address);
+    return transaction;
+}
+
+
+export const mintToken = async (privateKey: string, amount: null | string = "100") => {
     const wallet = new Wallet(privateKey, provider);
     const OwnerWallet = new Wallet(process.env.OWNER_PRIVATE_KEY, provider);
     const contract = new Contract(process.env.ERC20_ADDRESS, artifact.abi, OwnerWallet);
-    (async function () {
-        let transaction = await contract.mintToken(wallet.address, (amount || "100"));
-        let result = await transaction.wait();
-        //You can inspect transaction on Etherscan
-        console.log(`https://rinkeby.etherscan.io/tx/${result.transactionHash}`);
-        //You can inspect the token transfer activity on Etherscan
-        console.log(`https://rinkeby.etherscan.io/token/${contract.address}`);
-        //You can also inpect token balances on a single account
-    })();
+
+    let transaction = await contract.mintToken(wallet.address, ethers.utils.parseEther(amount));
+    let result = await transaction.wait();
+    //You can inspect transaction on Etherscan
+    console.log(`https://rinkeby.etherscan.io/tx/${result.transactionHash}`);
+    //You can inspect the token transfer activity on Etherscan
+    console.log(`https://rinkeby.etherscan.io/token/${contract.address}`);
 }
 
 export const mintNFT = async (privateKey: string) => {

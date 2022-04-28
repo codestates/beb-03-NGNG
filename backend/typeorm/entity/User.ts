@@ -5,6 +5,7 @@ import { Entity, Column, OneToMany } from "typeorm";
 import { Model } from './Models/Model'
 import { Post } from './Post'
 import { Report } from './Report';
+import { Reward } from './Reward';
 
 
 @Entity()
@@ -58,6 +59,9 @@ export class User extends Model {
 
     @OneToMany(() => Comment, comment => comment.user_id)
     commentsForId!: Comment[]
+
+    @OneToMany(() => Reward, reward => reward.user)
+    rewardForId!: Reward[]
 
     // @OneToMany(() => Comment, comment => comment.user_imageUri)
     // commentsForImageUri!: Comment[]
