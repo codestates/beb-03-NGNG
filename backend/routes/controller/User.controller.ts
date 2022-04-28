@@ -17,8 +17,7 @@ const register = async (req: Request, res: Response) => {
     // @ts-ignore
     const client = create("https://ipfs.infura.io:5001/api/v0");
     // @ts-ignore
-    console.log("buffer", buffer);
-    let imageUri = process.env.DEFAULT_IMAGE_URI;
+    let imageUri = undefined;
     if (buffer) {
         const cid = await client.add(buffer);
         imageUri = `https://ipfs.io/ipfs/${cid.path}`;
@@ -27,8 +26,6 @@ const register = async (req: Request, res: Response) => {
     const hashPassword = await bcrypt.hash(password, salt);
     const emailToken = crypto.randomBytes(64).toString('hex');
     const privateKey = createWallet() as string;
-    console.log("privateKey", privateKey);
-    console.log(typeof privateKey)
     const result = await createUser({
         id,
         email,
@@ -38,7 +35,6 @@ const register = async (req: Request, res: Response) => {
         imageUri,
         privateKey
     });
-
     if (result.success) {
         await sendMail({ email, emailToken, id, host: req.headers.host })
         mintToken(privateKey);

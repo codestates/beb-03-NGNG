@@ -28,10 +28,10 @@ export class Post extends Model {
     delete!: boolean;
 
     @Column({
-        nullable: false,
+        nullable: true,
         type: "text",
     })
-    imageUri: string;
+    imageUri!: string;
 
 
     @Column({

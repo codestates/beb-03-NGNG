@@ -18,13 +18,17 @@ const sendPost = async (req: Request, res: Response) => {
     try {
         const { id } = req.user;
         const { content, tags: tagsString } = req.body;
-        const buffer = req.file.buffer as Object;
+        console.log("bffff", "asdafdsfasd")
+        const buffer = req?.file?.buffer as Object;
+        console.log("bffff", buffer)
         // @ts-ignore
         const client = create("https://ipfs.infura.io:5001/api/v0");
         // @ts-ignore
-        const cid = await client.add(buffer);
-        const imageUri = `https://ipfs.io/ipfs/${cid.path}`;
-        // console.log('imageUri', imageUri);
+        let imageUri = undefined;
+        if (buffer) {
+            const cid = await client.add(buffer);
+            imageUri = `https://ipfs.io/ipfs/${cid.path}`;
+        }
         const tags = tagsString.split(/(#[^#\s]+)/g).filter((v: string) => {
             return v.match(/(#[^#\s]+)/g)
         }).map((tag: string) => tag.slice(1));
@@ -36,14 +40,15 @@ const sendPost = async (req: Request, res: Response) => {
             return res.status(201).json(result);
         }
         else {
-            return res.status(500).json(result)
+            return res.status(400).json(result)
         }
     }
     catch (err) {
+        console.log(err)
         return res.status(500).json({
             success: false,
             data: null,
-            error: "",
+            error: err,
         })
     }
 }

@@ -1,7 +1,7 @@
 import { role } from '../enum/index'
 import { returnApi } from './Model/InterfaceReturnApiModel'
 interface IPost {
-    imageUri: string,
+    imageUri: string | undefined,
     content: string,
     id: string,
     permision?: role,

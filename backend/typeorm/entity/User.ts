@@ -14,10 +14,10 @@ export class User extends Model {
     id!: string;
 
     @Column({
-        nullable: false,
+        nullable: true,
         type: "text",
     })
-    imageUri: string;
+    imageUri!: string;
 
     @Column({ unique: true })
     @Length(1, 255)

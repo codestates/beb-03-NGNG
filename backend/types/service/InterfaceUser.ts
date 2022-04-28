@@ -4,7 +4,7 @@ import { returnApi } from "./Model/InterfaceReturnApiModel"
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
 interface IUser {
-    imageUri: string,
+    imageUri: string | undefined,
     id: string,
     email: string,
     password: string,
