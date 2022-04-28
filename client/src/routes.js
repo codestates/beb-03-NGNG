@@ -2,9 +2,11 @@
 import Home from "./pages/Home/index.js";
 import MyTalk from "./pages/MyTalk/index.js";
 import Transactions from "./pages/Transactions/index.js";
+import TagSelected from "./pages/TagSelected/index.js";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
+
 
 const routes = [
   {
@@ -30,6 +32,14 @@ const routes = [
     icon: <Icon fontSize="small">transactions</Icon>,
     route: "/transactions",
     component: <Transactions />,
+  },
+  {
+    type: "collapse",
+    name: "TagSelected",
+    key: "tagSelected",
+    icon: <Icon fontSize="small">transactions</Icon>,
+    route: "/tagselected",
+    component: <TagSelected />,
   },
 ];
 

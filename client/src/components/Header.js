@@ -1,4 +1,4 @@
-import React, { useState, useNavigate, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -7,11 +7,12 @@ import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import Button from '@mui/material/Button';
-import LoginModal from './LoginModal';
-import SignupModal from './SignupModal';
+import LoginModal from './modals/LoginModal';
+import SignupModal from './modals/SignupModal';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { logout } from '../redux/user';
+import { useNavigate } from 'react-router-dom';
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -55,6 +56,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Header = (props) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const accessToken = useSelector((state) => state.user.accessToken);
   const inputRef = useRef();
 
@@ -62,9 +64,10 @@ const Header = (props) => {
     dispatch(logout());
   };
 
-  const handleKeyDown = (event) => {
-    if (event.keyCode === 13) {
+  const handleKeyDown = (e) => {
+    if (e.keyCode === 13) {
       console.log(inputRef.current.value);
+      navigate('/tagselected', {state: inputRef.current.value});
       inputRef.current.value = "";
     }
   };
@@ -88,6 +91,8 @@ const Header = (props) => {
               display: { xs: "none", sm: "block" },
               fontWeight: "bold",
             }}
+            onClick={() => navigate('/')}
+            sx={{cursor: 'pointer'}}
           >
             NGNG
           </Typography>
