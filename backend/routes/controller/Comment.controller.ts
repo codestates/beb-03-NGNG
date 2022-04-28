@@ -6,6 +6,7 @@ import {
     deleteMemberCommentFromUuid,
     deleteNonMemberCommentFromUuid
 } from '../../service/comment.service';
+import { addReward_service } from '../../service/reward.service';
 
 const sendMemberComment = async (req: Request, res: Response) => {
     const {
@@ -21,6 +22,7 @@ const sendMemberComment = async (req: Request, res: Response) => {
         parentUuid,
     });
     if (result.success) {
+        addReward_service({ type: "comment", id });
         return res.status(201).json(result);
     }
     else {

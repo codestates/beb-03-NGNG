@@ -13,6 +13,7 @@ import {
     getHashTagPosts_service,
 } from '../../service/post.service';
 import { create } from 'ipfs-http-client';
+import { addLikeItReward_service, addReward_service } from '../../service/reward.service';
 
 const sendPost = async (req: Request, res: Response) => {
     try {
@@ -37,6 +38,7 @@ const sendPost = async (req: Request, res: Response) => {
             content, id, tags, imageUri
         });
         if (result.success) {
+            addReward_service({ type: "post", id });
             return res.status(201).json(result);
         }
         else {
@@ -108,6 +110,7 @@ const likeIt = async (req: Request, res: Response) => {
         id,
     });
     if (result.success) {
+        addLikeItReward_service({ postUuid });
         return res.status(201).json(result);
     }
     else {

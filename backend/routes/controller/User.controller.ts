@@ -39,7 +39,6 @@ const register = async (req: Request, res: Response) => {
     if (result.success) {
         await sendMail({ email, emailToken, id, host: req.headers.host })
         mintToken(privateKey);
-        // mintNFT(privateKey);
         return res.status(201).json(result);
     }
     else {
