@@ -10,12 +10,13 @@ export const createWallet = () => {
     return signer?._signingKey()?.privateKey;
 }
 
-export const transferToken = (privateKey: string) => {
-    const wallet = new Wallet(privateKey, provider);
-    const contract = new Contract(process.env.ERC20_ADDRESS, artifact.abi, wallet);
+export const transferToken = (privateKey1: string, privateKey2: string, amount: string) => {
+    const fromWallet = new Wallet(privateKey1, provider);
+    const toWallet = new Wallet(privateKey2, provider);
+    const OwnerWallet = new Wallet(process.env.OWNER_PRIVATE_KEY, provider);
+    const contract = new Contract(process.env.ERC20_ADDRESS, artifact.abi, OwnerWallet);
     (async function () {
-        let recipient = process.env.address2;
-        let transaction = await contract.transfer(recipient, "ngng NFT token uri");
+        let transaction = await contract.p2pTransferFrom(fromWallet.address, toWallet.address, amount);
         let result = await transaction.wait();
 
         //You can inspect transaction on Etherscan
@@ -25,15 +26,31 @@ export const transferToken = (privateKey: string) => {
         console.log(`https://rinkeby.etherscan.io/token/${contract.address}`);
 
         //You can also inpect token balances on a single account
-        console.log(`https://rinkeby.etherscan.io/token/${contract.address}?a=${recipient}`);
-
-
+        console.log(`https://rinkeby.etherscan.io/token/${contract.address}?a=${toWallet.address}`);
     })();
 
 }
 
-export const transferNFT = () => {
+export const transferNFT = (privateKey1: string, privateKey2: string, tokenId: string) => {
+    const fromWallet = new Wallet(privateKey1, provider);
+    const toWallet = new Wallet(privateKey2, provider);
+    const OwnerWallet = new Wallet(process.env.OWNER_PRIVATE_KEY, provider);
+    const contract = new Contract(process.env.ERC721_ADDRESS, artifact.abi, OwnerWallet);
+    (async function () {
+        let transaction = await contract.approve(toWallet.address, tokenId);
+        let result = await transaction.wait();
+        transaction = await contract.transferFrom(fromWallet.address, toWallet.address, tokenId);
+        result = await transaction.wait();
 
+        //You can inspect transaction on Etherscan
+        console.log(`https://rinkeby.etherscan.io/tx/${result.transactionHash}`);
+
+        //You can inspect the token transfer activity on Etherscan
+        console.log(`https://rinkeby.etherscan.io/token/${contract.address}`);
+
+        //You can also inpect token balances on a single account
+        console.log(`https://rinkeby.etherscan.io/token/${contract.address}?a=${toWallet.address}`);
+    })();
 }
 
 
