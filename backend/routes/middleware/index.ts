@@ -49,11 +49,13 @@ const loginRequired = async (req: Request, res: Response, next: NextFunction) =>
         }
     }
     catch (err) {
-        // console.log(err)
-        // res.cookie('access-token', "", { maxAge: 1 })
+
         console.log("error가 남", err)
-        res.status(500).json({ success: false, message: err })
-        // res.redirect('/')
+        res.status(401).json({
+            success: false,
+            data: null,
+            message: err
+        })
     }
 }
 

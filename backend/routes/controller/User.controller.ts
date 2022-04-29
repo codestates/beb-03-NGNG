@@ -84,7 +84,7 @@ const login = async (req: Request, res: Response) => {
     if (result.success) {
         const token = createToken({ id })
         return res.status(201).json({
-            success: false,
+            success: true,
             data: {
                 token
             },
@@ -92,7 +92,11 @@ const login = async (req: Request, res: Response) => {
         });
     }
     else {
-        return res.status(500).json(result)
+        return res.status(500).json({
+            success: false,
+            data: null,
+            error: "로그인 실패"
+        })
     }
 }
 

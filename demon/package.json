@@ -1,0 +1,23 @@
+{
+  "name": "daemon",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "pm2 start ./index.js",
+    "migrate:undo":"npx sequelize-cli db:migrate:undo",
+    "migrate":"npx sequelize-cli db:migrate"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mysql2": "^2.3.3",
+    "pm2": "^5.1.2",
+    "sequelize": "^6.12.0-beta.3",
+    "web3": "^1.6.1"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.3.0"
+  }
+}

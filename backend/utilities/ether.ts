@@ -57,7 +57,7 @@ export const transferNFT = (privateKey1: string, privateKey2: string, tokenId: s
 export const getBalance = async (privateKey: string) => {
     console.log("privateKey", privateKey)
     const wallet = new Wallet(privateKey, provider);
-    console.log("wallet", wallet)
+    // console.log("wallet", wallet)
     const OwnerWallet = new Wallet(process.env.OWNER_PRIVATE_KEY, provider);
     const contract = new Contract(process.env.ERC20_ADDRESS, artifact.abi, OwnerWallet);
 
@@ -98,14 +98,6 @@ export const mintNFT = async (privateKey: string) => {
     let recipientAddress = recipient.address;
     let transaction = await contract.mintNFT(recipientAddress, "ngng NFT token uri");
     let result = await transaction.wait();
-    //You can inspect transaction on Etherscan
-    console.log(`https://rinkeby.etherscan.io/tx/${result.transactionHash}`);
-
-    //You can inspect the token transfer activity on Etherscan
-    console.log(`https://rinkeby.etherscan.io/token/${contract.address}`);
-
-    //You can also inpect token balances on a single account
-    console.log(`https://rinkeby.etherscan.io/token/${contract.address}?a=${recipient}`);
     return result;
 }
 

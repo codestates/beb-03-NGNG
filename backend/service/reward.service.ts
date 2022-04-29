@@ -64,11 +64,15 @@ const addLikeItReward_service = async ({ postUuid }: { postUuid: string }): Prom
 const pay_service = async ({ role }) => {
     try {
         if (role === "user") throw "권한이 없습니다.";
-        // const reward = await Reward.find();
         const rewards = await getRepository(Reward)
             .createQueryBuilder("reward")
             .leftJoinAndSelect('reward.user', 'user')
             .getRawMany();
+
+        await getRepository(Reward)
+            .createQueryBuilder()
+            .delete()
+            .execute();
         console.log(rewards);
         for (const reward of rewards) {
             const type = reward["reward_type"] as string;
