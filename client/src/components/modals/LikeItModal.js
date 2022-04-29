@@ -29,8 +29,13 @@ export default function LikeItModal({uuid, postUserId}) {
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
+    // 로그인 했는지 확인
+    if (!accessToken) {
+      alert('❗️ Please Log in');
+      return;
+    }
     if (postUserId === loginUserId) {
-      alert('You cannot Like your own post');
+      alert('❗️ You cannot like your own post');
       return;
     }
     setOpen(true);
@@ -58,10 +63,10 @@ export default function LikeItModal({uuid, postUserId}) {
     })
     }), {
       onSuccess: (data) => {
-        alert("Like It Success!");
+        alert("😄 Your like has been sent successfully");
       },
       onError: (error) => {
-        alert('You Lieked it already')
+        alert('❗️ You Lieked this post already')
       },
     }
   );
@@ -72,13 +77,6 @@ export default function LikeItModal({uuid, postUserId}) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // 좋아요를 이미 눌렀으면 좋아요 할 수 없다. (좋아요 조회하기)
-    // if (likeItData > 0) {
-    //   alert('You already Liked it!');
-    //   return;
-    // } else {
-    //   likeItMutation.mutate();
-    // }
     likeItMutation.mutate();
     handleClose();
   }

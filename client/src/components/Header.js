@@ -58,6 +58,7 @@ const Header = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const accessToken = useSelector((state) => state.user.accessToken);
+  console.log('🌸', accessToken);
   const inputRef = useRef();
 
   const handleLogout = () => {
@@ -66,7 +67,7 @@ const Header = (props) => {
 
   const handleKeyDown = (e) => {
     if (e.keyCode === 13) {
-      console.log(inputRef.current.value);
+      //console.log(inputRef.current.value);
       navigate('/tagselected', {state: inputRef.current.value});
       inputRef.current.value = "";
     }
@@ -101,7 +102,7 @@ const Header = (props) => {
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
-              placeholder="Search…"
+              placeholder="Search tag name..."
               inputProps={{ "aria-label": "search" }}
               inputRef={inputRef}
               onKeyDown={(event) => handleKeyDown(event)}

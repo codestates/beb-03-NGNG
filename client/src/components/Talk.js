@@ -38,11 +38,15 @@ const Talk = ({uuid}) => {
     })
   }), {
     onSuccess: () => {
-      alert('Comment Success!');
+      alert('😄 The comment has been created successfully');
       commentRef.current.value = '';
     },
     onError: (error) => {
-      alert('Something Wrong! Try again');
+      alert(`
+      ❗️ Something Wrong! Please try again
+
+      (${error})
+      `);
     }
   });
 
@@ -50,12 +54,16 @@ const Talk = ({uuid}) => {
     return axios.post('/api/comment/sendNonMemberComment', comment);
   }), {
     onSuccess: () => {
-      alert('Comment Success!');
+      alert('😄 The comment has been created successfully');
       commentRef.current.value = '';
       passwordRef.current.value = '';
     },
     onError: (error) => {
-      alert('Something Wrong! Try again');
+      alert(`
+      ❗️ Something Wrong! Please try again
+
+      (${error})
+      `);
     }
   });
 
@@ -87,7 +95,7 @@ const Talk = ({uuid}) => {
     event.preventDefault();
 
     if (commentRef.current.value.length === 0) {
-      alert('Please fill the field');
+      alert('❗️ Please fill the content field');
       return;
     }
 
@@ -99,7 +107,7 @@ const Talk = ({uuid}) => {
       newCommentMutation.mutate(comment);
     } else {
       if (passwordRef.current.value === '') {
-        alert('Please enter password');
+        alert('❗️ Please enter a password');
         return;
       } else {
         const anonymousComment = {
@@ -157,7 +165,7 @@ const Talk = ({uuid}) => {
             <LikeItModal uuid={uuid} postUserId={data.user.id} />
             <Typography>{likeItCount ? likeItCount : '0'}</Typography>
             <DonateModal />
-            <ReportModal uuid={uuid} />            
+            <ReportModal uuid={uuid} postUserId={data.user.id} />            
           </Box>
           <Box sx={{display: 'flex', flex: 1, ml: '30px'}}>
             <TextField label="Comment Message..." size='small' sx={{mr: '10px', flex: accessToken ? 1 : 0.75}} inputRef={commentRef}></TextField>

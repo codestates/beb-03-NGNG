@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const basePath = 'D:/codestates/section5/beb-daemon-example';
+const basePath = '/Users/yooni/Desktop/beb/section-5/project-2/beb-03-NGNG/demon';
 
 const Web3 = require('web3');
 const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));

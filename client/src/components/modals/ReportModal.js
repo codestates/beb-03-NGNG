@@ -24,15 +24,27 @@ const style = {
   p: 4,
 };
 
-export default function ReportModal({uuid}) {
+export default function ReportModal({uuid, postUserId}) {
   const accessToken = useSelector((state) => state.user.accessToken);
+  const loginUserId = useSelector((state) => state.user.userInfo.id);
   const contentRef = useRef();
 
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    // 로그인 했는지 확인
+    if (!accessToken) {
+      alert('❗️ Please Log in');
+      return;
+    }
+    if (postUserId === loginUserId) {
+      alert('❗️ You cannot report your own post');
+      return;
+    }
+    setOpen(true);
+  }
   const handleClose = () => setOpen(false);
 
-  const likeItMutation = useMutation((() => {
+  const reportMutation = useMutation((() => {
     return axios({
       method: "put",
       url: '/api/report/reportPost',
@@ -47,10 +59,10 @@ export default function ReportModal({uuid}) {
     })
     }), {
       onSuccess: (data) => {
-        alert("Report Success!");
+        alert("😄 Your report has been successfully sent");
       },
       onError: (error) => {
-        alert('You Reported it already')
+        alert('❗️ You reported this post already');
       },
     }
   );
@@ -64,11 +76,11 @@ export default function ReportModal({uuid}) {
     // 사유 작성했는지 확인하기
 
     if (contentRef.current.value === '') {
-      alert ('Please write content');
+      alert ('❗️ Please fill the reason field');
       return;
     }
 
-    likeItMutation.mutate();
+    reportMutation.mutate();
     handleClose();
   }
 
