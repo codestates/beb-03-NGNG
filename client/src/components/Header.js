@@ -58,7 +58,6 @@ const Header = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const accessToken = useSelector((state) => state.user.accessToken);
-  console.log('🌸', accessToken);
   const inputRef = useRef();
 
   const handleLogout = () => {
