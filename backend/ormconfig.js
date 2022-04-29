@@ -51,7 +51,7 @@ module.exports = [{
   port: 3306,
   username: process.env.DATABASE_ID,
   password: process.env.DATABASE_PASSWORD,
-  database: "dev",
+  database: process.env.DATABASE_DEMON_NAME,
   entities: [
     process.env.NODE_ENV === "production"
       ? "build/typeorm/entity/*{.ts,.js}"

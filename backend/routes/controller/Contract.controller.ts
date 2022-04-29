@@ -9,7 +9,7 @@ const mintNFT_controller = async (req: Request, res: Response) => {
             return res.status(201).json({
                 success: true,
                 data: {
-                    result
+                    transactionHash: result?.transactionHash
                 },
                 error: null,
             });
