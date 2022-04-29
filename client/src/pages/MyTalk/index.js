@@ -1,8 +1,20 @@
 import { Container, Box, Typography } from '@mui/material';
 import React from 'react';
 import Talks from '../../components/Talks';
+import { useSelector } from 'react-redux';
 
 const MyTalk = (props) => {
+  const accessToken = useSelector((state) => state.user.accessToken);
+
+  if (!accessToken) {
+    return (
+      <Container sx={{display: 'flex', justifyContent: 'center'}}>
+        <Typography fontSize={'36px'} color="primary" sx={{mt: 15}}>
+          Please Log in.. 😵
+        </Typography>
+      </Container>
+    )
+  }
   
   return (
     <Container>

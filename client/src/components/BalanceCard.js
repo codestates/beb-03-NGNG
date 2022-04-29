@@ -9,21 +9,22 @@ const BalanceCard = (props) => {
     <Card sx={{mb: 2, p: 2}}>
       <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
         <Typography variant="body2" color="primary" fontSize={'28px'}>
-          NGT (ERC20)
+          MY NGT
         </Typography>
         <Typography variant="body2" color="secondary" fontSize={'28px'}>
           {/* 💰 {tokenBalance} NGT */}
-          💰 100 NGT
+          💰 {tokenBalance} NGT
         </Typography>
       </Box>
-      <Box sx={{mt: 1, display: 'flex', justifyContent: 'space-between'}}>
+      {/* NFT 발급 여부 확인 불가능 */}
+      {/* <Box sx={{mt: 1, display: 'flex', justifyContent: 'space-between'}}>
         <Typography variant="body2" color="primary" fontSize={'28px'}>
           LEVEL NFT (ERC721)
         </Typography>
         <Typography variant="body2" color="secondary" fontSize={'28px'}>
           🔖 nft info
         </Typography>
-      </Box>
+      </Box> */}
     </Card>
   )
 }
