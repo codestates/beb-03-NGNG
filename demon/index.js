@@ -1,6 +1,19 @@
 const { getLastestTransactions } = require('./utils/main');
 const { Transactions, sequelize } = require('./models');
 
+const artifact = require('./../contract2/build/contracts/NgngToken.json')
+
+
+const Web3 = require('web3');
+const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
+
+const NgngToken = require(`./../contract2/build/contracts/NgngToken.json`);
+const NgngNft = require(`./../contract2/build/contracts/NgngNft.json`);
+
+
+const InputDataDecoder = require('ethereum-input-data-decoder');
+const decoder = new InputDataDecoder([...NgngToken.abi, ...NgngNft.abi]);
+
 /**
  *
  * sequelize-cli로 다음 명령어를 순서대로 실행
@@ -34,8 +47,12 @@ const bulkCreate = async (data) => await Transactions.bulkCreate(data);
 
 const startTask = async () => {
 	const data = await getLastestTransactions();
-	// console.log(data)
-	const result = await bulkCreate(data);
+	const newData = data.filter(d => {
+		const type = ["mintNFT", "mintToken", "transfer"];
+		const result = decoder.decodeData(d.input);
+		return type.includes(result?.method);
+	})
+	const result = await bulkCreate(newData);
 };
 
 const main = () => {

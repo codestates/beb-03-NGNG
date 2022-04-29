@@ -94,7 +94,9 @@ const pay_service = async ({ role }) => {
         return {
             success: true,
             data: {
-                rewards
+                rewards: rewards.map(({ reward_type, user_id }) => {
+                    return { reward_type, user_id }
+                })
             },
             error: null,
         }

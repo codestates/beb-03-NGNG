@@ -27,13 +27,13 @@ const connection = {
                 synchronize: true
             },
             {
-                name: "dev",
+                name: process.env.DATABASE_DEMON_NAME,
                 type: "mysql",
                 host: "localhost",
                 port: 3306,
-                username: "root",
+                username: process.env.DATABASE_ID,
                 password: process.env.DATABASE_PASSWORD,
-                database: "dev",
+                database: process.env.DATABASE_DEMON_NAME,
                 entities: ["typeorm/entity/demon/*{.ts,.js}"],
             }
         ])

@@ -6,12 +6,13 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "pm2 start ./index.js",
-    "migrate:undo":"npx sequelize-cli db:migrate:undo",
-    "migrate":"npx sequelize-cli db:migrate"
+    "migrate:undo": "npx sequelize-cli db:migrate:undo",
+    "migrate": "npx sequelize-cli db:migrate"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "ethereum-input-data-decoder": "^0.4.1",
     "mysql2": "^2.3.3",
     "pm2": "^5.1.2",
     "sequelize": "^6.12.0-beta.3",

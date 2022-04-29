@@ -3,6 +3,8 @@ const provider = new providers.JsonRpcProvider('http://localhost:7545');
 // const provider = new providers.JsonRpcProvider(`https://rinkeby.infura.io/v3/${process.env.projectId}`);
 const artifact = require("./../../contract2/build/contracts/NgngToken.json");
 const artifact2 = require("./../../contract2/build/contracts/NgngNFT.json");
+const InputDataDecoder = require('ethereum-input-data-decoder');
+const decoder = new InputDataDecoder([...artifact.abi, ...artifact2.abi]);
 
 
 export const createWallet = () => {
@@ -108,4 +110,15 @@ export const setToken = async () => {
     const contract = new Contract(process.env.ERC721_ADDRESS, artifact2.abi, Owner);
     let transaction = await contract.setToken(process.env.ERC20_ADDRESS);
     await transaction.wait();
+}
+
+
+export const decodeFromAbi = async ({ input }: { input: string }) => {
+    const decodeData = await decoder.decodeData(input);
+    return decodeData;
+}
+
+export const getAddressFromPrivateKey = ({ privateKey }: { privateKey: string }) => {
+    const wallet = new Wallet(privateKey, provider);
+    return wallet?.address;
 }
