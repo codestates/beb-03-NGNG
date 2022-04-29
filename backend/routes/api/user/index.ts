@@ -39,5 +39,4 @@ router.post('/sendVerifyEmail', loginRequired, isNotEmailVerified, sendVerifyEma
 router.get('/verify-email', verifyEmail);
 router.get('/loadMyInfo', loginRequired, getLoadMyInfo);
 
-
 export default router

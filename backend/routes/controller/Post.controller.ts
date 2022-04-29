@@ -56,111 +56,163 @@ const sendPost = async (req: Request, res: Response) => {
 }
 
 const getPost = async (req: Request, res: Response) => {
-    const postUuid = req.query.postUuid as string;
-    const result = await getPostFromUuid({
-        postUuid
-    });
-    if (result.success) {
-        return res.status(201).json(result);
+    try {
+        const postUuid = req.query.postUuid as string;
+        const result = await getPostFromUuid({
+            postUuid
+        });
+        if (result.success) {
+            return res.status(201).json(result);
+        }
+        else {
+            return res.status(500).json(result)
+        }
     }
-    else {
-        return res.status(500).json(result)
+    catch (err) {
+        return res.status(500).json({
+            success: false,
+            data: null,
+            error: err,
+        })
     }
 }
 
 const getPosts = async (req: Request, res: Response) => {
-    const limit = req.query.limit as string;
-    const result = await getPostsSortByTime({ limit });
-    if (result.success) {
-        return res.status(201).json(result);
+    try {
+        const limit = req.query.limit as string;
+        const result = await getPostsSortByTime({ limit });
+        if (result.success) {
+            return res.status(201).json(result);
+        }
+        else {
+            return res.status(500).json(result)
+        }
     }
-    else {
-        return res.status(500).json(result)
+    catch (err) {
+        return res.status(500).json({
+            success: false,
+            data: null,
+            error: err,
+        })
     }
 }
 
 const getHashTagPosts = async (req: Request, res: Response) => {
-    const tag = req.query.tag as string;
-    console.log(tag)
-    const result = await getHashTagPosts_service({ tag });
-    if (result.success) {
-        return res.status(201).json(result);
+    try {
+        const tag = req.query.tag as string;
+        console.log(tag)
+        const result = await getHashTagPosts_service({ tag });
+        if (result.success) {
+            return res.status(201).json(result);
+        }
+        else {
+            return res.status(500).json(result)
+        }
     }
-    else {
-        return res.status(500).json(result)
+    catch (err) {
+        return res.status(500).json({
+            success: false,
+            data: null,
+            error: err,
+        })
     }
 }
 
-// const getCategoryPostsPagenation = async (req: Request, res: Response) => {
-//     const category = req.query.category as string;
-//     const result = await getPostsPagenationSortByTime({ category });
-//     if (result.success) {
-//         return res.status(201).json(result);
-//     }
-//     else {
-//         return res.status(500).json(result)
-//     }
-// }
-
 const likeIt = async (req: Request, res: Response) => {
-    const { postUuid } = req.body;
-    const id = req?.user?.id as string;
-    const result = await likeItPost({
-        postUuid,
-        id,
-    });
-    if (result.success) {
-        addLikeItReward_service({ postUuid });
-        return res.status(201).json(result);
+    try {
+        const { postUuid } = req.body;
+        const id = req?.user?.id as string;
+        const result = await likeItPost({
+            postUuid,
+            id,
+        });
+        if (result.success) {
+            addLikeItReward_service({ postUuid });
+            return res.status(201).json(result);
+        }
+        else {
+            return res.status(500).json(result)
+        }
     }
-    else {
-        return res.status(500).json(result)
+    catch (err) {
+        return res.status(500).json({
+            success: false,
+            data: null,
+            error: err,
+        })
     }
 }
 
 const getLikeIt = async (req: Request, res: Response) => {
-    const postUuid = req.query.postUuid as string;
-    const result = await getLikeItPost({
-        postUuid
-    });
-    if (result.success) {
-        return res.status(201).json(result);
+    try {
+        const postUuid = req.query.postUuid as string;
+        const result = await getLikeItPost({
+            postUuid
+        });
+        if (result.success) {
+            return res.status(201).json(result);
+        }
+        else {
+            return res.status(500).json(result)
+        }
     }
-    else {
-        return res.status(500).json(result)
+    catch (err) {
+        return res.status(500).json({
+            success: false,
+            data: null,
+            error: err,
+        })
     }
 }
 
 
 const deletePost = async (req: Request, res: Response) => {
-    const postUuid = req.query.postUuid as string;
-    const id = req.user.id as string;
-    const result = await deletePost_service({
-        id,
-        postUuid
-    });
-    if (result.success) {
-        return res.status(201).json(result);
+    try {
+        const postUuid = req.query.postUuid as string;
+        const id = req.user.id as string;
+        const result = await deletePost_service({
+            id,
+            postUuid
+        });
+        if (result.success) {
+            return res.status(201).json(result);
+        }
+        else {
+            return res.status(500).json(result)
+        }
     }
-    else {
-        return res.status(500).json(result)
+    catch (err) {
+        return res.status(500).json({
+            success: false,
+            data: null,
+            error: err,
+        })
     }
 }
 
 const updatePost = async (req: Request, res: Response) => {
-    const postUuid = req.body.postUuid as string;
-    const content = req.body.content as string;
-    const id = req.user.id as string;
-    const result = await updatePost_service({
-        id,
-        postUuid,
-        content,
-    });
-    if (result.success) {
-        return res.status(201).json(result);
+    try {
+        const postUuid = req.body.postUuid as string;
+        const content = req.body.content as string;
+        const id = req.user.id as string;
+        const result = await updatePost_service({
+            id,
+            postUuid,
+            content,
+        });
+        if (result.success) {
+            return res.status(201).json(result);
+        }
+        else {
+            return res.status(500).json(result)
+        }
     }
-    else {
-        return res.status(500).json(result)
+    catch (err) {
+        return res.status(500).json({
+            success: false,
+            data: null,
+            error: err,
+        })
     }
 }
 
