@@ -1,4 +1,5 @@
 import connection from './typeorm/connection';
+import { createConnections } from "typeorm";
 import server from './config/express';
 import { setToken } from './utilities/ether';
 
@@ -16,7 +17,7 @@ const Server = async () => {
         });
 
     } catch (e) {
-        connection.close()
+        // connection.close()
         console.error(e);
         process.exit(1);
     }

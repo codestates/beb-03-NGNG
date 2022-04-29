@@ -1,5 +1,8 @@
-import { createConnection, getConnection } from 'typeorm';
+import { createConnection, createConnections, getConnection, Connection } from 'typeorm';
 import { createDatabase } from "typeorm-extension";
+
+
+export let connections: Array<Connection> | undefined = undefined;
 
 const connection = {
     async createDatabase() {
@@ -9,7 +12,32 @@ const connection = {
 
     async create(option: any = null) {
         // typeorm 연결
-        option ? await createConnection(option) : await createConnection();
+        // option ? await createConnection(option) : await createConnection();
+        connections = await createConnections([
+            {
+                name: 'default',
+                type: "mysql",
+                host: "localhost",
+                port: 3306,
+                logging: true,
+                username: process.env.DATABASE_ID,
+                password: process.env.DATABASE_PASSWORD,
+                database: process.env.DATABASE_NAME,
+                entities: ["typeorm/entity/*{.ts,.js}"],
+                synchronize: true
+            },
+            {
+                name: "dev",
+                type: "mysql",
+                host: "localhost",
+                port: 3306,
+                username: "root",
+                password: process.env.DATABASE_PASSWORD,
+                database: "dev",
+                entities: ["typeorm/entity/demon/*{.ts,.js}"],
+            }
+        ])
+        // console.log(connections)
     },
 
     async close() {
