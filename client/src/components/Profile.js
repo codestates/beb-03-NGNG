@@ -18,7 +18,7 @@ const Profile = (props) => {
         accessToken ?
         <Box>
           <Typography sx={{ fontSize: '24px'}}>Hello 🙋🏽‍♂️</Typography>
-          <Typography sx={{ fontSize: '18px'}}>{user.id}!</Typography>
+          <Typography sx={{ fontSize: '18px'}}>{user.id}</Typography>
           {/* <Typography sx={{ fontSize: '13px'}}>{user.tokenAmount}</Typography> */}
         </Box> :
         <Box>

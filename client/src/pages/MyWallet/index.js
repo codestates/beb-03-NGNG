@@ -1,10 +1,13 @@
 import { Container, Box, Typography } from '@mui/material';
 import React from 'react';
-import Talks from '../../components/Talks';
+import AdminCard from '../../components/AdminCard';
+import BalanceCard from '../../components/BalanceCard';
+import TxTable from '../../components/txTable';
 import { useSelector } from 'react-redux';
 
-const MyTalk = (props) => {
+const MyWallet = (props) => {
   const accessToken = useSelector((state) => state.user.accessToken);
+  const role = useSelector((state) => state.user.userInfo.role);
 
   if (!accessToken) {
     return (
@@ -15,15 +18,24 @@ const MyTalk = (props) => {
       </Container>
     )
   }
-  
+
   return (
     <Container>
       <Box sx={{display:'flex', mt: 2, mb: 3, alignItems: 'center'}}>
-        <Typography variant='h1' color='primary' sx={{fontSize: '40px'}}>What I Said..</Typography>
+        <Typography variant='h1' color='primary' sx={{fontSize: '40px'}}>
+          My Wallet Info
+        </Typography>
       </Box>
-      <Talks filter={true} />
+      <Box>
+        {
+          role === 'admin' &&
+          <AdminCard />
+        }
+        <BalanceCard />
+        <TxTable />
+      </Box>
     </Container>
-  )
-}
+  );
+};
 
-export default MyTalk;
+export default MyWallet;

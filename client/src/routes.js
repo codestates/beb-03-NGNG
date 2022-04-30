@@ -1,11 +1,12 @@
 // Material Dashboard 2 React layouts
 import Home from "./pages/Home/index.js";
 import MyTalk from "./pages/MyTalk/index.js";
-import Transactions from "./pages/Transactions/index.js";
 import TagSelected from "./pages/TagSelected/index.js";
+import MyWallet from "./pages/MyWallet/index.js";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
+
 
 
 const routes = [
@@ -27,17 +28,17 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Transactions",
-    key: "transactions",
-    icon: <Icon fontSize="small">transactions</Icon>,
-    route: "/transactions",
-    component: <Transactions />,
+    name: "MyWallet",
+    key: "mywallet",
+    icon: <Icon fontSize="small">mywallet</Icon>,
+    route: "/mywallet",
+    component: <MyWallet />,
   },
   {
     type: "collapse",
     name: "TagSelected",
     key: "tagSelected",
-    icon: <Icon fontSize="small">transactions</Icon>,
+    icon: <Icon fontSize="small">tagselected</Icon>,
     route: "/tagselected",
     component: <TagSelected />,
   },

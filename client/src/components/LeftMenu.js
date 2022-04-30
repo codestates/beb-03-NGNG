@@ -4,8 +4,12 @@ import Profile from './Profile';
 import HomeIcon from '@mui/icons-material/Home';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const LeftMenu = (props) => {
+  const accessToken = useSelector((state) => state.user.accessToken);
+  const navigate = useNavigate();
 
   return (
     <Paper elevation={4} sx={{ backgroundColor: '#606060', padding: '20px'}}>
@@ -39,9 +43,9 @@ const LeftMenu = (props) => {
           </ListItem>
           <ListItem disablePadding>
             <ListItemButton
-            component="a" href="/transactions">
+            component="a" href="/mywallet">
               <AccountBalanceWalletIcon sx={{mr: 1}} />
-            <ListItemText primary="Transactions" primaryTypographyProps={{fontSize: '20px'}}/>
+            <ListItemText primary="My Wallet" primaryTypographyProps={{fontSize: '20px'}}/>
             </ListItemButton>
           </ListItem>
         </List>

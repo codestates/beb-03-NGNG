@@ -9,7 +9,6 @@ const networkUri = process.env.NODE_ENV === "production" ?
 
 const provider = new providers.JsonRpcProvider(networkUri);
 
-// const provider = new providers.JsonRpcProvider(`https://rinkeby.infura.io/v3/${process.env.projectId}`);
 const artifact = require('./../contracts/NgngToken.json');
 const artifact2 = require("./../contracts/NgngNFT.json");
 const InputDataDecoder = require('ethereum-input-data-decoder');

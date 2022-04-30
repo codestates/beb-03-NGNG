@@ -64,9 +64,9 @@ const main = () => {
 				console.log("getTx");
 			}
 			else {
-				console.log("Working");
+				console.log("wait");
 			}
-		}, 5000)
+		}, 10000)
 	}
 	catch (err) {
 		console.log(err);

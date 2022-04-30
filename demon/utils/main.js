@@ -3,14 +3,17 @@ const path = require('path');
 const Web3 = require('web3');
 require('dotenv').config();
 
+const deployedAddress = process.env.NODE_ENV === 'production' ?
+	process.env.RINKBE_ERC20_ADDRESS :
+	process.env.GANACHE_ERC20_ADDRESS;
+const NETWORK_URI = process.env.NODE_ENV === 'production' ?
+	process.env.RINKBE_NETWORK :
+	process.env.GANACHE_NETWORK;
 
-let web3 = undefined;
-if (process.env.NODE_ENV === "production") {
-	web3 = new Web3(`https://rinkeby.infura.io/v3/${process.env.projectId}`);
-}
-else {
-	web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
-}
+console.log("NETWORK_URI : ", NETWORK_URI);
+console.log("deployedAddress : ", deployedAddress);
+
+const web3 = new Web3(NETWORK_URI);
 
 const getTx = async (tx) => await web3.eth.getTransaction(tx);
 
@@ -20,13 +23,6 @@ const getLastestTransactions = async () => {
 		fs.readFileSync(path.join(__dirname, '/blockNumber'), {
 			encoding: 'utf-8',
 		}),
-	);
-
-	const contractAddress = fs.readFileSync(
-		path.join(__dirname, '/deployedAddress'),
-		{
-			encoding: 'utf-8',
-		},
 	);
 	const allTransactions = [];
 	let lastest = checkedBlockNum;
@@ -44,7 +40,8 @@ const getLastestTransactions = async () => {
 			return [];
 		} else {
 			// 가장 마지막에 확인한 블록의 다음 블록부터 가장 최신 블록까지의 모든 트랜잭션 조회
-			for (let i = checkedBlockNum + 1; i <= lastest; i++) {
+			for (let i = checkedBlockNum + 1; i <= lastest || i <= (checkedBlockNum + Number(process.env.MAXIMUM_BLOCK_NUMBER)); i++) {
+				console.log("checkedBlockNum : ", i);
 				const block = await web3.eth.getBlock(i);
 
 				// 트랜잭션 해시로 모든 트랜잭션 조회
@@ -58,7 +55,7 @@ const getLastestTransactions = async () => {
 				.then((data) => {
 					const result = [];
 					for (let tx of data) {
-						if (tx.from === contractAddress || tx.to === contractAddress) {
+						if (tx.from === deployedAddress || tx.to === deployedAddress) {
 							result.push(tx);
 						}
 					}

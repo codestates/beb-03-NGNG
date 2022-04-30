@@ -49,10 +49,14 @@ export default function PostDeleteModal({uuid}) {
     })
     }), {
       onSuccess: (data) => {
-        alert("Post Delete Success!");
+        alert("😄 The post has been successfully deleted");
       },
       onError: (error) => {
-        alert(error);
+        alert(`
+        ❗️ Something Wrong! Please try again
+
+        (${error})
+        `);
       },
     }
   );

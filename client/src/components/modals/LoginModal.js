@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -26,6 +26,7 @@ const style = {
 export default function LoginModal() {
   const dispatch = useDispatch();
   const [inValid, setInvalid] = useState(false);
+  const idRef = useRef();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -39,7 +40,7 @@ export default function LoginModal() {
     },
     {
       onSuccess: (data) => {
-        alert("Login Success!");
+        alert("😄 You are successfully logged in");
         handleClose();
         setInvalid(false);
         const accessToken = data.data.data.token;
@@ -47,13 +48,13 @@ export default function LoginModal() {
 
         // userInfo 가져와서 전역변수 설정
         axios
-          .get("/api/user/getUser", {
+          .get("/api/user/loadMyInfo", {
             headers: {
               Authorization: `bearer ${accessToken}`,
             },
           })
           .then((res) => {
-            dispatch(getUserInfo(res.data.data.user));
+            dispatch(getUserInfo(res.data.data));
           });
       },
     }
@@ -125,7 +126,8 @@ export default function LoginModal() {
               label="User ID"
               name="userId"
               autoComplete="userId"
-              autoFocus
+              autoFocus={true}
+              inputRef={idRef}
               sx={{ mb: 0 }}
             />
             <TextField

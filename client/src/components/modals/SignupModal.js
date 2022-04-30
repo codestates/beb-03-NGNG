@@ -53,11 +53,15 @@ export default function SignupModal() {
   }), {
     onSuccess: (data) => {
       setIsUploading(false);
-      alert('Sign Up Success!');
+      alert('😄 You have been successfully signed up');
       handleClose();
     },
     onError: (error) => {
-      alert(error);
+      alert(`
+      ❗️ Something Wrong! Please try again
+
+      (${error})
+      `);
       setIsUploading(false);
     }
   });
@@ -67,7 +71,7 @@ export default function SignupModal() {
     imgFile = event.target.files[0];
     setTimeout(() => {
       document.getElementById("progress-indicator2").style.display = 'none';
-    }, 2500)
+    }, 4000)
   }
 
   const handleSubmit = (event) => {

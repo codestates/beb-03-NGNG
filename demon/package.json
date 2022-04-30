@@ -6,13 +6,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "pm2 start ./index.js",
-    "pro": "pm2 start cross-env NODE_ENV=production ./index.js",
+    "pro": "cross-env NODE_ENV=production pm2 start ./index.js",
     "migrate:undo": "npx sequelize-cli db:migrate:undo",
     "migrate": "npx sequelize-cli db:migrate"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cross-env": "^7.0.3",
     "dotenv": "^16.0.0",
     "ethereum-input-data-decoder": "^0.4.1",
     "mysql2": "^2.3.3",

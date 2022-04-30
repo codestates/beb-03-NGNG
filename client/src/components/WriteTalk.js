@@ -13,6 +13,7 @@ import { useDispatch } from 'react-redux';
 import { initializeTag } from '../redux/tag';
 import { useMutation } from 'react-query';
 import axios from 'axios';
+import { faAssistiveListeningSystems } from '@fortawesome/free-solid-svg-icons';
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -58,14 +59,13 @@ const WriteTalk = (props) => {
   const contentRef = useRef();
   let imgFile;
 
-  const loadFile = (input) => {
+  const loadFile = (event) => {
     document.getElementById("progress-indicator").style.display = 'block';
-		imgFile = input.target.files[0];
-    
+    imgFile = event.target.files[0];
     setTimeout(() => {
       document.getElementById("progress-indicator").style.display = 'none';
-    }, 2500)
-	};
+    }, 4000)
+  }
 
   const newPostMutation = useMutation(((formData) => {
       setIsUploading(true);
@@ -81,28 +81,32 @@ const WriteTalk = (props) => {
     }), {
       onSuccess: (data) => {
         setIsUploading(false);
-        alert("Post Success!");
+        alert("😄 The post has been created successfully");
         dispatch(initializeTag());
         contentRef.current.value = "";
       },
       onError: (error) => {
-        alert(error);
+        alert(`
+        ❗️ Something Wrong! Please try again
+
+        (${error})
+        `);
         setIsUploading(false);
       },
     }
   );
 
   const handleSubmit = (event) => {
-    console.log('🎁', imgFile);
+    // console.log('🎁', imgFile);
     event.preventDefault();
 
     if (accessToken === undefined) {
-      alert("Please Login");
+      alert("❗️ Please Log in");
       return;
     }
 
     if (contentRef.current.value.length === 0) {
-      alert("Please fill the field");
+      alert("❗️ Please fill the content field");
       return;
     }
 

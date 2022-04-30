@@ -54,10 +54,14 @@ export default function AnonyCommentDeleteModal({uuid}) {
     })
     }), {
       onSuccess: (data) => {
-        alert("Comment Delete Success!");
+        alert("😄 The comment has been successfully deleted");
       },
       onError: (error) => {
-        alert(error);
+        alert(`
+        ❗️ Something Wrong! Please try again
+
+        (${error})
+        `);
       },
     }
   );
