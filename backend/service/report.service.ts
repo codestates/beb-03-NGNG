@@ -10,8 +10,6 @@ const reportPost_service = async ({ id, postUuid, content }: { id: string, postU
     try {
         const user = await User.findOneOrFail({ id });
         const post = await Post.findOneOrFail({ uuid: postUuid });
-        console.log("uu", user);
-        console.log("pp", post);
         if (user && post) {
             const report = Report.create({
                 reporter: user,
@@ -19,7 +17,6 @@ const reportPost_service = async ({ id, postUuid, content }: { id: string, postU
                 post
             });
             const errors = await validate(report)
-            console.log("createUser error check : ", errors)
             if (errors.length > 0) throw errors
             await report.save()
         }
@@ -29,6 +26,7 @@ const reportPost_service = async ({ id, postUuid, content }: { id: string, postU
             error: null,
         }
     } catch (err) {
+        console.log("reportPost_service error check : ", err);
         return {
             success: false,
             data: null,

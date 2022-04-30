@@ -12,32 +12,7 @@ const connection = {
 
     async create(option: any = null) {
         // typeorm 연결
-        // option ? await createConnection(option) : await createConnection();
-        connections = await createConnections([
-            {
-                name: 'default',
-                type: "mysql",
-                host: "localhost",
-                port: 3306,
-                logging: true,
-                username: process.env.DATABASE_ID,
-                password: process.env.DATABASE_PASSWORD,
-                database: process.env.DATABASE_NAME,
-                entities: ["typeorm/entity/*{.ts,.js}"],
-                synchronize: true
-            },
-            {
-                name: process.env.DATABASE_DEMON_NAME,
-                type: "mysql",
-                host: "localhost",
-                port: 3306,
-                username: process.env.DATABASE_ID,
-                password: process.env.DATABASE_PASSWORD,
-                database: process.env.DATABASE_DEMON_NAME,
-                entities: ["typeorm/entity/demon/*{.ts,.js}"],
-            }
-        ])
-        // console.log(connections)
+        connections = await createConnections();
     },
 
     async close() {

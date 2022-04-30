@@ -29,8 +29,8 @@ module.exports = [{
   username: process.env.DATABASE_ID,
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE_NAME,
-  synchronize: true,
-  logging: true,
+  synchronize: process.env.NODE_ENV !== "production",
+  logging: process.env.NODE_ENV !== "production",
   entities: [
     process.env.NODE_ENV === "production"
       ? "build/typeorm/entity/*{.ts,.js}"
@@ -54,16 +54,9 @@ module.exports = [{
   database: process.env.DATABASE_DEMON_NAME,
   entities: [
     process.env.NODE_ENV === "production"
-      ? "build/typeorm/entity/*{.ts,.js}"
+      ? "build/typeorm/entity/demon/*{.ts,.js}"
       : "typeorm/entity/demon/*{.ts,.js}",
   ],
-  migrations: ["typeorm/migration/**/*{.ts,.js}"],
-  subscribers: ["typeorm/subscriber/**/*{.ts,.js}"],
-  cli: {
-    entitiesDir: "typeorm/entity",
-    migrationsDir: "typeorm/migration",
-    subscribersDir: "typeorm/subscriber",
-  },
 }];
 // [
 //   {

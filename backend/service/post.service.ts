@@ -16,7 +16,7 @@ const likeItPost = async (likeItData: ILikeIt): Promise<returnPostLikeIt> => {
         const post = await Post.findOneOrFail({ uuid: postUuid })
         const user = await User.findOneOrFail({ id })
         const thumbFindOne = await Thumb.findOne({ post, user })
-        console.log(thumbFindOne)
+        if (process.env.NODE_ENV !== "production") console.log(thumbFindOne)
         if (thumbFindOne) {
             // thumbFindOne.remove()
             return {
@@ -58,7 +58,7 @@ const getLikeItPost = async (likeItData: { postUuid: string }): Promise<returnGe
             .select("SUM(thumb.likeIt)", "likeItCount")
             .where("thumb.postIndex = :postIndex", { postIndex: post.index })
             .getRawOne();
-        console.log(thumb)
+        if (process.env.NODE_ENV !== "production") console.log(thumb)
         let likeItCount = 0
         if (thumb.sum !== null) {
             likeItCount = parseInt(thumb.likeItCount)
@@ -89,18 +89,18 @@ const createPost = async (postData: IPost): Promise<returnPost> => {
         tags,
         imageUri
     } = postData;
-    console.log(postData)
+    if (process.env.NODE_ENV !== "production") console.log(postData)
     try {
         const user = await User.findOneOrFail({ id })
         const post = Post.create({ content, user, imageUri });
         const errors = await validate(post);
         if (errors.length > 0) throw errors
         await post.save();
-        console.log(post)
+        if (process.env.NODE_ENV !== "production") console.log(post)
         const tagArray = tags.map(tag => {
             return { post, tag, uuid: uuid() }
         });
-        console.log(tagArray)
+        if (process.env.NODE_ENV !== "production") console.log(tagArray)
         const hashTag = await getConnection()
             .createQueryBuilder()
             .insert()
@@ -201,10 +201,8 @@ const getPostFromUuid = async ({ postUuid }: { postUuid: string }): Promise<retu
             .select()
             .where("hashTag.postIndex = :postIdx", { postIdx: post['index'] })
             .getMany()
-        console.log(post)
-        if (process.env.NODE_ENV !== "production") {
-            console.log(post);
-        }
+        if (process.env.NODE_ENV !== "production") console.log(post);
+
 
         return {
             success: true,
@@ -237,7 +235,7 @@ const getPostsSortByTime = async ({ limit = "150" }: { limit: string }): Promise
             .orderBy("post.createdAt", "DESC")
             .limit(intLimit)
             .getRawMany();
-        console.log(posts)
+        if (process.env.NODE_ENV !== "production") console.log(posts);
         return {
             success: true,
             data: {
@@ -257,7 +255,7 @@ const getPostsSortByTime = async ({ limit = "150" }: { limit: string }): Promise
 
 const getHashTagPosts_service = async ({ tag }: { tag: string }): Promise<returnPosts> => {
     try {
-        console.log(tag)
+        if (process.env.NODE_ENV !== "production") console.log(tag);
         const hashTag = await getRepository(HashTag)
             .createQueryBuilder("hashTag")
             .leftJoin('hashTag.post', 'post')
@@ -265,7 +263,7 @@ const getHashTagPosts_service = async ({ tag }: { tag: string }): Promise<return
             .leftJoin('post.user', 'user')
             .select(["post.uuid", "post.updatedAt", "post.content", "id"])
             .getRawMany();
-        console.log(hashTag);
+        if (process.env.NODE_ENV !== "production") console.log(hashTag);
         return {
             success: true,
             data: {

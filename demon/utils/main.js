@@ -1,22 +1,29 @@
 const fs = require('fs');
 const path = require('path');
-const basePath = 'D:/codestates/section5/beb-daemon-example';
-
 const Web3 = require('web3');
-const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
+require('dotenv').config();
+
+
+let web3 = undefined;
+if (process.env.NODE_ENV === "production") {
+	web3 = new Web3(`https://rinkeby.infura.io/v3/${process.env.projectId}`);
+}
+else {
+	web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
+}
 
 const getTx = async (tx) => await web3.eth.getTransaction(tx);
 
 const getLastestTransactions = async () => {
 	// 가장 마지막에 확인한 블록번호 조회
 	const checkedBlockNum = Number(
-		fs.readFileSync(path.join(basePath, '/utils/blockNumber'), {
+		fs.readFileSync(path.join(__dirname, '/blockNumber'), {
 			encoding: 'utf-8',
 		}),
 	);
 
 	const contractAddress = fs.readFileSync(
-		path.join(basePath, '/utils/deployedAddress'),
+		path.join(__dirname, '/deployedAddress'),
 		{
 			encoding: 'utf-8',
 		},
@@ -60,7 +67,7 @@ const getLastestTransactions = async () => {
 				.then((data) => {
 					// 가장 마지막에 확인한 블록번호 저장
 					fs.writeFileSync(
-						path.join(basePath, '/utils/blockNumber'),
+						path.join(__dirname, '/blockNumber'),
 						String(lastest),
 					);
 					return data;

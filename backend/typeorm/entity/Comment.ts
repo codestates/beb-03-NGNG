@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, OneToMany, OneToOne, JoinColumn } from "typeorm";
+import { Entity, Column, ManyToOne, OneToMany, JoinColumn } from "typeorm";
 import { Post } from './Post';
 import { User } from './User'
 import { Model } from "./Models/Model";
@@ -56,14 +56,6 @@ export class Comment extends Model {
     })
     @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
     user_id!: User;
-
-    // @ManyToOne(() => User, user => user.commentsForImageUri, {
-    //     onDelete: "CASCADE",
-    //     onUpdate: "CASCADE"
-    // })
-    // @JoinColumn({ name: 'user_imageUri', referencedColumnName: 'imageUri' })
-    // user_imageUri!: User;
-
 
     @ManyToOne(() => Post, post => post.comments, {
         onDelete: "CASCADE",

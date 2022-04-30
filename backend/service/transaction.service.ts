@@ -9,28 +9,27 @@ import { decodeFromAbi, getAddressFromPrivateKey } from '../utilities/ether';
 const getTransactions_service = async ({ privateKey }: { privateKey: string }): Promise<any> => {
     try {
         const address = getAddressFromPrivateKey({ privateKey });
-        console.log(address);
         const result = await getConnection('demon')
             .getRepository(Transactions)
             .createQueryBuilder("transactions")
-            // .where(`transactions.to = :toAddress`, { toAddress: address })
-            // .orWhere(`transactions.from = :fromAddress`, { fromAddress: address })
             .getRawMany();
-        console.log(result);
+        if (process.env.NODE_ENV !== "production") console.log(result);
 
         const txData = await Promise.all(
             result.map(async ({
+                transactions_createdAt,
                 transactions_hash,
                 transactions_input,
             }) => {
                 const decodeInput = await decodeFromAbi({ input: transactions_input });
                 return {
+                    transactions_createdAt,
                     transactions_hash,
                     transactions_input: decodeInput
                 }
             })
         );
-        console.log(txData, typeof address)
+        if (process.env.NODE_ENV !== "production") console.log(txData, typeof address)
         const newTxData = txData.filter(({ transactions_input }) => {
             const { types, inputs } = transactions_input;
             for (let i = 0; i < types.length; i++) {
@@ -48,7 +47,7 @@ const getTransactions_service = async ({ privateKey }: { privateKey: string }): 
             error: "",
         }
     } catch (err) {
-        console.log(err)
+        console.log("getTransactions_service error : ", err)
         return {
             success: false,
             data: null,

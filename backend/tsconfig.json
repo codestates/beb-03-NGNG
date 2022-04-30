@@ -3,7 +3,8 @@
      "lib": [
         "es5",
         "es6",
-        "es2018"
+        "es2018",
+        "dom"
      ],
      "target": "es5",
      "module": "commonjs",

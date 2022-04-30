@@ -1,5 +1,4 @@
 import { Thumb } from './Thumb';
-import { IsIP, Length } from "class-validator";
 import { Entity, Column, ManyToOne, OneToMany, AfterInsert } from "typeorm";
 import { Comment } from "./Comment";
 

@@ -40,7 +40,6 @@ const createMemberComment = async (commentData: IMemberComment): Promise<returnC
 
         // 추가해야 검사해줌
         const errors = await validate(comment)
-        console.log(errors)
         if (errors.length > 0) throw errors
         await comment.save()
         return {
@@ -49,6 +48,7 @@ const createMemberComment = async (commentData: IMemberComment): Promise<returnC
             error: null,
         }
     } catch (err) {
+        console.log("createMemberComment error check: ", err);
         return {
             success: false,
             data: null,
@@ -184,8 +184,6 @@ const getCommentsFromPostUuid = async ({ postUuid }: any): Promise<returnComment
             .orderBy("comment.createdAt", "ASC")
             .getRawMany();
 
-
-        console.log(comment)
         const temp: any = {}
         comment.map((o) => {
             // deleted가 1이라면 content 삭제

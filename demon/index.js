@@ -3,10 +3,6 @@ const { Transactions, sequelize } = require('./models');
 
 const artifact = require('./../contract2/build/contracts/NgngToken.json')
 
-
-const Web3 = require('web3');
-const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
-
 const NgngToken = require(`./../contract2/build/contracts/NgngToken.json`);
 const NgngNft = require(`./../contract2/build/contracts/NgngNft.json`);
 
@@ -47,12 +43,14 @@ const bulkCreate = async (data) => await Transactions.bulkCreate(data);
 
 const startTask = async () => {
 	const data = await getLastestTransactions();
-	const newData = data.filter(d => {
-		const type = ["mintNFT", "mintToken", "transfer"];
-		const result = decoder.decodeData(d.input);
-		return type.includes(result?.method);
-	})
-	const result = await bulkCreate(newData);
+	if (Array.isArray(data) && data.length > 0) {
+		const newData = data.filter(d => {
+			const type = ["mintNFT", "mintToken", "transfer"];
+			const result = decoder.decodeData(d.input);
+			return type.includes(result?.method);
+		})
+		const result = await bulkCreate(newData);
+	}
 };
 
 const main = () => {
@@ -63,11 +61,12 @@ const main = () => {
 				working = true;
 				await startTask();
 				working = false;
+				console.log("getTx");
 			}
 			else {
-				console.log("Working")
+				console.log("Working");
 			}
-		}, 1000)
+		}, 5000)
 	}
 	catch (err) {
 		console.log(err);
