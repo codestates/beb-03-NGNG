@@ -7,7 +7,7 @@ const deployedAddress = process.env.NODE_ENV === 'production' ?
 	process.env.RINKBE_ERC20_ADDRESS :
 	process.env.GANACHE_ERC20_ADDRESS;
 const NETWORK_URI = process.env.NODE_ENV === 'production' ?
-	process.env.RINKBE_NETWORK :
+	process.env.RINKEBY_NETWORK :
 	process.env.GANACHE_NETWORK;
 
 console.log("NETWORK_URI : ", NETWORK_URI);
@@ -40,7 +40,7 @@ const getLastestTransactions = async () => {
 			return [];
 		} else {
 			// 가장 마지막에 확인한 블록의 다음 블록부터 가장 최신 블록까지의 모든 트랜잭션 조회
-			for (let i = checkedBlockNum + 1; i <= lastest || i <= (checkedBlockNum + Number(process.env.MAXIMUM_BLOCK_NUMBER)); i++) {
+			for (let i = checkedBlockNum + 1; i <= lastest; i++) {
 				console.log("checkedBlockNum : ", i);
 				const block = await web3.eth.getBlock(i);
 
@@ -71,8 +71,7 @@ const getLastestTransactions = async () => {
 				});
 		}
 	} catch (err) {
-		console.log("error가 뜸")
-		// console.log(err);
+		console.log("error : ", err);
 	}
 };
 
