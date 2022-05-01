@@ -1,9 +1,7 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Transactions extends Model {
+  class transactions extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -12,25 +10,28 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
     }
-  };
-  Transactions.init({
-    hash: DataTypes.STRING,
-    nonce: DataTypes.INTEGER,
-    blockHash: DataTypes.STRING,
-    blockNumber: DataTypes.INTEGER,
-    transactionIndex: DataTypes.INTEGER,
-    from: DataTypes.STRING,
-    to: DataTypes.STRING,
-    value: DataTypes.STRING,
-    gas: DataTypes.INTEGER,
-    gasPrice: DataTypes.STRING,
-    input: DataTypes.TEXT,
-    v: DataTypes.STRING,
-    r: DataTypes.STRING,
-    s: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'Transactions',
-  });
-  return Transactions;
+  }
+  transactions.init(
+    {
+      hash: DataTypes.STRING,
+      nonce: DataTypes.INTEGER,
+      blockHash: DataTypes.STRING,
+      blockNumber: DataTypes.INTEGER,
+      transactionIndex: DataTypes.INTEGER,
+      from: DataTypes.STRING,
+      to: DataTypes.STRING,
+      value: DataTypes.STRING,
+      gas: DataTypes.INTEGER,
+      gasPrice: DataTypes.STRING,
+      input: DataTypes.TEXT,
+      v: DataTypes.STRING,
+      r: DataTypes.STRING,
+      s: DataTypes.STRING,
+    },
+    {
+      sequelize,
+      modelName: "transactions",
+    }
+  );
+  return transactions;
 };

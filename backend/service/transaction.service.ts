@@ -15,7 +15,7 @@ const getTransactions_service = async ({
     const address = getAddressFromPrivateKey({ privateKey });
     const result = await getConnection(process.env.DATABASE_DEMON_NAME)
       .getRepository(Transactions)
-      .createQueryBuilder("Transactions")
+      .createQueryBuilder("transactions")
       .getRawMany();
     if (process.env.NODE_ENV !== "production") console.log(result);
 
