@@ -93,7 +93,7 @@ const Comment = ({postUuid, userId, updatedAt, content, commentUuid, anonymouseI
   }
   return (
     <>
-      <Card sx={{backgroundColor: '#9F9C92', display: 'flex'}}>
+      <Card sx={{backgroundColor: '#9F9C92', display: 'flex', mb: 1}}>
         <Box>
           <CardHeader
             avatar={
@@ -105,7 +105,7 @@ const Comment = ({postUuid, userId, updatedAt, content, commentUuid, anonymouseI
             sx={{width: '210px'}}
           />
         </Box>
-        <Box sx={{display: 'flex', flexDirection: 'column'}}>
+        <Box sx={{display: 'flex', flexDirection: 'column', flex: 1}}>
           <Box sx={{display: 'flex', alignItems: 'center'}}>
             <CardContent sx={{width: '100%', display: 'flex', flexDirection: 'column'}}>
               <Typography variant="h6" color="text.secondary">
@@ -138,7 +138,7 @@ const Comment = ({postUuid, userId, updatedAt, content, commentUuid, anonymouseI
         childComments.length > 0 && (
           <Box sx={{display: 'flex'}}>
             <FontAwesomeIcon icon={faCaretRight} fontSize={'60px'} style={{padding: '14px', paddingRight: '20px', color: '#3E3E41'}} />
-            <Box sx={{flex:1, mt: 1}}>
+            <Box sx={{flex:1}}>
               {
                 childComments.map((comment) => {
                   return <SubComment key={comment.uuid} uuid={comment.uuid} updatedAt={comment.updatedAt} content={comment.content} anonymouseId={comment.annonymouseId} userId={comment.id} deleted={comment.deleted} />

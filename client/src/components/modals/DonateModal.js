@@ -57,8 +57,10 @@ export default function DonateModal({ postUserId }) {
       if (res?.data?.success) {
         const { from, to, transactionHash } = res?.data?.data;
         alert("😄 Donated successfully.");
+        handleClose();
       } else {
         alert("❗️ Something Wrong! Please try again");
+        handleClose();
       }
     }
   };

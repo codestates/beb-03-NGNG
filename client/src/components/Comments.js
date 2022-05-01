@@ -17,7 +17,7 @@ const Comments = ({postUuid}) => {
   })
 
   return (
-      <Box sx={{display: 'flex', mb: 3}}>
+      <Box sx={{display: 'flex', mb: 2}}>
         {
           comments.length !== 0 &&
           <FontAwesomeIcon icon={faCaretRight} fontSize={'60px'} style={{padding: '14px', paddingRight: '20px', color: '#3E3E41', marginLeft: '20px', marginRight: '20px'}} />

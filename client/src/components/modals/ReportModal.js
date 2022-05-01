@@ -44,13 +44,13 @@ export default function ReportModal({uuid, postUserId}) {
   }
   const handleClose = () => setOpen(false);
 
-  const reportMutation = useMutation((() => {
+  const reportMutation = useMutation(((content) => {
     return axios({
-      method: "put",
+      method: "post",
       url: '/api/report/reportPost',
       data: {
         postUuid: uuid,
-        content: contentRef.current.value,
+        content: content,
       },
       headers: {
         "Authorization": `bearer ${accessToken}`,
@@ -80,7 +80,7 @@ export default function ReportModal({uuid, postUserId}) {
       return;
     }
 
-    reportMutation.mutate();
+    reportMutation.mutate(contentRef.current.value);
     handleClose();
   }
 
