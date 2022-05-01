@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { loginRequired, emailVerified } from '../../middleware';
-import { mintNFT_controller } from './../../controller/Contract.controller';
+import { mintNFT_controller } from '../../controller/Contract.controller';
 
 const router = Router()
 
