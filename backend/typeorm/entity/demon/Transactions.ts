@@ -1,4 +1,4 @@
-import { Entity, Column, BaseEntity, PrimaryGeneratedColumn, ManyToOne, OneToMany, OneToOne, JoinColumn } from "typeorm";
+import { Entity, Column, BaseEntity, PrimaryGeneratedColumn, ManyToOne, OneToMany, OneToOne, JoinColumn, Timestamp } from "typeorm";
 
 @Entity({ database: process.env.DATABASE_DEMON_NAME })
 export class Transactions extends BaseEntity {
@@ -72,5 +72,15 @@ export class Transactions extends BaseEntity {
         nullable: true
     })
     s: string
+    @Column({
+        nullable: false,
+        type: "timestamp"
+    })
+    createdAt: Timestamp
+    @Column({
+        nullable: false,
+        type: "timestamp"
+    })
+    updatedAt: Timestamp
 
 }

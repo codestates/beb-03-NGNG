@@ -29,7 +29,6 @@ const createUser = async (userData: IUser): Promise<returnUser> => {
         });
 
         const errors = await validate(user)
-        console.log("createUser error check : ", errors)
         if (errors.length > 0) throw errors
 
         await user.save()
@@ -39,6 +38,7 @@ const createUser = async (userData: IUser): Promise<returnUser> => {
             error: null,
         }
     } catch (err) {
+        console.log("createUser error check : ", err)
         return {
             success: false,
             data: null,
@@ -51,7 +51,6 @@ const deleteUserFromId = async (userId: string): Promise<returnUser> => {
     try {
         const user = await User.findOneOrFail({ id: userId, role: 'user' });
         // 추가해야 검사해줌
-        console.log("deleteUserFromId", user);
         if (user) {
             await user.remove();
         }
@@ -105,7 +104,6 @@ const updateUser = async (user: IUser | any): Promise<returnUser> => {
         const validateUser = new User({ id, email, emailToken });
         const errors = await validate(validateUser, { skipMissingProperties: true })
         if (errors.length > 0) {
-            console.log(errors)
             throw errors
         }
         await User.update({ id }, { emailToken, email, isVerified: false })
@@ -115,6 +113,7 @@ const updateUser = async (user: IUser | any): Promise<returnUser> => {
             error: null,
         }
     } catch (err) {
+        console.log("updateUser check error", err)
         return {
             success: false,
             data: null,
@@ -170,7 +169,6 @@ const loginCheckUser = async (userData: ILoginUser): Promise<returnApi> => {
 const verifyEmailUser = async ({ emailToken }: { emailToken: string }): Promise<returnUser> => {
     try {
         const user = await User.findOneOrFail({ emailToken });
-        console.log(user)
         user.emailToken = null;
         user.isVerified = true;
         await user.save();
@@ -190,9 +188,7 @@ const verifyEmailUser = async ({ emailToken }: { emailToken: string }): Promise<
 
 const checkEmailVerifyFromId = async ({ id }: { id: string }): Promise<returnUser> => {
     try {
-        console.log(id)
         const user = await User.findOneOrFail({ id })
-        console.log("user : ", user)
         if (user.isVerified) {
             return {
                 success: true,

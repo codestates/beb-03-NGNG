@@ -1,1 +1,21 @@
-{"name":"contract2","version":"1.0.0","description":"","main":"truffle-config.js","directories":{"test":"test"},"dependencies":{"@openzeppelin/contracts":"^4.6.0","@truffle/hdwallet-provider":"^2.0.7","dotenv":"^16.0.0"},"devDependencies":{},"scripts":{"remixd":"remixd -s D:/codestates/section5/beb-03-NGNG/contract2 --remix-ide https://remix.ethereum.org","test":"echo \"Error: no test specified\" && exit 1"},"author":"","license":"ISC"}
+{
+  "name": "contract2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.6.0",
+    "@truffle/hdwallet-provider": "^2.0.7",
+    "dotenv": "^16.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "remixd": "remixd -s D:/codestates/section5/beb-03-NGNG/contract2 --remix-ide https://remix.ethereum.org",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

@@ -19,9 +19,7 @@ const sendPost = async (req: Request, res: Response) => {
     try {
         const { id } = req.user;
         const { content, tags: tagsString } = req.body;
-        console.log("bffff", "asdafdsfasd")
-        const buffer = req?.file?.buffer as Object;
-        console.log("bffff", buffer)
+        const buffer = req?.file?.buffer as any;
         // @ts-ignore
         const client = create("https://ipfs.infura.io:5001/api/v0");
         // @ts-ignore
@@ -33,7 +31,7 @@ const sendPost = async (req: Request, res: Response) => {
         const tags = tagsString.split(/(#[^#\s]+)/g).filter((v: string) => {
             return v.match(/(#[^#\s]+)/g)
         }).map((tag: string) => tag.slice(1));
-        console.log(tags)
+        if (process.env.NODE_ENV !== "production") console.log(tags)
         const result = await createPost({
             content, id, tags, imageUri
         });
@@ -100,7 +98,7 @@ const getPosts = async (req: Request, res: Response) => {
 const getHashTagPosts = async (req: Request, res: Response) => {
     try {
         const tag = req.query.tag as string;
-        console.log(tag)
+        if (process.env.NODE_ENV !== "production") console.log(tag)
         const result = await getHashTagPosts_service({ tag });
         if (result.success) {
             return res.status(201).json(result);

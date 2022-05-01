@@ -15,7 +15,7 @@ const loginRequired = async (req: Request, res: Response, next: NextFunction) =>
         let token = null;
 
         const bearerHeader = req?.headers['authorization'];
-        console.log(bearerHeader)
+        if (process.env.NODE_ENV !== "production") console.log(bearerHeader)
 
         if (bearerHeader === undefined) throw "token not found";
 
@@ -28,7 +28,7 @@ const loginRequired = async (req: Request, res: Response, next: NextFunction) =>
 
         const secret: any = process.env.JWT_SECRET
         const validateToken: any = jwt.verify(token, secret);
-        console.log("validateToken : ", validateToken);
+        if (process.env.NODE_ENV !== "production") console.log("validateToken : ", validateToken);
 
         // jwt 복호화해서 나온 id 나 nickname 기준으로 
         // db에서 확인해서 db 데이터를 넣어주느냐
@@ -39,8 +39,8 @@ const loginRequired = async (req: Request, res: Response, next: NextFunction) =>
             if (result.success === false) throw "db에 id가 없음";
             const { id, imageUri, email, role, uuid, createAt, isVerified, privateKey }: IUser = result?.data?.user;
             let tokenBalance = await getBalance(privateKey);
-            tokenBalance = 'ethers.utils.formatEther(tokenBalance)';
-            console.log(tokenBalance)
+            tokenBalance = ethers.utils.formatEther(tokenBalance);
+            if (process.env.NODE_ENV !== "production") console.log(tokenBalance);
             req.user = { id, imageUri, email, role, uuid, createAt, isVerified, privateKey, tokenBalance };
             next()
         }
@@ -49,8 +49,7 @@ const loginRequired = async (req: Request, res: Response, next: NextFunction) =>
         }
     }
     catch (err) {
-
-        console.log("error가 남", err)
+        console.log(err)
         res.status(401).json({
             success: false,
             data: null,
@@ -61,20 +60,20 @@ const loginRequired = async (req: Request, res: Response, next: NextFunction) =>
 
 const emailVerified = async (req: Request, res: any, next: NextFunction) => {
     const id = req.body.id as string;
-    console.log(id)
+    if (process.env.NODE_ENV !== "production") console.log(id)
     const result = await checkEmailVerifyFromId({ id });
     if (result.success) {
         next()
     }
     else {
-        console.log(result.error)
+        if (process.env.NODE_ENV !== "production") console.log(result.error)
         return res.status(500).json(result)
     }
 }
 
 const isNotEmailVerified = async (req: Request, res: any, next: NextFunction) => {
     const id = req.body.id as string;
-    console.log(id)
+    if (process.env.NODE_ENV !== "production") console.log(id)
     const result = await checkEmailVerifyFromId({ id });
     if (result.success) {
         result.error = "이미 이메일 인증을 받았습니다."

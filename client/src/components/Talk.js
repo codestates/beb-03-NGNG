@@ -164,7 +164,7 @@ const Talk = ({uuid}) => {
           <Box sx={{width: '180px', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
             <LikeItModal uuid={uuid} postUserId={data.user.id} />
             <Typography>{likeItCount ? likeItCount : '0'}</Typography>
-            <DonateModal />
+            <DonateModal postUserId={data.user.id}/>
             <ReportModal uuid={uuid} postUserId={data.user.id} />            
           </Box>
           <Box sx={{display: 'flex', flex: 1, ml: '30px'}}>

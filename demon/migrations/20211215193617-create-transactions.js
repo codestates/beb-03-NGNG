@@ -1,66 +1,66 @@
-'use strict';
+"use strict";
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Transactions', {
+    await queryInterface.createTable("transactions", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       hash: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       nonce: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       blockHash: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       blockNumber: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       transactionIndex: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       from: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       to: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       value: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       gas: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       gasPrice: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       input: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
       },
       v: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       r: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       s: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Transactions');
-  }
+    await queryInterface.dropTable("transactions");
+  },
 };

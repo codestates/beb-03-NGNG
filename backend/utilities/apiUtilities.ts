@@ -3,7 +3,6 @@ import nodemailer from 'nodemailer';
 // const config = require("./../config");
 import config from './../config';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
-require('dotenv').config();
 
 const sanitizeUser = (user: User): any => {
     const { password, emailToken, ...userWithOutPassword } = user;
@@ -90,7 +89,3 @@ export {
     sanitizeUser,
     sendMail,
 };
-
-function mailConfig(mailConfig: any) {
-    throw new Error('Function not implemented.');
-}

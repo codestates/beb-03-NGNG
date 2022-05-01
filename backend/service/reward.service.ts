@@ -11,8 +11,7 @@ const addReward_service = async ({ type, id, }: { id: string, type: string }): P
     try {
         const user = await User.findOneOrFail({ id });
         const reward = Reward.create({ user, type });
-        const errors = await validate(reward)
-        console.log("createUser error check : ", errors);
+        const errors = await validate(reward);
         if (errors.length > 0) throw errors;
         await reward.save();
         return {
@@ -21,6 +20,7 @@ const addReward_service = async ({ type, id, }: { id: string, type: string }): P
             error: null,
         }
     } catch (err) {
+        console.log("createUser error check : ", err);
         return {
             success: false,
             data: null,
@@ -41,10 +41,9 @@ const addLikeItReward_service = async ({ postUuid }: { postUuid: string }): Prom
             .leftJoinAndSelect("post.user", "user")
             .where("post.uuid = :postUuid", { postUuid })
             .getOne();
-        console.log(post)
+        if (process.env.NODE_ENV !== "production") console.log(post);
         const reward = Reward.create({ user: post?.user, type });
         const errors = await validate(reward)
-        console.log("createUser error check : ", errors);
         if (errors.length > 0) throw errors;
         await reward.save();
         return {
@@ -53,6 +52,7 @@ const addLikeItReward_service = async ({ postUuid }: { postUuid: string }): Prom
             error: null,
         }
     } catch (err) {
+        console.log("addLikeItReward_service error check : ", err);
         return {
             success: false,
             data: null,
@@ -73,7 +73,9 @@ const pay_service = async ({ role }) => {
             .createQueryBuilder()
             .delete()
             .execute();
-        console.log(rewards);
+        if (process.env.NODE_ENV !== "production") console.log(rewards);
+        // async 때문에 한개 씩 민팅 해서 오래걸림
+        // *id 별로 amount 값 모아서 한번에 민팅하기*
         for (const reward of rewards) {
             const type = reward["reward_type"] as string;
             const privateKey = reward['user_privateKey'] as string;
@@ -86,7 +88,7 @@ const pay_service = async ({ role }) => {
                 amount = 1;
             }
             const result = await findNFT({ privateKey });
-            console.log('nft balance', result);
+            if (process.env.NODE_ENV !== "production") console.log('nft balance', result);
             const NftBalance = +ethers.utils.formatEther(result);
 
             await mintToken(privateKey, (amount * (NftBalance + 1)).toString());
@@ -102,7 +104,7 @@ const pay_service = async ({ role }) => {
         }
     }
     catch (err) {
-        console.log(err);
+        console.log("pay_service error : ", err);
         return {
             success: false,
             data: null,

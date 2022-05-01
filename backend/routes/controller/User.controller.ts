@@ -14,7 +14,7 @@ const register = async (req: Request, res: Response) => {
     try {
         const { id, email, password } = req.body;
 
-        const buffer = req?.file?.buffer as Object;
+        const buffer = req?.file?.buffer as any;
         // try {
         // @ts-ignore
         const client = create("https://ipfs.infura.io:5001/api/v0");
@@ -114,7 +114,6 @@ const login = async (req: Request, res: Response) => {
 const getLoadMyInfo = async (req: Request, res: Response) => {
     try {
         const { id, imageUri, email, role, uuid, createAt, isVerified, tokenBalance }: IUser = req?.user;
-        console.log()
         return res.status(201).json({
             success: true,
             data: { id, imageUri, email, role, uuid, createAt, isVerified, tokenBalance },
@@ -135,7 +134,7 @@ const getLoadMyInfo = async (req: Request, res: Response) => {
 const verifyEmail = async (req: Request, res: Response) => {
     try {
         const emailToken = req.query.token as string
-        console.log(emailToken)
+        if (process.env.NODE_ENV !== "production") console.log(emailToken)
         const result = await verifyEmailUser({ emailToken })
         if (result.success) {
             return res.status(201).redirect("/");
@@ -162,7 +161,7 @@ const sendVerifyEmail = async (req: Request, res: Response) => {
         const host = req.headers.host;
         const emailToken = crypto.randomBytes(64).toString('hex');
         const result = await updateUser({ id, email, emailToken })
-        console.log("update User", result)
+        if (process.env.NODE_ENV !== "production") console.log("update User", result)
         if (result.success) {
             await sendMail({ host, email, emailToken, id });
             return res.status(201).json({
@@ -194,7 +193,7 @@ const logout = async (req: Request, res: Response) => {
 const getUser = async (req: Request, res: Response) => {
     try {
         const { id } = req.user as { id: string }
-        console.log(id)
+        if (process.env.NODE_ENV !== "production") console.log(id)
         const result = await getUserFromId({ id });
         if (result.success) {
             return res.status(201).json(result);
