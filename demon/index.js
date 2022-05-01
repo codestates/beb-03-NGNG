@@ -41,7 +41,7 @@ const startTask = async () => {
   const data = await getLastestTransactions();
   if (Array.isArray(data) && data.length > 0) {
     const newData = data.filter((d) => {
-      const type = ["mintNFT", "mintToken", "transfer"];
+      const type = ["mintNFT", "mintToken", "p2pTransferFrom"];
       const result = decoder.decodeData(d.input);
       return type.includes(result?.method);
     });

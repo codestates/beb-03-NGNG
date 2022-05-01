@@ -38,21 +38,20 @@ export const createWallet = () => {
   return signer?._signingKey()?.privateKey;
 };
 
-export const transferToken = (
+export const transferToken = async (
   privateKey1: string,
   privateKey2: string,
   amount: string
 ) => {
   const fromWallet = new Wallet(privateKey1, provider);
   const toWallet = new Wallet(privateKey2, provider);
-  (async function () {
-    let transaction = await erc20_contract.p2pTransferFrom(
-      fromWallet.address,
-      toWallet.address,
-      amount
-    );
-    let result = await transaction.wait();
-  })();
+  let transaction = await erc20_contract.p2pTransferFrom(
+    fromWallet.address,
+    toWallet.address,
+    amount
+  );
+  let result = await transaction.wait();
+  return result;
 };
 
 export const transferNFT = (
