@@ -39,7 +39,7 @@ export default function DonateModal({ postUserId }) {
 
   const donationButtonHandler = async (e) => {
     e.preventDefault();
-    const check = window.confirm("진짜 기부하시겠습니까?");
+    const check = window.confirm("Do you really want to donate?");
     if (check) {
       const res = await axios.post(
         "/api/contract/transferToken",
@@ -56,9 +56,9 @@ export default function DonateModal({ postUserId }) {
       console.log(res);
       if (res?.data?.success) {
         const { from, to, transactionHash } = res?.data?.data;
-        alert("donation 성공");
+        alert("😄 Donated successfully.");
       } else {
-        alert("donation 실패");
+        alert("❗️ Something Wrong! Please try again");
       }
     }
   };
@@ -80,7 +80,7 @@ export default function DonateModal({ postUserId }) {
           <Typography component="h1" variant="h5">
             Donation 🎁
           </Typography>
-          <Typography>Your donation will be transfered to yooni.</Typography>
+          <Typography>Your donation will be transfered to {postUserId}.</Typography>
           <Box component="form" noValidate sx={{ mt: 1 }}>
             <TextField
               type="number"
