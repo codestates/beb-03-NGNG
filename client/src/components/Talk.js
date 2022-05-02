@@ -23,6 +23,31 @@ import PostDeleteModal from './modals/PostDeleteModal';
 import PostEditModal from './modals/PostEditModal';
 import LikeItModal from './modals/LikeItModal';
 
+function getTimeToString(inputTime)
+{
+      let date = new Date(inputTime);
+
+			var dd = date.getDate();
+			var mm = date.getMonth()+1; //January is 0!
+		
+			var yyyy = date.getFullYear();
+			if(dd<10){dd='0'+dd} if(mm<10){mm='0'+mm}
+			
+			yyyy = yyyy.toString();
+			mm = mm.toString();
+			dd = dd.toString();
+			
+			var m = date.getHours();
+			var s = date.getMinutes();
+
+			if(m<10){m='0'+m} if(s<10){s='0'+s}
+			m = m.toString();
+			s = s.toString();
+		
+			var s1 = `${yyyy}-${mm}-${dd} ${m}:${s}`;
+			return s1;
+}
+
 const Talk = ({uuid}) => {
   const accessToken = useSelector((state) => state.user.accessToken);
   const loginedUserId = useSelector((state) => state.user.userInfo.id);
@@ -132,12 +157,12 @@ const Talk = ({uuid}) => {
               </Avatar>
             }
             title={data.user.id}
-            subheader={`${data.updatedAt.slice(0, 10)} ${data.updatedAt.slice(11,16)}`}
+            subheader={getTimeToString(data.updatedAt)}
           />
           {/* 이 아래의 박스는 로그인한 유저의 id(from redux)와 post 작성자 id(data.user.id)가 같아아만 보인다. */}
           {
             loginedUserId === data.user.id &&
-            <Box sx={{width: '80px', mr: 2, display: 'flex', justifyContent: 'space-between',     alignItems: 'center'}}>
+            <Box sx={{width: '80px', mr: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
             <PostEditModal uuid={uuid} />
             <PostDeleteModal uuid={uuid} />            
           </Box>

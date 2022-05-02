@@ -6,6 +6,7 @@ import MyWallet from "./pages/MyWallet/index.js";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
+import Logout from "./pages/Logout/index.js";
 
 
 
@@ -41,6 +42,14 @@ const routes = [
     icon: <Icon fontSize="small">tagselected</Icon>,
     route: "/tagselected",
     component: <TagSelected />,
+  },
+  {
+    type: "collapse",
+    name: "Logout",
+    key: "logout",
+    icon: <Icon fontSize="small">logout</Icon>,
+    route: "/logout",
+    component: <Logout />,
   },
 ];
 
