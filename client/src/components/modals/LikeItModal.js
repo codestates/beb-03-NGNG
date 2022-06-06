@@ -57,7 +57,7 @@ export default function LikeItModal({ uuid, postUserId }) {
           postUuid: uuid,
         },
         headers: {
-          Authorization: `bearer ${accessToken}`,
+          // Authorization: `bearer ${accessToken}`,
           "Content-Type": "application/json",
         },
       });

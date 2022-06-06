@@ -1,30 +1,30 @@
-import React from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import ClearIcon from '@mui/icons-material/Clear';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { useSelector } from 'react-redux';
-import { useMutation } from 'react-query';
-import axios from 'axios';
+import React from "react";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import ClearIcon from "@mui/icons-material/Clear";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useSelector } from "react-redux";
+import { useMutation } from "react-query";
+import axios from "axios";
 
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 500,
-  bgcolor: 'primary.light',
-  border: '2px solid #000',
-  borderRadius: '10px',
+  bgcolor: "primary.light",
+  border: "2px solid #000",
+  borderRadius: "10px",
   boxShadow: 24,
   p: 4,
 };
 
-export default function CommentDeleteModal({uuid}) {
+export default function CommentDeleteModal({ uuid }) {
   const accessToken = useSelector((state) => state.user.accessToken);
 
   const [open, setOpen] = React.useState(false);
@@ -36,21 +36,22 @@ export default function CommentDeleteModal({uuid}) {
 
     postDeleteMutation.mutate();
     handleClose();
-  }
+  };
 
-  const postDeleteMutation = useMutation((() => {
-    return axios({
-      method: "post",
-      url: '/api/comment/deleteMemberComment',
-      data: {
-        commentUuid: uuid
-      },
-      headers: {
-        "Authorization": `bearer ${accessToken}`,
-        "Content-Type": 'application/json'
-      }
-    })
-    }), {
+  const postDeleteMutation = useMutation(
+    () => {
+      return axios({
+        method: "post",
+        url: "/api/comment/deleteMemberComment",
+        data: {
+          commentUuid: uuid,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    },
+    {
       onSuccess: (data) => {
         alert("😄 The comment has been successfully deleted");
       },
@@ -64,11 +65,9 @@ export default function CommentDeleteModal({uuid}) {
     }
   );
 
-  
-
   return (
     <>
-      <Tooltip title="Delete" placement='top'>
+      <Tooltip title="Delete" placement="top">
         <IconButton aria-label="report" onClick={handleOpen}>
           <DeleteIcon />
         </IconButton>
@@ -83,10 +82,8 @@ export default function CommentDeleteModal({uuid}) {
           <Typography component="h1" variant="h5">
             🤔 Delete the post
           </Typography>
-          <Typography>
-            Are you sure you want to delete this post?
-          </Typography>
-          <Box noValidate sx={{ mt: 1, display: 'flex' }}>
+          <Typography>Are you sure you want to delete this post?</Typography>
+          <Box noValidate sx={{ mt: 1, display: "flex" }}>
             <Button
               type="submit"
               fullWidth

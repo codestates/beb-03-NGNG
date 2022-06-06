@@ -10,7 +10,7 @@ const provider = new providers.JsonRpcProvider(networkUri);
 
 const artifact = require(process.env.NODE_ENV === "production"
   ? "./../../contracts/NgngToken.json"
-  : "./contracts/NgngToken.json");
+  : "./../contracts/NgngToken.json");
 const artifact2 = require(process.env.NODE_ENV === "production"
   ? "./../../contracts/NgngNft.json"
   : "./../contracts/NgngNft.json");

@@ -1,40 +1,39 @@
-import './App.css';
-import { Navigate, Routes, Route} from 'react-router-dom';
-import Header from './components/Header';
-import Container from '@mui/material/Container';
-import { CssBaseline, Stack } from '@mui/material';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import RightBar from './components/RightBar';
-import LeftMenu from './components/LeftMenu';
+import "./App.css";
+import { Navigate, Routes, Route } from "react-router-dom";
+import Header from "./components/Header";
+import Container from "@mui/material/Container";
+import { CssBaseline, Stack } from "@mui/material";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import RightBar from "./components/RightBar";
+import LeftMenu from "./components/LeftMenu";
 import routes from "./routes";
-
 
 const customTheme = createTheme({
   palette: {
-    type: 'dark',
+    type: "dark",
     primary: {
-      main: '#dba531',
+      main: "#dba531",
     },
     secondary: {
-      main: '#007849',
+      main: "#007849",
     },
     error: {
-      main: '#ff7605',
+      main: "#ff7605",
     },
     success: {
-      main: '#f7b92a',
+      main: "#f7b92a",
     },
     background: {
-      default: '#292b33',
-      paper: '#3a3a3f',
+      default: "#292b33",
+      paper: "#3a3a3f",
     },
     info: {
-      main: '#00c4b5',
+      main: "#00c4b5",
     },
   },
   typography: {
-    fontFamily: 'Montserrat',
+    fontFamily: "Montserrat",
     fontSize: 14,
     fontWeightRegular: 400,
     fontWeightMedium: 600,
@@ -42,46 +41,46 @@ const customTheme = createTheme({
     fontWeightBold: 700,
     h1: {
       fontWeight: 400,
-      fontFamily: 'Permanent Marker',
-      fontSize: '2.9rem',
+      fontFamily: "Permanent Marker",
+      fontSize: "2.9rem",
     },
   },
-})
+});
 
 function App() {
-
   const getRoutes = (allRoutes) =>
-  allRoutes.map((route) => {
-    if (route.collapse) {
-      return getRoutes(route.collapse);
-    }
-
-    if (route.route) {
-      return <Route exact path={route.route} element={route.component} key={route.key} />;
-    }
-
-    return null;
-  });
+    allRoutes.map((route) => {
+      if (route.route) {
+        return (
+          <Route
+            exact
+            path={route.route}
+            element={route.component}
+            key={route.key}
+          />
+        );
+      }
+    });
 
   return (
     <ThemeProvider theme={customTheme}>
       <CssBaseline />
-      <Container maxWidth={"xl"} >
+      <Container maxWidth={"xl"}>
         <Header />
         <Stack direction="row">
-          <Box width={'250px'} sx={{display: 'flex', flexDirection: 'column'}} >
+          <Box
+            width={"250px"}
+            sx={{ display: "flex", flexDirection: "column" }}
+          >
             <LeftMenu />
           </Box>
-          <Box sx={{flex: '1'}}>
+          <Box sx={{ flex: "1" }}>
             <Routes>
-              {/* <Route path="/" element={<Home />} />
-              <Route path="/mytalk" element={<MyTalk />} />
-              <Route path="/transactions" element={<Transactions />} /> */}
               {getRoutes(routes)}
               <Route path="*" element={<Navigate to="/home" />} />
             </Routes>
           </Box>
-          <Box width={'300px'}>
+          <Box width={"300px"}>
             <RightBar />
           </Box>
         </Stack>

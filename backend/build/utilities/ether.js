@@ -54,7 +54,7 @@ var networkUri = process.env.NODE_ENV === "production"
 var provider = new ethers_1.providers.JsonRpcProvider(networkUri);
 var artifact = require(process.env.NODE_ENV === "production"
     ? "./../../contracts/NgngToken.json"
-    : "./contracts/NgngToken.json");
+    : "./../contracts/NgngToken.json");
 var artifact2 = require(process.env.NODE_ENV === "production"
     ? "./../../contracts/NgngNft.json"
     : "./../contracts/NgngNft.json");

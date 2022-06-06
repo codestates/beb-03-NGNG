@@ -49,7 +49,7 @@ export default function DonateModal({ postUserId }) {
         },
         {
           headers: {
-            Authorization: `bearer ${accessToken}`,
+            // Authorization: `bearer ${accessToken}`,
           },
         }
       );
@@ -82,7 +82,9 @@ export default function DonateModal({ postUserId }) {
           <Typography component="h1" variant="h5">
             Donation 🎁
           </Typography>
-          <Typography>Your donation will be transfered to {postUserId}.</Typography>
+          <Typography>
+            Your donation will be transfered to {postUserId}.
+          </Typography>
           <Box component="form" noValidate sx={{ mt: 1 }}>
             <TextField
               type="number"

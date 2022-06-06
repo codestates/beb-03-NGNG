@@ -79,6 +79,7 @@ const loginRequired = async (
       success: false,
       data: null,
       message: err,
+      redirect: "/logout",
     });
   }
 };

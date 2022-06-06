@@ -69,7 +69,7 @@ const Comment = ({
     (comment) => {
       return axios.post("/api/comment/sendMemberComment", comment, {
         headers: {
-          Authorization: `bearer ${accessToken}`,
+          // Authorization: `bearer ${accessToken}`,
         },
       });
     },

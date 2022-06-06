@@ -1,19 +1,28 @@
-import { Card, Button, Box, Tooltip, IconButton, Container, Backdrop, CircularProgress } from '@mui/material';
-import TextField from '@mui/material/TextField';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import React, { useRef, useState } from 'react';
-import { styled, alpha } from '@mui/material/styles';
-import InputBase from '@mui/material/InputBase';
-import SearchIcon from '@mui/icons-material/Search';
-import CreateIcon from '@mui/icons-material/Create';
-import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-import TagInput from './TagInput';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import { initializeTag } from '../redux/tag';
-import { useMutation } from 'react-query';
-import axios from 'axios';
-import { faAssistiveListeningSystems } from '@fortawesome/free-solid-svg-icons';
+import {
+  Card,
+  Button,
+  Box,
+  Tooltip,
+  IconButton,
+  Container,
+  Backdrop,
+  CircularProgress,
+} from "@mui/material";
+import TextField from "@mui/material/TextField";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import React, { useRef, useState } from "react";
+import { styled, alpha } from "@mui/material/styles";
+import InputBase from "@mui/material/InputBase";
+import SearchIcon from "@mui/icons-material/Search";
+import CreateIcon from "@mui/icons-material/Create";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import TagInput from "./TagInput";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { initializeTag } from "../redux/tag";
+import { useMutation } from "react-query";
+import axios from "axios";
+import { faAssistiveListeningSystems } from "@fortawesome/free-solid-svg-icons";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -60,25 +69,26 @@ const WriteTalk = (props) => {
   let imgFile;
 
   const loadFile = (event) => {
-    document.getElementById("progress-indicator").style.display = 'block';
+    document.getElementById("progress-indicator").style.display = "block";
     imgFile = event.target.files[0];
     setTimeout(() => {
-      document.getElementById("progress-indicator").style.display = 'none';
-    }, 4000)
-  }
+      document.getElementById("progress-indicator").style.display = "none";
+    }, 4000);
+  };
 
-  const newPostMutation = useMutation(((formData) => {
+  const newPostMutation = useMutation(
+    (formData) => {
       setIsUploading(true);
       return axios({
         method: "post",
-        url: '/api/post/sendPost',
+        url: "/api/post/sendPost",
         data: formData,
         headers: {
-          "Authorization": `bearer ${accessToken}`,
           "Content-Type": "multipart/form-data",
-        }
-      })
-    }), {
+        },
+      });
+    },
+    {
       onSuccess: (data) => {
         setIsUploading(false);
         alert("😄 The post has been created successfully");
@@ -160,7 +170,15 @@ const WriteTalk = (props) => {
             pt: 0.5,
           }}
         >
-          <input type='file' accept='image/*' className='inputImg' style={{display: 'none'}} id="post-img-file" name="post-img-file" onChange={(e) => loadFile(e)} />
+          <input
+            type="file"
+            accept="image/*"
+            className="inputImg"
+            style={{ display: "none" }}
+            id="post-img-file"
+            name="post-img-file"
+            onChange={(e) => loadFile(e)}
+          />
           <label htmlFor="post-img-file">
             <Button
               variant="contained"
@@ -172,21 +190,21 @@ const WriteTalk = (props) => {
               <AddPhotoAlternateIcon />
             </Button>
           </label>
-            <Button
-              type="submit"
-              variant="contained"
-              color="success"
-              id="submit-button"
-              onClick={handleSubmit}
-              sx={{ height: "30px", width: "60px" }}
-            >
-              Submit
-            </Button>
-            <CircularProgress sx={{ml: 1.5, mt: 1.5, display: 'none'}} id="progress-indicator" />
-          {
-            isUploading &&
-            <CircularProgress sx={{ml: 1.5, mt: 1.5}} />
-          }
+          <Button
+            type="submit"
+            variant="contained"
+            color="success"
+            id="submit-button"
+            onClick={handleSubmit}
+            sx={{ height: "30px", width: "60px" }}
+          >
+            Submit
+          </Button>
+          <CircularProgress
+            sx={{ ml: 1.5, mt: 1.5, display: "none" }}
+            id="progress-indicator"
+          />
+          {isUploading && <CircularProgress sx={{ ml: 1.5, mt: 1.5 }} />}
         </Box>
       </Card>
     </>

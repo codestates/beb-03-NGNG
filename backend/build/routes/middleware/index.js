@@ -101,6 +101,7 @@ var loginRequired = function (req, res, next) { return __awaiter(void 0, void 0,
                     success: false,
                     data: null,
                     message: err_1,
+                    redirect: "/logout",
                 });
                 return [3 /*break*/, 6];
             case 6: return [2 /*return*/];

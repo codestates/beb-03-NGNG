@@ -54,7 +54,7 @@ export default function ReportModal({ uuid, postUserId }) {
           content: content,
         },
         headers: {
-          Authorization: `bearer ${accessToken}`,
+          // Authorization: `bearer ${accessToken}`,
           "Content-Type": "application/json",
         },
       });
