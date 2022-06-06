@@ -7,7 +7,7 @@ on:
 env:
   DOCKER_IMAGE: ghcr.io/${{ github.actor }}/ngng
   VERSION: ${{ github.sha }}
-  NAME: go_cicd
+  NAME: ngng_docker
 
 jobs:
   build:
@@ -69,4 +69,4 @@ jobs:
           -e RINKEBY_NETWORK=${{ secrets.RINKEBY_NETWORK }} \
           -e RINKEBY_OWNER_PRIVATE_KEY=${{ secrets.RINKEBY_OWNER_PRIVATE_KEY }} \
           -e TOKEN_EXPIRETIME=${{ secrets.TOKEN_EXPIRETIME }} \
-          --name go_cicd --restart always ${{ env.DOCKER_IMAGE }}:latest
+          --name ${{ env.NAME }} --restart always ${{ env.DOCKER_IMAGE }}:latest
