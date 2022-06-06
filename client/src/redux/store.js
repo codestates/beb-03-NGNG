@@ -30,7 +30,6 @@ const store = configureStore({
 axios.interceptors.request.use(
   function (config) {
     const accessToken = store.getState().user.accessToken;
-    console.log("accessToken", accessToken);
     config.headers.Authorization = `bearer ${accessToken}`;
     return config;
   },

@@ -1,18 +1,18 @@
-import React, { useState, useRef } from 'react';
-import { styled, alpha } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
-import SearchIcon from '@mui/icons-material/Search';
-import Button from '@mui/material/Button';
-import LoginModal from './modals/LoginModal';
-import SignupModal from './modals/SignupModal';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import { logout } from '../redux/user';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useRef } from "react";
+import { styled, alpha } from "@mui/material/styles";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import InputBase from "@mui/material/InputBase";
+import SearchIcon from "@mui/icons-material/Search";
+import Button from "@mui/material/Button";
+import LoginModal from "./modals/LoginModal";
+import SignupModal from "./modals/SignupModal";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { logout } from "../redux/user";
+import { useNavigate } from "react-router-dom";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -67,7 +67,7 @@ const Header = (props) => {
   const handleKeyDown = (e) => {
     if (e.keyCode === 13) {
       //console.log(inputRef.current.value);
-      navigate('/tagselected', {state: inputRef.current.value});
+      navigate("/tagselected", { state: inputRef.current.value });
       inputRef.current.value = "";
     }
   };
@@ -91,8 +91,8 @@ const Header = (props) => {
               display: { xs: "none", sm: "block" },
               fontWeight: "bold",
             }}
-            onClick={() => navigate('/')}
-            sx={{cursor: 'pointer'}}
+            onClick={() => navigate("/")}
+            sx={{ cursor: "pointer" }}
           >
             NGNG
           </Typography>
