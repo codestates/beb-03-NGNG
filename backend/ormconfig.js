@@ -25,12 +25,12 @@ module.exports = [
   {
     name: "default",
     type: "mysql",
-    host: "localhost",
+    host: process.env.DATABASE_HOST,
     port: 3306,
     username: process.env.DATABASE_ID,
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_NAME,
-    synchronize: process.env.NODE_ENV !== "production",
+    synchronize: process.env.NODE_ENV === "production",
     logging: process.env.NODE_ENV !== "production",
     entities: [
       process.env.NODE_ENV === "production"
@@ -48,7 +48,7 @@ module.exports = [
   {
     name: process.env.DATABASE_DEMON_NAME,
     type: "mysql",
-    host: "localhost",
+    host: process.env.DATABASE_HOST,
     port: 3306,
     username: process.env.DATABASE_ID,
     password: process.env.DATABASE_PASSWORD,

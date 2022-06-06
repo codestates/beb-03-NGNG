@@ -10,7 +10,7 @@ const Server = async () => {
     console.log("database 생성");
     await connection.create();
     console.log("database 연결");
-    await setToken();
+    // await setToken();
     console.log("erc721 거래용 토큰(erc20) 세팅");
     // 프론트 서버 시작
     server.listen(port, (err?: any) => {

@@ -8,8 +8,12 @@ const networkUri =
 
 const provider = new providers.JsonRpcProvider(networkUri);
 
-const artifact = require("./../contracts/NgngToken.json");
-const artifact2 = require("./../contracts/NgngNft.json");
+const artifact = require(process.env.NODE_ENV === "production"
+  ? "./../../contracts/NgngToken.json"
+  : "./contracts/NgngToken.json");
+const artifact2 = require(process.env.NODE_ENV === "production"
+  ? "./../../contracts/NgngNft.json"
+  : "./../contracts/NgngNft.json");
 const InputDataDecoder = require("ethereum-input-data-decoder");
 const decoder = new InputDataDecoder([...artifact.abi, ...artifact2.abi]);
 

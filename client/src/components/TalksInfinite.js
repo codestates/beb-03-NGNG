@@ -1,16 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { useQuery } from 'react-query';
-import axios from 'axios';
-import Talk from './Talk';
-import { useSelector } from 'react-redux';
-import { useInView } from 'react-intersection-observer';
-import { useInfiniteQuery, QueryClient, QueryClientProvider } from 'react-query';
+import React, { useEffect, useState } from "react";
+import { useQuery } from "react-query";
+import axios from "axios";
+import Talk from "./Talk";
+import { useSelector } from "react-redux";
+import { useInView } from "react-intersection-observer";
+import {
+  useInfiniteQuery,
+  QueryClient,
+  QueryClientProvider,
+} from "react-query";
 
 const TalksInfinite = ({ filter }) => {
-  const loginedUserId = useSelector((state) => state.user.userInfo.id);
+  const loginedUserId = useSelector((state) => state?.user?.userInfo?.id);
   const { ref, inView } = useInView();
 
-  const { 
+  const {
     status,
     data,
     error,
@@ -21,24 +25,24 @@ const TalksInfinite = ({ filter }) => {
     fetchPreviousPage,
     hasNextPage,
     hasPreviousPage,
-    } = useInfiniteQuery('getPosts', () => {
-
-      return axios.get('/api/post/getPosts')
-      .then((res) => {
+  } = useInfiniteQuery(
+    "getPosts",
+    () => {
+      return axios.get("/api/post/getPosts").then((res) => {
         return res.data.data.posts;
-      })
+      });
     },
     {
-      getPreviousPageParam: firstPage => firstPage.previousId ?? undefined,
-      getNextPageParam: lastPage => lastPage.nextId ?? undefined,
+      getPreviousPageParam: (firstPage) => firstPage.previousId ?? undefined,
+      getNextPageParam: (lastPage) => lastPage.nextId ?? undefined,
     }
-  )
+  );
 
   useEffect(() => {
     if (inView) {
       fetchNextPage();
     }
-  }, [inView])
+  }, [inView]);
 
   return (
     <>
@@ -48,29 +52,25 @@ const TalksInfinite = ({ filter }) => {
           disabled={!hasPreviousPage || isFetchingPreviousPage}
         >
           {isFetchingPreviousPage
-            ? 'Loading more...'
+            ? "Loading more..."
             : hasPreviousPage
-            ? 'Load Older'
-            : 'Nothing more to load'}
+            ? "Load Older"
+            : "Nothing more to load"}
         </button>
       </div>
 
-      {
-        filter &&
+      {filter &&
         data
-        .filter((post) => {
-          return post.user_id === loginedUserId;
-        })
-        .map((post) => {
-          return <Talk key={post.post_uuid} uuid={post.post_uuid} />
-        })
-      }
-      {
-        (!filter) &&
+          .filter((post) => {
+            return post.user_id === loginedUserId;
+          })
+          .map((post) => {
+            return <Talk key={post.post_uuid} uuid={post.post_uuid} />;
+          })}
+      {!filter &&
         data.map((post) => {
-          return <Talk key={post.post_uuid} uuid={post.post_uuid} />
-        })
-      }
+          return <Talk key={post.post_uuid} uuid={post.post_uuid} />;
+        })}
 
       <div>
         <button
@@ -79,14 +79,14 @@ const TalksInfinite = ({ filter }) => {
           disabled={!hasNextPage || isFetchingNextPage}
         >
           {isFetchingNextPage
-            ? 'Loading more...'
+            ? "Loading more..."
             : hasNextPage
-            ? 'Load Newer'
-            : 'Nothing more to load'}
+            ? "Load Newer"
+            : "Nothing more to load"}
         </button>
       </div>
     </>
-  )
-}
+  );
+};
 
 export default TalksInfinite;
